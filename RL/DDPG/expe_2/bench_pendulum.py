@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import DDPG_pendulum
-import DDPG_pendulum_etienne
+import DDPG_pendulum_original
+import DDPG_pendulum_modified
 
-reward_time_updated = DDPG_pendulum_etienne.main()
-reward_time = DDPG_pendulum.main()
+reward_time_updated = DDPG_pendulum_modified.main(MAX_EPISODES=300)
+reward_time = DDPG_pendulum_original.main(MAX_EPISODES=300)
 
 
 def plot_rewards():
