@@ -16,14 +16,16 @@ import matplotlib.pyplot as plt
 
 import argparse
 
-parser = argparse.ArgumentParser(description='Run DDPG on Pendulum')
+parser = argparse.ArgumentParser(description='Run DDPG on Mountain Car')
 parser.add_argument('--gpu', help='Use GPU', action='store_true')
 args = parser.parse_args()
+env = gym.make("MountainCarContinuous-v0")
 
-LOW_BOUND = -2
-HIGH_BOUND = 2
 
-STATE_SIZE = 3      # state vector size
+LOW_BOUND =  env.action_space.low[0] # -1
+HIGH_BOUND =  env.action_space.high[0] # 1
+
+STATE_SIZE = 2      # state vector size
 ACTION_SIZE = 1     # action vector size (single-valued because actions are continuous in the interval (-2, 2))
 
 MEMORY_CAPACITY = 1000000
@@ -48,6 +50,7 @@ EXPLO_THETA = 0.15
 EXPLO_SIGMA = 0.2
 
 MAX_STEPS = 200
+MAX_EPISODES = 200
 EPS = 0.001
 
 
@@ -62,7 +65,6 @@ print("\033[91m\033[1mDevice : ", device.upper(), "\033[0m")
 device = torch.device(device)
 
 
-env = gym.make("Pendulum-v0")
 
 # Replay memory function
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
@@ -130,7 +132,15 @@ def update_targets(target, original):
 
         for targetParam, orgParam in zip(target.parameters(), original.parameters()):
             targetParam.data.copy_((1 - TAU)*targetParam.data + TAU*orgParam.data)
+            
 
+# Compute the q-value over a random sample of action
+def compute_value_random_action(next_state_action):
+    with torch.no_grad():
+            action_sample = torch.rand(BATCH_SIZE) * (HIGH_BOUND - LOW_BOUND) + LOW_BOUND
+            next_state_action[:,STATE_SIZE] = action_sample
+            values = target_critic_nn(next_state_action)
+    return values
 
 def optimize_model():
 
@@ -159,14 +169,19 @@ def optimize_model():
     next_action = target_actor_nn(non_final_next_states).detach()
 
     # Compute next timestep state-action (s,a) tensor for non-final next states
-    next_state_action = torch.zeros(BATCH_SIZE, 4, device=device)
-    next_state_action[non_final_mask, :] = torch.cat([non_final_next_states, next_action], -1)
+    next_state_action = torch.zeros(BATCH_SIZE, ACTION_SIZE+STATE_SIZE, device=device)
+    #next_state_action[non_final_mask, :] = torch.cat([non_final_next_states, next_action], -1)
+    
+    ################# Etienne #################
+    next_state_action[non_final_mask,:STATE_SIZE] = non_final_next_states
+    random_state_values = compute_value_random_action(next_state_action)
 
     # Compute next state values at t+1 using target critic network
-    next_state_values = target_critic_nn(next_state_action).detach()
+    #next_state_values = target_critic_nn(next_state_action).detach()
 
     # Compute expected state action values y[i]= r[i] + Q'(s[i+1], a[i+1])
-    expected_state_action_values = reward_batch.view(BATCH_SIZE, 1) + GAMMA*next_state_values
+    expected_state_action_values = reward_batch.view(BATCH_SIZE, 1) + GAMMA*random_state_values
+    #expected_state_action_values = reward_batch.view(BATCH_SIZE, 1) + GAMMA*next_state_values
 
     # Critic loss by mean squared error
     loss_critic = F.mse_loss(state_action_values, expected_state_action_values)
@@ -223,7 +238,8 @@ target_actor_nn.eval()
 MAX_TIME_SEC = 400
 reward_time = np.zeros(MAX_TIME_SEC)
 
-def main(train=False,MAX_EPISODES=200):
+
+def main():
 
     episode_reward = [0]*MAX_EPISODES
     nb_total_steps = 0
@@ -235,6 +251,8 @@ def main(train=False,MAX_EPISODES=200):
 
             if i_episode % 10 == 0:
                 print("Episode ", i_episode)
+                
+            print("Episode {} : reward  = ".format(i_episode),end='')
 
             state = env.reset()
             state = torch.tensor([state], dtype=torch.float, device=device)
@@ -277,7 +295,6 @@ def main(train=False,MAX_EPISODES=200):
                 reward_time[i_sec] = episode_reward[i_episode]
 
                 #env.render()
-               
 
     except KeyboardInterrupt:
         pass
@@ -295,14 +312,11 @@ def main(train=False,MAX_EPISODES=200):
     print('Average duration of one episode : ', round(time_execution/MAX_EPISODES, 3), 's')
     print('---------------------------------------------------')
 
-    #plt.plot(episode_reward[:i_episode])
-    #plt.show()
-    if not train:
-        return reward_time[:i_sec]
-    else:
-        plt.plot(episode_reward[:i_episode])
-        plt.show()
-        return target_critic_nn, reward_time[:i_sec]
+#    plt.plot(episode_reward[:i_episode])
+#    plt.show()
+    
+    return reward_time[:i_sec]
+
 
 #if __name__ == '__main__':
 #    main()

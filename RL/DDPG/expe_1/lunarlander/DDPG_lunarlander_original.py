@@ -16,16 +16,16 @@ import matplotlib.pyplot as plt
 
 import argparse
 
-parser = argparse.ArgumentParser(description='Run DDPG on Pendulum')
+parser = argparse.ArgumentParser(description='Run DDPG on lunar lander')
 parser.add_argument('--gpu', help='Use GPU', action='store_true')
 args = parser.parse_args()
+env = gym.make("LunarLanderContinuous-v2")
 
-LOW_BOUND = -2
-HIGH_BOUND = 2
+LOW_BOUND = env.action_space.low[0] # -1
+HIGH_BOUND = env.action_space.high[0] # 1
 
-STATE_SIZE = 3      # state vector size
-ACTION_SIZE = 1     # action vector size (single-valued because actions are continuous in the interval (-2, 2))
-
+STATE_SIZE = env.observation_space.shape[0]      # state vector size (8)
+ACTION_SIZE = env.action_space.shape[0]     # action vector size (2)
 MEMORY_CAPACITY = 1000000
 
 BATCH_SIZE = 128
@@ -48,6 +48,7 @@ EXPLO_THETA = 0.15
 EXPLO_SIGMA = 0.2
 
 MAX_STEPS = 200
+MAX_EPISODES = 200
 EPS = 0.001
 
 
@@ -62,7 +63,6 @@ print("\033[91m\033[1mDevice : ", device.upper(), "\033[0m")
 device = torch.device(device)
 
 
-env = gym.make("Pendulum-v0")
 
 # Replay memory function
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
@@ -112,7 +112,7 @@ class DQN_actor(nn.Module):
         self.hidden1 = nn.Linear(state_size, 8)
         self.hidden2 = nn.Linear(8, 8)
         self.hidden3 = nn.Linear(8, 8)
-        self.output = nn.Linear(8, 1)
+        self.output = nn.Linear(8, ACTION_SIZE)
 
     def forward(self, x):
         x = F.relu(self.hidden1(x))
@@ -120,8 +120,8 @@ class DQN_actor(nn.Module):
         x = F.relu(self.hidden3(x))
         x = self.output(x)
         x = (torch.sigmoid(x)* (HIGH_BOUND - LOW_BOUND)) + LOW_BOUND
-        return x.view(x.size(0), -1)
-
+#        return x.reshape((ACTION_SIZE,))
+        return torch.tensor([0,0],dtype=torch.float)
 
 # Soft target update function
 def update_targets(target, original):
@@ -159,7 +159,7 @@ def optimize_model():
     next_action = target_actor_nn(non_final_next_states).detach()
 
     # Compute next timestep state-action (s,a) tensor for non-final next states
-    next_state_action = torch.zeros(BATCH_SIZE, 4, device=device)
+    next_state_action = torch.zeros(BATCH_SIZE, ACTION_SIZE+STATE_SIZE, device=device)
     next_state_action[non_final_mask, :] = torch.cat([non_final_next_states, next_action], -1)
 
     # Compute next state values at t+1 using target critic network
@@ -223,7 +223,7 @@ target_actor_nn.eval()
 MAX_TIME_SEC = 400
 reward_time = np.zeros(MAX_TIME_SEC)
 
-def main(train=False,MAX_EPISODES=200):
+def main():
 
     episode_reward = [0]*MAX_EPISODES
     nb_total_steps = 0
@@ -295,14 +295,10 @@ def main(train=False,MAX_EPISODES=200):
     print('Average duration of one episode : ', round(time_execution/MAX_EPISODES, 3), 's')
     print('---------------------------------------------------')
 
-    #plt.plot(episode_reward[:i_episode])
-    #plt.show()
-    if not train:
-        return reward_time[:i_sec]
-    else:
-        plt.plot(episode_reward[:i_episode])
-        plt.show()
-        return target_critic_nn, reward_time[:i_sec]
+    plt.plot(episode_reward[:i_episode])
+    plt.show()
+    
+    return reward_time[:i_sec]
 
-#if __name__ == '__main__':
-#    main()
+if __name__ == '__main__':
+    main()

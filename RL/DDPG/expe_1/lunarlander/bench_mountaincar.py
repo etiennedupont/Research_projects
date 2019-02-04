@@ -1,9 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import DDPG_pendulum_original
-import DDPG_pendulum_modified
+import DDPG_mountaincar_original
+import DDPG_mountaincar_modified
 
-reward_time_updated, reward_time = DDPG_pendulum_modified.main(MAX_EPISODES=300)
+reward_time_updated = DDPG_mountaincar_modified.main()
+reward_time = DDPG_mountaincar_original.main()
+
 
 def plot_rewards():
     max_time = min(len(reward_time), len(reward_time_updated))
@@ -11,7 +13,7 @@ def plot_rewards():
     fig, ax = plt.subplots()
     ax.plot(time,reward_time[:max_time],'b+',label='reward standard method')
     ax.plot(time,reward_time_updated[:max_time],'r+',label='reward new method')
-    ax.set(xlabel='Execution time (s)',ylabel='Reward',title='DDPG benchmark on pendulum')
+    ax.set(xlabel='Execution time (s)',ylabel='Reward',title='DDPG benchmark on mountaincar')
     plt.legend()
     fig.savefig("benchmark_time_reward1.jpg")
     plt.show()
@@ -48,7 +50,7 @@ def plot_rewards_averaged(n_sec, reward_time, reward_time_updated):
     fig, ax = plt.subplots()
     ax.plot(time,reward_time_averaged,'b-',label='reward standard method')
     ax.plot(time,reward_time_updated_averaged,'r-',label='reward new method')
-    ax.set(xlabel='Execution time (s)',ylabel='Average reward over {} s'.format(n_sec),title='DDPG benchmark on pendulum')
+    ax.set(xlabel='Execution time (s)',ylabel='Average reward over {} s'.format(n_sec),title='DDPG benchmark on mountaincar')
     plt.legend()
     fig.savefig("benchmark_time_reward_averaged.jpg")
     plt.show()

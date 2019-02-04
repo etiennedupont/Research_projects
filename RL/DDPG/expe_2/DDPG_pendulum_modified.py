@@ -154,7 +154,7 @@ def optimize_model():
 
 # Initialize neural nets
 # We first need to compute the optimal Q value to be used later in the policy gradient theorem
-critic_nn = DDPG_pendulum_original.main(train=True,MAX_EPISODES=300)
+critic_nn, reward_time_original = DDPG_pendulum_original.main(train=True,MAX_EPISODES=300)
 
 # Actor net: state input -- action output bounded from lower bound to high bound
 actor_nn = DQN_actor(STATE_SIZE).to(device)
@@ -250,7 +250,7 @@ def main(MAX_EPISODES=200):
     #plt.plot(episode_reward[:i_episode])
     #plt.show()
     
-    return reward_time[:i_sec]
+    return reward_time[:i_sec], reward_time_original
 
 
 #if __name__ == '__main__':

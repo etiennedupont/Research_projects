@@ -16,15 +16,16 @@ import matplotlib.pyplot as plt
 
 import argparse
 
-parser = argparse.ArgumentParser(description='Run DDPG on Pendulum')
+parser = argparse.ArgumentParser(description='Run DDPG on Mountain Car')
 parser.add_argument('--gpu', help='Use GPU', action='store_true')
 args = parser.parse_args()
+env = gym.make("MountainCarContinuous-v0")
 
 
-LOW_BOUND = -2
-HIGH_BOUND = 2
+LOW_BOUND =  env.action_space.low[0] # -1
+HIGH_BOUND =  env.action_space.high[0] # 1
 
-STATE_SIZE = 3      # state vector size
+STATE_SIZE = 2      # state vector size
 ACTION_SIZE = 1     # action vector size (single-valued because actions are continuous in the interval (-2, 2))
 
 MEMORY_CAPACITY = 1000000
@@ -64,7 +65,6 @@ print("\033[91m\033[1mDevice : ", device.upper(), "\033[0m")
 device = torch.device(device)
 
 
-env = gym.make("Pendulum-v0")
 
 # Replay memory function
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
@@ -133,37 +133,14 @@ def update_targets(target, original):
         for targetParam, orgParam in zip(target.parameters(), original.parameters()):
             targetParam.data.copy_((1 - TAU)*targetParam.data + TAU*orgParam.data)
             
-##### Etienne : compute the max of the action value function for a given state
-NB_SAMPLES = 5
 
-# Compute a "max" over NB_SAMPLES random actions (very poor approximation of the max)
-def compute_max_poor(next_state_action):
-    max_tot_value = - np.inf
-    max_values = torch.zeros(BATCH_SIZE)
+# Compute the q-value over a random sample of action
+def compute_value_random_action(next_state_action):
     with torch.no_grad():
-        for i in range(NB_SAMPLES):
             action_sample = torch.rand(BATCH_SIZE) * (HIGH_BOUND - LOW_BOUND) + LOW_BOUND
-            next_state_action[:,3] = action_sample
-            temp_values = target_critic_nn(next_state_action)
-            tot_temp_value = torch.sum(temp_values)
-            if tot_temp_value > max_tot_value:
-                max_tot_value = tot_temp_value
-                max_values = temp_values
-    return max_values
-
-# Compute the max value for each state : well better approximation of the max
-def compute_max(next_state_action):
-    max_values = torch.ones(BATCH_SIZE)*(-np.inf)
-    with torch.no_grad():
-        for i in range(NB_SAMPLES):
-            action_sample = torch.rand(BATCH_SIZE) * (HIGH_BOUND - LOW_BOUND) + LOW_BOUND
-            next_state_action[:,3] = action_sample
-            temp_values = target_critic_nn(next_state_action)
-            for j in range(BATCH_SIZE):
-                if temp_values[j] > max_values[j]:
-                    max_values[j] = temp_values[j]
-    return max_values            
-
+            next_state_action[:,STATE_SIZE] = action_sample
+            values = target_critic_nn(next_state_action)
+    return values
 
 def optimize_model():
 
@@ -192,18 +169,18 @@ def optimize_model():
     next_action = target_actor_nn(non_final_next_states).detach()
 
     # Compute next timestep state-action (s,a) tensor for non-final next states
-    next_state_action = torch.zeros(BATCH_SIZE, 4, device=device)
+    next_state_action = torch.zeros(BATCH_SIZE, ACTION_SIZE+STATE_SIZE, device=device)
     #next_state_action[non_final_mask, :] = torch.cat([non_final_next_states, next_action], -1)
     
     ################# Etienne #################
-    next_state_action[non_final_mask,:3] = non_final_next_states
-    max_state_values = compute_max(next_state_action)
+    next_state_action[non_final_mask,:STATE_SIZE] = non_final_next_states
+    random_state_values = compute_value_random_action(next_state_action)
 
     # Compute next state values at t+1 using target critic network
     #next_state_values = target_critic_nn(next_state_action).detach()
 
     # Compute expected state action values y[i]= r[i] + Q'(s[i+1], a[i+1])
-    expected_state_action_values = reward_batch.view(BATCH_SIZE, 1) + GAMMA*max_state_values
+    expected_state_action_values = reward_batch.view(BATCH_SIZE, 1) + GAMMA*random_state_values
     #expected_state_action_values = reward_batch.view(BATCH_SIZE, 1) + GAMMA*next_state_values
 
     # Critic loss by mean squared error
@@ -335,8 +312,8 @@ def main():
     print('Average duration of one episode : ', round(time_execution/MAX_EPISODES, 3), 's')
     print('---------------------------------------------------')
 
-    #plt.plot(episode_reward[:i_episode])
-    #plt.show()
+#    plt.plot(episode_reward[:i_episode])
+#    plt.show()
     
     return reward_time[:i_sec]
 
