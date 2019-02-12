@@ -1,0 +1,2229 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.6.21)  4 NOV 2018 12:15
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**main.tex
+(./main.tex
+LaTeX2e <2018-04-01> patch level 2
+Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
+(./elsarticle.cls
+Document Class: elsarticle 2009/09/17, 1.20b: Elsevier Ltd
+\@bls=\dimen102
+(/usr/local/texlive/2018/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2018/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen103
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 99.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen104
+\Gin@req@width=\dimen105
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/pifont.sty
+Package: pifont 2005/04/12 PSNFSS-v9.2a Pi font support (SPQR) 
+LaTeX Font Info:    Try loading font information for U+pzd on input line 63.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/upzd.fd
+File: upzd.fd 2001/06/04 font definitions for U/pzd.
+)
+LaTeX Font Info:    Try loading font information for U+psy on input line 64.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/psnfss/upsy.fd
+File: upsy.fd 2001/06/04 font definitions for U/psy.
+))
+\c@tnote=\count88
+\c@fnote=\count89
+\c@cnote=\count90
+\c@ead=\count91
+\c@author=\count92
+\@eadauthor=\toks15
+\c@affn=\count93
+\absbox=\box26
+\keybox=\box27
+\Columnwidth=\dimen106
+\space@left=\dimen107
+\els@boxa=\box28
+\els@boxb=\box29
+\leftMargin=\dimen108
+\@enLab=\toks16
+\@sep=\skip43
+\@@sep=\skip44
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/natbib/natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip45
+\bibsep=\skip46
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count94
+)
+\splwrite=\write3
+\openout3 = `main.spl'.
+
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2018/03/24 v5.7 Page Geometry
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
+)
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/ifvtex.sty
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+(/usr/local/texlive/2018/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count95
+\Gm@cntv=\count96
+\c@Gm@tempcnt=\count97
+\Gm@bindingoffset=\dimen109
+\Gm@wd@mp=\dimen110
+\Gm@odd@mp=\dimen111
+\Gm@even@mp=\dimen112
+\Gm@layoutwidth=\dimen113
+\Gm@layoutheight=\dimen114
+\Gm@layouthoffset=\dimen115
+\Gm@layoutvoffset=\dimen116
+\Gm@dimlist=\toks17
+)
+\appnamewidth=\dimen117
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/txfonts/txfonts.sty
+Package: txfonts 2008/01/22 v3.2.1
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 21.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> OT1/txr/m/n on input line 21.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/txr/m/n on input line 21.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/txr/m/n --> OT1/txr/bx/n on input line 22.
+\symitalic=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `italic' in version `bold'
+(Font)                  OT1/txr/m/it --> OT1/txr/bx/it on input line 26.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 29.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> OT1/txr/bx/n on input line 29.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
+(Font)                  OT1/cmr/bx/n --> OT1/txr/bx/n on input line 29.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 30.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> OT1/txr/m/it on input line 30.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> OT1/txr/m/it on input line 30.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/txr/m/it --> OT1/txr/bx/it on input line 31.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 40.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> OT1/txss/m/n on input line 40.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> OT1/txss/m/n on input line 40.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/txss/m/n --> OT1/txss/b/n on input line 41.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 50.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> OT1/txtt/m/n on input line 50.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> OT1/txtt/m/n on input line 50.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/txtt/m/n --> OT1/txtt/b/n on input line 51.
+LaTeX Font Info:    Redeclaring symbol font `letters' on input line 58.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `normal'
+(Font)                  OML/cmm/m/it --> OML/txmi/m/it on input line 58.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/cmm/b/it --> OML/txmi/m/it on input line 58.
+LaTeX Font Info:    Overwriting symbol font `letters' in version `bold'
+(Font)                  OML/txmi/m/it --> OML/txmi/bx/it on input line 59.
+\symlettersA=\mathgroup5
+LaTeX Font Info:    Overwriting symbol font `lettersA' in version `bold'
+(Font)                  U/txmia/m/it --> U/txmia/bx/it on input line 67.
+LaTeX Font Info:    Redeclaring symbol font `symbols' on input line 77.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `normal'
+(Font)                  OMS/cmsy/m/n --> OMS/txsy/m/n on input line 77.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/cmsy/b/n --> OMS/txsy/m/n on input line 77.
+LaTeX Font Info:    Overwriting symbol font `symbols' in version `bold'
+(Font)                  OMS/txsy/m/n --> OMS/txsy/bx/n on input line 78.
+\symAMSa=\mathgroup6
+LaTeX Font Info:    Overwriting symbol font `AMSa' in version `bold'
+(Font)                  U/txsya/m/n --> U/txsya/bx/n on input line 94.
+\symAMSb=\mathgroup7
+LaTeX Font Info:    Overwriting symbol font `AMSb' in version `bold'
+(Font)                  U/txsyb/m/n --> U/txsyb/bx/n on input line 103.
+\symsymbolsC=\mathgroup8
+LaTeX Font Info:    Overwriting symbol font `symbolsC' in version `bold'
+(Font)                  U/txsyc/m/n --> U/txsyc/bx/n on input line 113.
+LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 120.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/txex/m/n on input line 120.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/txex/m/n on input line 120.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/txex/m/n --> OMX/txex/bx/n on input line 121.
+\symlargesymbolsA=\mathgroup9
+LaTeX Font Info:    Overwriting symbol font `largesymbolsA' in version `bold'
+(Font)                  U/txexa/m/n --> U/txexa/bx/n on input line 129.
+LaTeX Info: Redefining \not on input line 1043.
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics/epsfig.sty
+Package: epsfig 2017/06/25 v1.7b (e)psfig emulation (SPQR)
+\epsfxsize=\dimen118
+\epsfysize=\dimen119
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2011/12/19 v6.7a set line spacing
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks18
+LaTeX Font Info:    Redeclaring symbol font `AMSa' on input line 59.
+LaTeX Font Info:    Overwriting symbol font `AMSa' in version `normal'
+(Font)                  U/txsya/m/n --> U/msa/m/n on input line 59.
+LaTeX Font Info:    Overwriting symbol font `AMSa' in version `bold'
+(Font)                  U/txsya/bx/n --> U/msa/m/n on input line 59.
+LaTeX Font Info:    Redeclaring symbol font `AMSb' on input line 60.
+LaTeX Font Info:    Overwriting symbol font `AMSb' in version `normal'
+(Font)                  U/txsyb/m/n --> U/msb/m/n on input line 60.
+LaTeX Font Info:    Overwriting symbol font `AMSb' in version `bold'
+(Font)                  U/txsyb/bx/n --> U/msb/m/n on input line 60.
+LaTeX Font Info:    Redeclaring math delimiter \ulcorner on input line 74.
+LaTeX Font Info:    Redeclaring math delimiter \urcorner on input line 75.
+LaTeX Font Info:    Redeclaring math delimiter \llcorner on input line 76.
+LaTeX Font Info:    Redeclaring math delimiter \lrcorner on input line 77.
+LaTeX Font Info:    Redeclaring math symbol \square on input line 141.
+LaTeX Font Info:    Redeclaring math symbol \lozenge on input line 142.
+)
+LaTeX Font Info:    Redeclaring math symbol \boxdot on input line 44.
+LaTeX Font Info:    Redeclaring math symbol \boxplus on input line 45.
+LaTeX Font Info:    Redeclaring math symbol \boxtimes on input line 46.
+LaTeX Font Info:    Redeclaring math symbol \blacksquare on input line 48.
+LaTeX Font Info:    Redeclaring math symbol \centerdot on input line 49.
+LaTeX Font Info:    Redeclaring math symbol \blacklozenge on input line 51.
+LaTeX Font Info:    Redeclaring math symbol \circlearrowright on input line 52.
+
+LaTeX Font Info:    Redeclaring math symbol \circlearrowleft on input line 53.
+LaTeX Font Info:    Redeclaring math symbol \leftrightharpoons on input line 56
+.
+LaTeX Font Info:    Redeclaring math symbol \boxminus on input line 57.
+LaTeX Font Info:    Redeclaring math symbol \Vdash on input line 58.
+LaTeX Font Info:    Redeclaring math symbol \Vvdash on input line 59.
+LaTeX Font Info:    Redeclaring math symbol \vDash on input line 60.
+LaTeX Font Info:    Redeclaring math symbol \twoheadrightarrow on input line 61
+.
+LaTeX Font Info:    Redeclaring math symbol \twoheadleftarrow on input line 62.
+
+LaTeX Font Info:    Redeclaring math symbol \leftleftarrows on input line 63.
+LaTeX Font Info:    Redeclaring math symbol \rightrightarrows on input line 64.
+
+LaTeX Font Info:    Redeclaring math symbol \upuparrows on input line 65.
+LaTeX Font Info:    Redeclaring math symbol \downdownarrows on input line 66.
+LaTeX Font Info:    Redeclaring math symbol \upharpoonright on input line 67.
+LaTeX Font Info:    Redeclaring math symbol \downharpoonright on input line 69.
+
+LaTeX Font Info:    Redeclaring math symbol \upharpoonleft on input line 70.
+LaTeX Font Info:    Redeclaring math symbol \downharpoonleft on input line 71.
+LaTeX Font Info:    Redeclaring math symbol \rightarrowtail on input line 72.
+LaTeX Font Info:    Redeclaring math symbol \leftarrowtail on input line 73.
+LaTeX Font Info:    Redeclaring math symbol \leftrightarrows on input line 74.
+LaTeX Font Info:    Redeclaring math symbol \rightleftarrows on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \Lsh on input line 76.
+LaTeX Font Info:    Redeclaring math symbol \Rsh on input line 77.
+LaTeX Font Info:    Redeclaring math symbol \leftrightsquigarrow on input line 
+79.
+LaTeX Font Info:    Redeclaring math symbol \looparrowleft on input line 80.
+LaTeX Font Info:    Redeclaring math symbol \looparrowright on input line 81.
+LaTeX Font Info:    Redeclaring math symbol \circeq on input line 82.
+LaTeX Font Info:    Redeclaring math symbol \succsim on input line 83.
+LaTeX Font Info:    Redeclaring math symbol \gtrsim on input line 84.
+LaTeX Font Info:    Redeclaring math symbol \gtrapprox on input line 85.
+LaTeX Font Info:    Redeclaring math symbol \multimap on input line 86.
+LaTeX Font Info:    Redeclaring math symbol \therefore on input line 87.
+LaTeX Font Info:    Redeclaring math symbol \because on input line 88.
+LaTeX Font Info:    Redeclaring math symbol \doteqdot on input line 89.
+LaTeX Font Info:    Redeclaring math symbol \triangleq on input line 91.
+LaTeX Font Info:    Redeclaring math symbol \precsim on input line 92.
+LaTeX Font Info:    Redeclaring math symbol \lesssim on input line 93.
+LaTeX Font Info:    Redeclaring math symbol \lessapprox on input line 94.
+LaTeX Font Info:    Redeclaring math symbol \eqslantless on input line 95.
+LaTeX Font Info:    Redeclaring math symbol \eqslantgtr on input line 96.
+LaTeX Font Info:    Redeclaring math symbol \curlyeqprec on input line 97.
+LaTeX Font Info:    Redeclaring math symbol \curlyeqsucc on input line 98.
+LaTeX Font Info:    Redeclaring math symbol \preccurlyeq on input line 99.
+LaTeX Font Info:    Redeclaring math symbol \leqq on input line 100.
+LaTeX Font Info:    Redeclaring math symbol \leqslant on input line 101.
+LaTeX Font Info:    Redeclaring math symbol \lessgtr on input line 102.
+LaTeX Font Info:    Redeclaring math symbol \backprime on input line 103.
+LaTeX Font Info:    Redeclaring math symbol \risingdotseq on input line 104.
+LaTeX Font Info:    Redeclaring math symbol \fallingdotseq on input line 105.
+LaTeX Font Info:    Redeclaring math symbol \succcurlyeq on input line 106.
+LaTeX Font Info:    Redeclaring math symbol \geqq on input line 107.
+LaTeX Font Info:    Redeclaring math symbol \geqslant on input line 108.
+LaTeX Font Info:    Redeclaring math symbol \gtrless on input line 109.
+LaTeX Font Info:    Redeclaring math symbol \bigstar on input line 117.
+LaTeX Font Info:    Redeclaring math symbol \between on input line 118.
+LaTeX Font Info:    Redeclaring math symbol \blacktriangledown on input line 11
+9.
+LaTeX Font Info:    Redeclaring math symbol \blacktriangleright on input line 1
+20.
+LaTeX Font Info:    Redeclaring math symbol \blacktriangleleft on input line 12
+1.
+LaTeX Font Info:    Redeclaring math symbol \vartriangle on input line 122.
+LaTeX Font Info:    Redeclaring math symbol \blacktriangle on input line 123.
+LaTeX Font Info:    Redeclaring math symbol \triangledown on input line 124.
+LaTeX Font Info:    Redeclaring math symbol \eqcirc on input line 125.
+LaTeX Font Info:    Redeclaring math symbol \lesseqgtr on input line 126.
+LaTeX Font Info:    Redeclaring math symbol \gtreqless on input line 127.
+LaTeX Font Info:    Redeclaring math symbol \lesseqqgtr on input line 128.
+LaTeX Font Info:    Redeclaring math symbol \gtreqqless on input line 129.
+LaTeX Font Info:    Redeclaring math symbol \Rrightarrow on input line 130.
+LaTeX Font Info:    Redeclaring math symbol \Lleftarrow on input line 131.
+LaTeX Font Info:    Redeclaring math symbol \veebar on input line 132.
+LaTeX Font Info:    Redeclaring math symbol \barwedge on input line 133.
+LaTeX Font Info:    Redeclaring math symbol \doublebarwedge on input line 134.
+LaTeX Font Info:    Redeclaring math symbol \measuredangle on input line 137.
+LaTeX Font Info:    Redeclaring math symbol \sphericalangle on input line 138.
+LaTeX Font Info:    Redeclaring math symbol \varpropto on input line 139.
+LaTeX Font Info:    Redeclaring math symbol \smallsmile on input line 140.
+LaTeX Font Info:    Redeclaring math symbol \smallfrown on input line 141.
+LaTeX Font Info:    Redeclaring math symbol \Subset on input line 142.
+LaTeX Font Info:    Redeclaring math symbol \Supset on input line 143.
+LaTeX Font Info:    Redeclaring math symbol \Cup on input line 144.
+LaTeX Font Info:    Redeclaring math symbol \Cap on input line 146.
+LaTeX Font Info:    Redeclaring math symbol \curlywedge on input line 148.
+LaTeX Font Info:    Redeclaring math symbol \curlyvee on input line 149.
+LaTeX Font Info:    Redeclaring math symbol \leftthreetimes on input line 150.
+LaTeX Font Info:    Redeclaring math symbol \rightthreetimes on input line 151.
+
+LaTeX Font Info:    Redeclaring math symbol \subseteqq on input line 152.
+LaTeX Font Info:    Redeclaring math symbol \supseteqq on input line 153.
+LaTeX Font Info:    Redeclaring math symbol \bumpeq on input line 154.
+LaTeX Font Info:    Redeclaring math symbol \Bumpeq on input line 155.
+LaTeX Font Info:    Redeclaring math symbol \lll on input line 156.
+LaTeX Font Info:    Redeclaring math symbol \ggg on input line 158.
+LaTeX Font Info:    Redeclaring math symbol \circledS on input line 160.
+LaTeX Font Info:    Redeclaring math symbol \pitchfork on input line 161.
+LaTeX Font Info:    Redeclaring math symbol \dotplus on input line 162.
+LaTeX Font Info:    Redeclaring math symbol \backsim on input line 163.
+LaTeX Font Info:    Redeclaring math symbol \backsimeq on input line 164.
+LaTeX Font Info:    Redeclaring math symbol \complement on input line 165.
+LaTeX Font Info:    Redeclaring math symbol \intercal on input line 166.
+LaTeX Font Info:    Redeclaring math symbol \circledcirc on input line 167.
+LaTeX Font Info:    Redeclaring math symbol \circledast on input line 168.
+LaTeX Font Info:    Redeclaring math symbol \circleddash on input line 169.
+LaTeX Font Info:    Redeclaring math symbol \lvertneqq on input line 171.
+LaTeX Font Info:    Redeclaring math symbol \gvertneqq on input line 172.
+LaTeX Font Info:    Redeclaring math symbol \nleq on input line 173.
+LaTeX Font Info:    Redeclaring math symbol \ngeq on input line 174.
+LaTeX Font Info:    Redeclaring math symbol \nless on input line 175.
+LaTeX Font Info:    Redeclaring math symbol \ngtr on input line 176.
+LaTeX Font Info:    Redeclaring math symbol \nprec on input line 177.
+LaTeX Font Info:    Redeclaring math symbol \nsucc on input line 178.
+LaTeX Font Info:    Redeclaring math symbol \lneqq on input line 179.
+LaTeX Font Info:    Redeclaring math symbol \gneqq on input line 180.
+LaTeX Font Info:    Redeclaring math symbol \nleqslant on input line 181.
+LaTeX Font Info:    Redeclaring math symbol \ngeqslant on input line 182.
+LaTeX Font Info:    Redeclaring math symbol \lneq on input line 183.
+LaTeX Font Info:    Redeclaring math symbol \gneq on input line 184.
+LaTeX Font Info:    Redeclaring math symbol \npreceq on input line 185.
+LaTeX Font Info:    Redeclaring math symbol \nsucceq on input line 186.
+LaTeX Font Info:    Redeclaring math symbol \precnsim on input line 187.
+LaTeX Font Info:    Redeclaring math symbol \succnsim on input line 188.
+LaTeX Font Info:    Redeclaring math symbol \lnsim on input line 189.
+LaTeX Font Info:    Redeclaring math symbol \gnsim on input line 190.
+LaTeX Font Info:    Redeclaring math symbol \nleqq on input line 191.
+LaTeX Font Info:    Redeclaring math symbol \ngeqq on input line 192.
+LaTeX Font Info:    Redeclaring math symbol \precneqq on input line 193.
+LaTeX Font Info:    Redeclaring math symbol \succneqq on input line 194.
+LaTeX Font Info:    Redeclaring math symbol \precnapprox on input line 195.
+LaTeX Font Info:    Redeclaring math symbol \succnapprox on input line 196.
+LaTeX Font Info:    Redeclaring math symbol \lnapprox on input line 197.
+LaTeX Font Info:    Redeclaring math symbol \gnapprox on input line 198.
+LaTeX Font Info:    Redeclaring math symbol \nsim on input line 199.
+LaTeX Font Info:    Redeclaring math symbol \ncong on input line 200.
+LaTeX Font Info:    Redeclaring math symbol \diagup on input line 201.
+LaTeX Font Info:    Redeclaring math symbol \diagdown on input line 202.
+LaTeX Font Info:    Redeclaring math symbol \varsubsetneq on input line 203.
+LaTeX Font Info:    Redeclaring math symbol \varsupsetneq on input line 204.
+LaTeX Font Info:    Redeclaring math symbol \nsubseteqq on input line 205.
+LaTeX Font Info:    Redeclaring math symbol \nsupseteqq on input line 206.
+LaTeX Font Info:    Redeclaring math symbol \subsetneqq on input line 207.
+LaTeX Font Info:    Redeclaring math symbol \supsetneqq on input line 208.
+LaTeX Font Info:    Redeclaring math symbol \varsubsetneqq on input line 209.
+LaTeX Font Info:    Redeclaring math symbol \varsupsetneqq on input line 210.
+LaTeX Font Info:    Redeclaring math symbol \subsetneq on input line 211.
+LaTeX Font Info:    Redeclaring math symbol \supsetneq on input line 212.
+LaTeX Font Info:    Redeclaring math symbol \nsubseteq on input line 213.
+LaTeX Font Info:    Redeclaring math symbol \nsupseteq on input line 214.
+LaTeX Font Info:    Redeclaring math symbol \nparallel on input line 215.
+LaTeX Font Info:    Redeclaring math symbol \nmid on input line 216.
+LaTeX Font Info:    Redeclaring math symbol \nshortmid on input line 217.
+LaTeX Font Info:    Redeclaring math symbol \nshortparallel on input line 218.
+LaTeX Font Info:    Redeclaring math symbol \nvdash on input line 219.
+LaTeX Font Info:    Redeclaring math symbol \nVdash on input line 220.
+LaTeX Font Info:    Redeclaring math symbol \nvDash on input line 221.
+LaTeX Font Info:    Redeclaring math symbol \nVDash on input line 222.
+LaTeX Font Info:    Redeclaring math symbol \ntrianglerighteq on input line 223
+.
+LaTeX Font Info:    Redeclaring math symbol \ntrianglelefteq on input line 224.
+
+LaTeX Font Info:    Redeclaring math symbol \ntriangleleft on input line 225.
+LaTeX Font Info:    Redeclaring math symbol \ntriangleright on input line 226.
+LaTeX Font Info:    Redeclaring math symbol \nleftarrow on input line 227.
+LaTeX Font Info:    Redeclaring math symbol \nrightarrow on input line 228.
+LaTeX Font Info:    Redeclaring math symbol \nLeftarrow on input line 229.
+LaTeX Font Info:    Redeclaring math symbol \nRightarrow on input line 230.
+LaTeX Font Info:    Redeclaring math symbol \nLeftrightarrow on input line 231.
+
+LaTeX Font Info:    Redeclaring math symbol \nleftrightarrow on input line 232.
+
+LaTeX Font Info:    Redeclaring math symbol \divideontimes on input line 233.
+LaTeX Font Info:    Redeclaring math symbol \varnothing on input line 234.
+LaTeX Font Info:    Redeclaring math symbol \nexists on input line 235.
+LaTeX Font Info:    Redeclaring math symbol \Finv on input line 236.
+LaTeX Font Info:    Redeclaring math symbol \Game on input line 237.
+LaTeX Font Info:    Redeclaring math symbol \eth on input line 240.
+LaTeX Font Info:    Redeclaring math symbol \eqsim on input line 241.
+LaTeX Font Info:    Redeclaring math symbol \beth on input line 242.
+LaTeX Font Info:    Redeclaring math symbol \gimel on input line 243.
+LaTeX Font Info:    Redeclaring math symbol \daleth on input line 244.
+LaTeX Font Info:    Redeclaring math symbol \lessdot on input line 245.
+LaTeX Font Info:    Redeclaring math symbol \gtrdot on input line 246.
+LaTeX Font Info:    Redeclaring math symbol \ltimes on input line 247.
+LaTeX Font Info:    Redeclaring math symbol \rtimes on input line 248.
+LaTeX Font Info:    Redeclaring math symbol \shortmid on input line 249.
+LaTeX Font Info:    Redeclaring math symbol \shortparallel on input line 250.
+LaTeX Font Info:    Redeclaring math symbol \smallsetminus on input line 251.
+LaTeX Font Info:    Redeclaring math symbol \thicksim on input line 252.
+LaTeX Font Info:    Redeclaring math symbol \thickapprox on input line 253.
+LaTeX Font Info:    Redeclaring math symbol \approxeq on input line 254.
+LaTeX Font Info:    Redeclaring math symbol \succapprox on input line 255.
+LaTeX Font Info:    Redeclaring math symbol \precapprox on input line 256.
+LaTeX Font Info:    Redeclaring math symbol \curvearrowleft on input line 257.
+LaTeX Font Info:    Redeclaring math symbol \curvearrowright on input line 258.
+
+LaTeX Font Info:    Redeclaring math symbol \digamma on input line 259.
+LaTeX Font Info:    Redeclaring math symbol \varkappa on input line 260.
+LaTeX Font Info:    Redeclaring math symbol \Bbbk on input line 261.
+LaTeX Font Info:    Redeclaring math symbol \hslash on input line 262.
+LaTeX Font Info:    Redeclaring math symbol \backepsilon on input line 265.
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/lineno/lineno.sty
+Package: lineno 2005/11/02 line numbers on paragraphs v4.41
+\linenopenalty=\count98
+\output=\toks19
+\linenoprevgraf=\count99
+\linenumbersep=\dimen120
+\linenumberwidth=\dimen121
+\c@linenumber=\count100
+\c@pagewiselinenumber=\count101
+\c@LN@truepage=\count102
+\c@internallinenumber=\count103
+\c@internallinenumbers=\count104
+\quotelinenumbersep=\dimen122
+\bframerule=\dimen123
+\bframesep=\dimen124
+\bframebox=\box30
+LaTeX Info: Redefining \\ on input line 3056.
+)
+No file main.aux.
+\openout1 = `main.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/txmi/m/it on input line 92.
+LaTeX Font Info:    Try loading font information for OML+txmi on input line 92.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/txfonts/omltxmi.fd
+File: omltxmi.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 92.
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 92.
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for OMS/txsy/m/n on input line 92.
+LaTeX Font Info:    Try loading font information for OMS+txsy on input line 92.
+
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/txfonts/omstxsy.fd
+File: omstxsy.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for OMX/txex/m/n on input line 92.
+LaTeX Font Info:    Try loading font information for OMX+txex on input line 92.
+
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/txfonts/omxtxex.fd
+File: omxtxex.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Checking defaults for U/txexa/m/n on input line 92.
+LaTeX Font Info:    Try loading font information for U+txexa on input line 92.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/txfonts/utxexa.fd
+File: utxexa.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    ... okay on input line 92.
+LaTeX Font Info:    Try loading font information for OT1+txr on input line 92.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/txfonts/ot1txr.fd
+File: ot1txr.fd 2000/12/15 v3.1
+)
+(/usr/local/texlive/2018/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count105
+\scratchdimen=\dimen125
+\scratchbox=\box31
+\nofMPsegments=\count106
+\nofMParguments=\count107
+\everyMPshowfont=\toks20
+\MPscratchCnt=\count108
+\MPscratchDim=\dimen126
+\MPnumerator=\count109
+\makeMPintoPDFobject=\count110
+\everyMPtoPDFconversion=\toks21
+) (/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+(/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)))
+(/usr/local/texlive/2018/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+(/usr/local/texlive/2018/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2018/01/30 v0.27 Utility functions of pdfTeX for LuaTeX (HO
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: custom
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* hratio: 1:1
+* vratio: 1:1
+* modes: 
+* h-part:(L,W,R)=(64.75394pt, 468.0pt, 64.75394pt)
+* v-part:(T,H,B)=(111.52342pt, 622.0pt, 111.52342pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=468.0pt
+* \textheight=622.0pt
+* \oddsidemargin=-7.51605pt
+* \evensidemargin=-7.51605pt
+* \topmargin=-22.74657pt
+* \headheight=50.0pt
+* \headsep=12.0pt
+* \topskip=10.0pt
+* \footskip=18.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=24.0pt
+* \skip\footins=24.0pt plus 2.0pt minus 12.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+(./abstract.tex
+LaTeX Font Info:    Try loading font information for U+txmia on input line 7.
+ (/usr/local/texlive/2018/texmf-dist/tex/latex/txfonts/utxmia.fd
+File: utxmia.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    Try loading font information for U+msa on input line 7.
+ (/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 7.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Try loading font information for U+txsyc on input line 7.
+
+(/usr/local/texlive/2018/texmf-dist/tex/latex/txfonts/utxsyc.fd
+File: utxsyc.fd 2000/12/15 v3.1
+)) (./pluto.tex
+
+Package natbib Warning: Citation `Ster:15' on page 1 undefined on input line 17
+.
+
+
+Package natbib Warning: Citation `Glad:16' on page 1 undefined on input line 17
+.
+
+
+Package natbib Warning: Citation `Grun:16' on page 1 undefined on input line 17
+.
+
+
+Package natbib Warning: Citation `Moor:16' on page 1 undefined on input line 17
+.
+
+[1
+
+{/usr/local/texlive/2018/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+
+Package natbib Warning: Citation `Hubb:88' on page 2 undefined on input line 29
+.
+
+
+Package natbib Warning: Citation `Elli:89' on page 2 undefined on input line 29
+.
+
+
+Package natbib Warning: Citation `Hins:15dps' on page 2 undefined on input line
+ 32.
+
+
+Package natbib Warning: Citation `Glad:16' on page 2 undefined on input line 32
+.
+
+
+Package natbib Warning: Citation `Elli:03' on page 2 undefined on input line 36
+.
+
+
+Package natbib Warning: Citation `Sica:03' on page 2 undefined on input line 36
+.
+
+
+Package natbib Warning: Citation `Olki:15' on page 2 undefined on input line 36
+.
+
+
+Package natbib Warning: Citation `Owen:93' on page 2 undefined on input line 41
+.
+
+
+Package natbib Warning: Citation `Dout:99' on page 2 undefined on input line 41
+.
+
+
+Package natbib Warning: Citation `Grun:13' on page 2 undefined on input line 41
+.
+
+
+Package natbib Warning: Citation `Grun:16' on page 2 undefined on input line 46
+.
+
+
+Package natbib Warning: Citation `Youn:97' on page 2 undefined on input line 50
+.
+
+
+Package natbib Warning: Citation `Lell:09' on page 2 undefined on input line 50
+.
+
+
+Package natbib Warning: Citation `Lell:11co' on page 2 undefined on input line 
+50.
+
+
+Package natbib Warning: Citation `Lell:15' on page 2 undefined on input line 50
+.
+
+
+Package natbib Warning: Citation `Lell:16' on page 2 undefined on input line 50
+.
+
+
+Package natbib Warning: Citation `Lell:11co' on page 2 undefined on input line 
+54.
+
+
+Package natbib Warning: Citation `Lell:15' on page 2 undefined on input line 54
+.
+
+
+Package natbib Warning: Citation `Glad:16' on page 2 undefined on input line 57
+.
+
+
+Package natbib Warning: Citation `Elli:89' on page 2 undefined on input line 61
+.
+
+
+Package natbib Warning: Citation `Sica:03' on page 2 undefined on input line 61
+.
+
+
+Package natbib Warning: Citation `Elli:07' on page 2 undefined on input line 61
+.
+
+
+Package natbib Warning: Citation `Pers:08' on page 2 undefined on input line 61
+.
+
+
+Package natbib Warning: Citation `Youn:08' on page 2 undefined on input line 61
+.
+
+
+Package natbib Warning: Citation `Dias:15' on page 2 undefined on input line 61
+.
+
+
+Package natbib Warning: Citation `Sica:16' on page 2 undefined on input line 61
+.
+
+
+Package natbib Warning: Citation `Hins:15dps' on page 2 undefined on input line
+ 62.
+
+
+Package natbib Warning: Citation `Glad:16' on page 2 undefined on input line 62
+.
+
+
+Package natbib Warning: Citation `Yell:89' on page 2 undefined on input line 69
+.
+
+
+Package natbib Warning: Citation `Stro:96' on page 2 undefined on input line 69
+.
+
+
+Package natbib Warning: Citation `Dias:15' on page 2 undefined on input line 71
+.
+
+
+Package natbib Warning: Citation `Gurw:15dps' on page 2 undefined on input line
+ 71.
+
+
+Package natbib Warning: Citation `Glad:16' on page 2 undefined on input line 71
+.
+
+
+Package natbib Warning: Citation `Glad:16' on page 2 undefined on input line 75
+.
+
+
+Package natbib Warning: Citation `Lell:16' on page 2 undefined on input line 76
+.
+
+
+Package natbib Warning: Citation `Glad:16' on page 2 undefined on input line 78
+.
+
+
+Package natbib Warning: Citation `Sica:03' on page 2 undefined on input line 81
+.
+
+
+Package natbib Warning: Citation `Pers:08' on page 2 undefined on input line 81
+.
+
+
+Package natbib Warning: Citation `Toig:10' on page 2 undefined on input line 81
+.
+
+
+Package natbib Warning: Citation `Lebo:10' undefined on input line 109.
+
+
+Package natbib Warning: Citation `Hour:95' undefined on input line 109.
+
+
+Package natbib Warning: Citation `Lebo:12' undefined on input line 109.
+
+
+Package natbib Warning: Citation `Forg:06' undefined on input line 109.
+
+
+Package natbib Warning: Citation `Forg:99' undefined on input line 109.
+
+
+Package natbib Warning: Citation `Forg:98' undefined on input line 109.
+
+
+Package natbib Warning: Citation `Gonz:09a' undefined on input line 109.
+
+
+Package natbib Warning: Citation `Zalu:13' on page 2 undefined on input line 11
+2.
+
+
+Package natbib Warning: Citation `Toig:15' on page 2 undefined on input line 11
+3.
+
+[2]
+
+LaTeX Warning: Reference `sc:model' on page 3 undefined on input line 123.
+
+
+LaTeX Warning: Reference `sc:initial' on page 3 undefined on input line 124.
+
+
+LaTeX Warning: Reference `sc:Tresults' on page 3 undefined on input line 127.
+
+
+LaTeX Warning: Reference `sc:ch4_co_results' on page 3 undefined on input line 
+127.
+
+
+Package natbib Warning: Citation `Forg:99' on page 3 undefined on input line 14
+5.
+
+
+Package natbib Warning: Citation `Arak:77' on page 3 undefined on input line 14
+9.
+
+
+Package natbib Warning: Citation `Gonz:09a' on page 3 undefined on input line 1
+60.
+
+
+Package natbib Warning: Citation `Bert:16ica' on page 3 undefined on input line
+ 184.
+
+
+LaTeX Warning: Reference `sc:ch4_model' on page 3 undefined on input line 204.
+
+
+Package natbib Warning: Citation `Lell:11co' on page 3 undefined on input line 
+206.
+
+
+Package natbib Warning: Citation `Lell:16' on page 3 undefined on input line 20
+6.
+
+[3]
+
+Package natbib Warning: Citation `Stro:96' on page 4 undefined on input line 23
+8.
+
+
+Package natbib Warning: Citation `Stro:96' on page 4 undefined on input line 23
+9.
+
+
+Package natbib Warning: Citation `Stro:96' on page 4 undefined on input line 24
+2.
+
+
+Package natbib Warning: Citation `Stro:96' on page 4 undefined on input line 24
+7.
+
+
+Package natbib Warning: Citation `Zalu:11' on page 4 undefined on input line 24
+7.
+
+
+Package natbib Warning: Citation `Bour:03' on page 4 undefined on input line 24
+9.
+
+
+Package natbib Warning: Citation `Dias:15' on page 4 undefined on input line 27
+2.
+
+
+Package natbib Warning: Citation `Glad:16' on page 4 undefined on input line 27
+2.
+
+
+Package natbib Warning: Citation `Glad:16' on page 4 undefined on input line 28
+3.
+
+
+Package natbib Warning: Citation `Hubb:90' on page 4 undefined on input line 30
+7.
+
+[4]
+
+LaTeX Warning: Reference `sc:cond' on page 5 undefined on input line 333.
+
+
+Package natbib Warning: Citation `Lell:11spitzer' on page 5 undefined on input 
+line 370.
+
+
+Package natbib Warning: Citation `Forg:99' on page 5 undefined on input line 39
+8.
+
+
+Package natbib Warning: Citation `Mell:82' on page 5 undefined on input line 39
+9.
+
+
+Overfull \hbox (2.90015pt too wide) in paragraph at lines 406--409
+[]\OT1/txr/m/n/10 Turbulence and con-vec-tion mix en-ergy (po-ten-tial tem-per-
+a-ture), mo-men-tum (wind), and trac-ers (gases and aerosols).
+ []
+
+[5]
+
+Package natbib Warning: Citation `Forg:99' on page 6 undefined on input line 42
+5.
+
+
+Package natbib Warning: Citation `Forg:98' on page 6 undefined on input line 45
+0.
+
+
+Package natbib Warning: Citation `Fray:09' on page 6 undefined on input line 45
+6.
+
+[6]
+
+Package natbib Warning: Citation `Forg:98' on page 7 undefined on input line 53
+3.
+
+
+LaTeX Warning: Reference `sc:dynamic' on page 7 undefined on input line 558.
+
+
+Package natbib Warning: Citation `Bert:16ica' on page 7 undefined on input line
+ 568.
+
+
+Package natbib Warning: Citation `Hour:99' on page 7 undefined on input line 58
+0.
+
+
+LaTeX Warning: Reference `sc:pbl' on page 7 undefined on input line 582.
+
+
+LaTeX Warning: Reference `eq:sflux' on page 7 undefined on input line 588.
+
+
+LaTeX Warning: Reference `eq:sflux' on page 7 undefined on input line 590.
+
+
+Package natbib Warning: Citation `Fray:09' on page 7 undefined on input line 59
+7.
+
+
+Package natbib Warning: Citation `Merl:15' on page 7 undefined on input line 61
+5.
+
+
+Package natbib Warning: Citation `Fray:09' on page 7 undefined on input line 62
+4.
+
+[7]
+
+LaTeX Warning: Reference `eq:ch4sat' on page 8 undefined on input line 631.
+
+
+Package natbib Warning: Citation `Ross:78' on page 8 undefined on input line 68
+8.
+
+
+Package natbib Warning: Citation `Bert:16ica' on page 8 undefined on input line
+ 701.
+
+
+Package natbib Warning: Citation `Fray:09' on page 8 undefined on input line 71
+6.
+
+[8]
+
+Package natbib Warning: Citation `Merl:15' on page 9 undefined on input line 73
+6.
+
+
+Package natbib Warning: Citation `Moor:16' on page 9 undefined on input line 75
+8.
+
+
+LaTeX Warning: Reference `fg:map_ini' on page 9 undefined on input line 761.
+
+
+Package natbib Warning: Citation `Hans:96' on page 9 undefined on input line 77
+2.
+
+
+Package natbib Warning: Citation `Youn:13' on page 9 undefined on input line 77
+2.
+
+
+Package natbib Warning: Citation `Toig:15' on page 9 undefined on input line 77
+2.
+
+
+Package natbib Warning: Citation `Vang:11' on page 9 undefined on input line 77
+8.
+
+
+Package natbib Warning: Citation `Toig:15' on page 9 undefined on input line 77
+8.
+
+
+Package natbib Warning: Citation `Bert:16nat' on page 9 undefined on input line
+ 791.
+
+
+LaTeX Warning: Reference `fg:map_ini' on page 9 undefined on input line 792.
+
+
+LaTeX Warning: Reference `sc:kinds' on page 9 undefined on input line 802.
+
+[9]
+
+LaTeX Warning: Reference `sc:ch4_co_results' on page 10 undefined on input line
+ 820.
+
+
+Package natbib Warning: Citation `Hans:96' on page 10 undefined on input line 8
+35.
+
+
+Package natbib Warning: Citation `Youn:13' on page 10 undefined on input line 8
+35.
+
+
+LaTeX Warning: Reference `fg:evol_ps' on page 10 undefined on input line 842.
+
+
+Package natbib Warning: Citation `Sica:16' on page 10 undefined on input line 8
+43.
+
+
+Package natbib Warning: Citation `Glad:16' on page 10 undefined on input line 8
+43.
+
+
+LaTeX Warning: Reference `fg:map_ini' on page 10 undefined on input line 845.
+
+
+Package natbib Warning: Citation `Ster:15' on page 10 undefined on input line 8
+54.
+
+
+Package natbib Warning: Citation `Grun:16' on page 10 undefined on input line 8
+54.
+
+
+Package natbib Warning: Citation `Grun:16' on page 10 undefined on input line 8
+66.
+
+
+LaTeX Warning: Reference `fg:evol_ps' on page 10 undefined on input line 875.
+
+Package epstopdf Info: Source file: <figures/map_ini1988.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 31083 bytes
+(epstopdf)             Output file: <figures/map_ini1988-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/map_ini1988-eps-co
+nverted-to.pdf figures/map_ini1988.eps>
+(epstopdf)             \includegraphics on input line 884.
+runsystem(repstopdf --outfile=figures/map_ini1988-eps-converted-to.pdf figures/
+map_ini1988.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/map_ini1988-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:09
+(epstopdf)                    size: 11301 bytes.
+<figures/map_ini1988-eps-converted-to.pdf, id=39, 472.76625pt x 289.08pt>
+File: figures/map_ini1988-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/map_ini1988-eps-converted-to.pdf>
+Package pdftex.def Info: figures/map_ini1988-eps-converted-to.pdf  used on inpu
+t line 884.
+(pdftex.def)             Requested size: 199.16928pt x 121.7877pt.
+Package epstopdf Info: Source file: <figures/map_ini_legend.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 91491 bytes
+(epstopdf)             Output file: <figures/map_ini_legend-eps-converted-to.pd
+f>
+(epstopdf)             Command: <repstopdf --outfile=figures/map_ini_legend-eps
+-converted-to.pdf figures/map_ini_legend.eps>
+(epstopdf)             \includegraphics on input line 885.
+runsystem(repstopdf --outfile=figures/map_ini_legend-eps-converted-to.pdf figur
+es/map_ini_legend.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/map_ini_legend-eps-converted-to.pd
+f>
+(epstopdf)                    date: 2018-11-04 12:15:10
+(epstopdf)                    size: 28041 bytes.
+<figures/map_ini_legend-eps-converted-to.pdf, id=41, 130.4875pt x 255.95625pt>
+File: figures/map_ini_legend-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/map_ini_legend-eps-converted-to.pdf>
+Package pdftex.def Info: figures/map_ini_legend-eps-converted-to.pdf  used on i
+nput line 885.
+(pdftex.def)             Requested size: 39.83368pt x 78.13487pt.
+Package epstopdf Info: Source file: <figures/map_ini2005_pole.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 31729 bytes
+(epstopdf)             Output file: <figures/map_ini2005_pole-eps-converted-to.
+pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/map_ini2005_pole-e
+ps-converted-to.pdf figures/map_ini2005_pole.eps>
+(epstopdf)             \includegraphics on input line 886.
+runsystem(repstopdf --outfile=figures/map_ini2005_pole-eps-converted-to.pdf fig
+ures/map_ini2005_pole.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/map_ini2005_pole-eps-converted-to.
+pdf>
+(epstopdf)                    date: 2018-11-04 12:15:10
+(epstopdf)                    size: 11527 bytes.
+<figures/map_ini2005_pole-eps-converted-to.pdf, id=43, 472.76625pt x 289.08pt>
+File: figures/map_ini2005_pole-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/map_ini2005_pole-eps-converted-to.pdf>
+Package pdftex.def Info: figures/map_ini2005_pole-eps-converted-to.pdf  used on
+ input line 886.
+(pdftex.def)             Requested size: 199.16928pt x 121.7877pt.
+Package epstopdf Info: Source file: <figures/evol_p1215km.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 90667 bytes
+(epstopdf)             Output file: <figures/evol_p1215km-eps-converted-to.pdf>
+
+(epstopdf)             Command: <repstopdf --outfile=figures/evol_p1215km-eps-c
+onverted-to.pdf figures/evol_p1215km.eps>
+(epstopdf)             \includegraphics on input line 908.
+runsystem(repstopdf --outfile=figures/evol_p1215km-eps-converted-to.pdf figures
+/evol_p1215km.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/evol_p1215km-eps-converted-to.pdf>
+
+(epstopdf)                    date: 2018-11-04 12:15:11
+(epstopdf)                    size: 75151 bytes.
+<figures/evol_p1215km-eps-converted-to.pdf, id=45, 471.7625pt x 243.91125pt>
+File: figures/evol_p1215km-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/evol_p1215km-eps-converted-to.pdf>
+Package pdftex.def Info: figures/evol_p1215km-eps-converted-to.pdf  used on inp
+ut line 908.
+(pdftex.def)             Requested size: 341.43306pt x 176.53151pt.
+Package epstopdf Info: Source file: <figures/evol_ps.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 105619 bytes
+(epstopdf)             Output file: <figures/evol_ps-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/evol_ps-eps-conver
+ted-to.pdf figures/evol_ps.eps>
+(epstopdf)             \includegraphics on input line 909.
+runsystem(repstopdf --outfile=figures/evol_ps-eps-converted-to.pdf figures/evol
+_ps.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/evol_ps-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:12
+(epstopdf)                    size: 90386 bytes.
+<figures/evol_ps-eps-converted-to.pdf, id=47, 471.7625pt x 251.94125pt>
+File: figures/evol_ps-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/evol_ps-eps-converted-to.pdf>
+Package pdftex.def Info: figures/evol_ps-eps-converted-to.pdf  used on input li
+ne 909.
+(pdftex.def)             Requested size: 341.43306pt x 182.34325pt.
+
+Package natbib Warning: Citation `Sica:16' on page 10 undefined on input line 9
+20.
+
+
+Package natbib Warning: Citation `Sica:16' on page 10 undefined on input line 9
+20.
+
+
+LaTeX Warning: Reference `fg:map_ts' on page 10 undefined on input line 936.
+
+
+Package natbib Warning: Citation `Lell:11spitzer' on page 10 undefined on input
+ line 945.
+
+[10]
+
+LaTeX Warning: Reference `fg:map_ts_mountain' on page 11 undefined on input lin
+e 959.
+
+
+LaTeX Warning: Reference `fg:map_ts' on page 11 undefined on input line 965.
+
+
+LaTeX Warning: Reference `fg:map_ts' on page 11 undefined on input line 972.
+
+
+LaTeX Warning: Reference `fg:map_ts' on page 11 undefined on input line 975.
+
+
+LaTeX Warning: Reference `fg:map_ts' on page 11 undefined on input line 982.
+
+Package epstopdf Info: Source file: <figures/fig_tsurf.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 1183281 bytes
+(epstopdf)             Output file: <figures/fig_tsurf-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/fig_tsurf-eps-conv
+erted-to.pdf figures/fig_tsurf.eps>
+(epstopdf)             \includegraphics on input line 997.
+runsystem(repstopdf --outfile=figures/fig_tsurf-eps-converted-to.pdf figures/fi
+g_tsurf.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/fig_tsurf-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:12
+(epstopdf)                    size: 492133 bytes.
+<figures/fig_tsurf-eps-converted-to.pdf, id=52, 597.23125pt x 845.1575pt>
+File: figures/fig_tsurf-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/fig_tsurf-eps-converted-to.pdf>
+Package pdftex.def Info: figures/fig_tsurf-eps-converted-to.pdf  used on input 
+line 997.
+(pdftex.def)             Requested size: 483.69684pt x 684.49646pt.
+
+Overfull \hbox (15.69684pt too wide) in paragraph at lines 997--1011
+ [] 
+ []
+
+
+LaTeX Warning: Float too large for page by 132.73645pt on input line 1013.
+
+Package epstopdf Info: Source file: <figures/maptsurf_wind_moun2_UT3.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 56350 bytes
+(epstopdf)             Output file: <figures/maptsurf_wind_moun2_UT3-eps-conver
+ted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/maptsurf_wind_moun
+2_UT3-eps-converted-to.pdf figures/maptsurf_wind_moun2_UT3.eps>
+(epstopdf)             \includegraphics on input line 1026.
+runsystem(repstopdf --outfile=figures/maptsurf_wind_moun2_UT3-eps-converted-to.
+pdf figures/maptsurf_wind_moun2_UT3.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/maptsurf_wind_moun2_UT3-eps-conver
+ted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:13
+(epstopdf)                    size: 35376 bytes.
+<figures/maptsurf_wind_moun2_UT3-eps-converted-to.pdf, id=54, 562.1pt x 340.271
+26pt>
+File: figures/maptsurf_wind_moun2_UT3-eps-converted-to.pdf Graphic file (type p
+df)
+<use figures/maptsurf_wind_moun2_UT3-eps-converted-to.pdf>
+Package pdftex.def Info: figures/maptsurf_wind_moun2_UT3-eps-converted-to.pdf  
+used on input line 1026.
+(pdftex.def)             Requested size: 258.5091pt x 156.49014pt.
+Package epstopdf Info: Source file: <figures/maptsurf_wind_moun2_UT15.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 56484 bytes
+(epstopdf)             Output file: <figures/maptsurf_wind_moun2_UT15-eps-conve
+rted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/maptsurf_wind_moun
+2_UT15-eps-converted-to.pdf figures/maptsurf_wind_moun2_UT15.eps>
+(epstopdf)             \includegraphics on input line 1027.
+runsystem(repstopdf --outfile=figures/maptsurf_wind_moun2_UT15-eps-converted-to
+.pdf figures/maptsurf_wind_moun2_UT15.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/maptsurf_wind_moun2_UT15-eps-conve
+rted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:13
+(epstopdf)                    size: 35662 bytes.
+<figures/maptsurf_wind_moun2_UT15-eps-converted-to.pdf, id=56, 562.1pt x 340.27
+126pt>
+File: figures/maptsurf_wind_moun2_UT15-eps-converted-to.pdf Graphic file (type 
+pdf)
+<use figures/maptsurf_wind_moun2_UT15-eps-converted-to.pdf>
+Package pdftex.def Info: figures/maptsurf_wind_moun2_UT15-eps-converted-to.pdf 
+ used on input line 1027.
+(pdftex.def)             Requested size: 258.5091pt x 156.49014pt.
+
+Overfull \hbox (23.06548pt too wide) in paragraph at lines 1021--1037
+ [] 
+ []
+
+
+LaTeX Warning: Reference `fg:sectionT' on page 11 undefined on input line 1047.
+
+
+
+Package natbib Warning: Citation `Toig:15' on page 11 undefined on input line 1
+048.
+
+
+LaTeX Warning: Reference `sc:ch4_results' on page 11 undefined on input line 10
+51.
+
+
+Package natbib Warning: Citation `Hins:15dps' on page 11 undefined on input lin
+e 1053.
+
+
+Package natbib Warning: Citation `Glad:16' on page 11 undefined on input line 1
+053.
+
+
+Package natbib Warning: Citation `Dias:15' on page 11 undefined on input line 1
+053.
+
+
+LaTeX Warning: Reference `fg:ch4' on page 11 undefined on input line 1056.
+
+[11 <./figures/map_ini1988-eps-converted-to.pdf> <./figures/map_ini_legend-eps-
+converted-to.pdf> <./figures/map_ini2005_pole-eps-converted-to.pdf>] [12 <./fig
+ures/evol_p1215km-eps-converted-to.pdf> <./figures/evol_ps-eps-converted-to.pdf
+>] [13 <./figures/fig_tsurf-eps-converted-to.pdf>]
+Package epstopdf Info: Source file: <figures/fig_tempzon.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 165373 bytes
+(epstopdf)             Output file: <figures/fig_tempzon-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/fig_tempzon-eps-co
+nverted-to.pdf figures/fig_tempzon.eps>
+(epstopdf)             \includegraphics on input line 1062.
+runsystem(repstopdf --outfile=figures/fig_tempzon-eps-converted-to.pdf figures/
+fig_tempzon.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/fig_tempzon-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:14
+(epstopdf)                    size: 39140 bytes.
+<figures/fig_tempzon-eps-converted-to.pdf, id=110, 597.23125pt x 845.1575pt>
+File: figures/fig_tempzon-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/fig_tempzon-eps-converted-to.pdf>
+Package pdftex.def Info: figures/fig_tempzon-eps-converted-to.pdf  used on inpu
+t line 1062.
+(pdftex.def)             Requested size: 512.1496pt x 724.79662pt.
+
+Overfull \hbox (17.59686pt too wide) in paragraph at lines 1061--1068
+ |  [] 
+ []
+
+
+LaTeX Warning: Float too large for page by 144.5366pt on input line 1070.
+
+
+LaTeX Warning: Reference `fg:hinson' on page 14 undefined on input line 1078.
+
+
+LaTeX Warning: Reference `fg:diuT' on page 14 undefined on input line 1098.
+
+
+Package natbib Warning: Citation `Hins:15agu' on page 14 undefined on input lin
+e 1102.
+
+
+LaTeX Warning: Reference `fg:diuN2' on page 14 undefined on input line 1104.
+
+
+LaTeX Warning: Reference `fg:diuN2' on page 14 undefined on input line 1107.
+
+
+LaTeX Warning: Reference `fg:diuT' on page 14 undefined on input line 1116.
+
+
+LaTeX Warning: Reference `fg:map_ts' on page 14 undefined on input line 1120.
+
+[14 <./figures/maptsurf_wind_moun2_UT3-eps-converted-to.pdf> <./figures/maptsur
+f_wind_moun2_UT15-eps-converted-to.pdf>] [15 <./figures/fig_tempzon-eps-convert
+ed-to.pdf>]
+
+LaTeX Warning: Reference `fg:diuT' on page 16 undefined on input line 1123.
+
+
+LaTeX Warning: Reference `fg:map_ts' on page 16 undefined on input line 1127.
+
+
+LaTeX Warning: Reference `fg:diuT' on page 16 undefined on input line 1131.
+
+
+LaTeX Warning: Reference `fg:diuT' on page 16 undefined on input line 1136.
+
+
+LaTeX Warning: Reference `fg:diuT' on page 16 undefined on input line 1136.
+
+Package epstopdf Info: Source file: <figures/fig_hinson.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 120562 bytes
+(epstopdf)             Output file: <figures/fig_hinson-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/fig_hinson-eps-con
+verted-to.pdf figures/fig_hinson.eps>
+(epstopdf)             \includegraphics on input line 1146.
+runsystem(repstopdf --outfile=figures/fig_hinson-eps-converted-to.pdf figures/f
+ig_hinson.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/fig_hinson-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:15
+(epstopdf)                    size: 27305 bytes.
+<figures/fig_hinson-eps-converted-to.pdf, id=141, 597.23125pt x 845.1575pt>
+File: figures/fig_hinson-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/fig_hinson-eps-converted-to.pdf>
+Package pdftex.def Info: figures/fig_hinson-eps-converted-to.pdf  used on input
+ line 1146.
+(pdftex.def)             Requested size: 483.69684pt x 684.49646pt.
+
+Overfull \hbox (15.69684pt too wide) in paragraph at lines 1146--1146
+ [] 
+ []
+
+
+Package natbib Warning: Citation `Hins:15dps' on page 16 undefined on input lin
+e 1157.
+
+
+Package natbib Warning: Citation `Glad:16' on page 16 undefined on input line 1
+157.
+
+
+Package natbib Warning: Citation `Hins:15dps' on page 16 undefined on input lin
+e 1157.
+
+
+Package natbib Warning: Citation `Glad:16' on page 16 undefined on input line 1
+157.
+
+
+LaTeX Warning: Float too large for page by 123.23645pt on input line 1159.
+
+Package epstopdf Info: Source file: <figures/diuT.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 32837 bytes
+(epstopdf)             Output file: <figures/diuT-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/diuT-eps-converted
+-to.pdf figures/diuT.eps>
+(epstopdf)             \includegraphics on input line 1171.
+runsystem(repstopdf --outfile=figures/diuT-eps-converted-to.pdf figures/diuT.ep
+s)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/diuT-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:15
+(epstopdf)                    size: 20962 bytes.
+<figures/diuT-eps-converted-to.pdf, id=143, 408.52625pt x 272.01625pt>
+File: figures/diuT-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/diuT-eps-converted-to.pdf>
+Package pdftex.def Info: figures/diuT-eps-converted-to.pdf  used on input line 
+1171.
+(pdftex.def)             Requested size: 227.62204pt x 151.56433pt.
+Package epstopdf Info: Source file: <figures/diuT_pole.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 31073 bytes
+(epstopdf)             Output file: <figures/diuT_pole-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/diuT_pole-eps-conv
+erted-to.pdf figures/diuT_pole.eps>
+(epstopdf)             \includegraphics on input line 1172.
+runsystem(repstopdf --outfile=figures/diuT_pole-eps-converted-to.pdf figures/di
+uT_pole.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/diuT_pole-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:16
+(epstopdf)                    size: 17121 bytes.
+<figures/diuT_pole-eps-converted-to.pdf, id=145, 408.52625pt x 272.01625pt>
+File: figures/diuT_pole-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/diuT_pole-eps-converted-to.pdf>
+Package pdftex.def Info: figures/diuT_pole-eps-converted-to.pdf  used on input 
+line 1172.
+(pdftex.def)             Requested size: 227.62204pt x 151.56433pt.
+Package epstopdf Info: Source file: <figures/diuT_flat.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 44599 bytes
+(epstopdf)             Output file: <figures/diuT_flat-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/diuT_flat-eps-conv
+erted-to.pdf figures/diuT_flat.eps>
+(epstopdf)             \includegraphics on input line 1177.
+runsystem(repstopdf --outfile=figures/diuT_flat-eps-converted-to.pdf figures/di
+uT_flat.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/diuT_flat-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:16
+(epstopdf)                    size: 28974 bytes.
+<figures/diuT_flat-eps-converted-to.pdf, id=147, 408.52625pt x 272.01625pt>
+File: figures/diuT_flat-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/diuT_flat-eps-converted-to.pdf>
+Package pdftex.def Info: figures/diuT_flat-eps-converted-to.pdf  used on input 
+line 1177.
+(pdftex.def)             Requested size: 227.62204pt x 151.56433pt.
+Package epstopdf Info: Source file: <figures/diuT_nocon.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 25270 bytes
+(epstopdf)             Output file: <figures/diuT_nocon-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/diuT_nocon-eps-con
+verted-to.pdf figures/diuT_nocon.eps>
+(epstopdf)             \includegraphics on input line 1178.
+runsystem(repstopdf --outfile=figures/diuT_nocon-eps-converted-to.pdf figures/d
+iuT_nocon.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/diuT_nocon-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:17
+(epstopdf)                    size: 12981 bytes.
+<figures/diuT_nocon-eps-converted-to.pdf, id=149, 408.52625pt x 272.01625pt>
+File: figures/diuT_nocon-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/diuT_nocon-eps-converted-to.pdf>
+Package pdftex.def Info: figures/diuT_nocon-eps-converted-to.pdf  used on input
+ line 1178.
+(pdftex.def)             Requested size: 227.62204pt x 151.56433pt.
+Package epstopdf Info: Source file: <figures/diuN2_7.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 30435 bytes
+(epstopdf)             Output file: <figures/diuN2_7-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/diuN2_7-eps-conver
+ted-to.pdf figures/diuN2_7.eps>
+(epstopdf)             \includegraphics on input line 1204.
+runsystem(repstopdf --outfile=figures/diuN2_7-eps-converted-to.pdf figures/diuN
+2_7.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/diuN2_7-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:17
+(epstopdf)                    size: 11431 bytes.
+<figures/diuN2_7-eps-converted-to.pdf, id=151, 462.72874pt x 253.94875pt>
+File: figures/diuN2_7-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/diuN2_7-eps-converted-to.pdf>
+Package pdftex.def Info: figures/diuN2_7-eps-converted-to.pdf  used on input li
+ne 1204.
+(pdftex.def)             Requested size: 227.62204pt x 124.92033pt.
+Package epstopdf Info: Source file: <figures/diuN2_45.eps>
+(epstopdf)                    date: 2018-10-30 23:57:49
+(epstopdf)                    size: 30446 bytes
+(epstopdf)             Output file: <figures/diuN2_45-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/diuN2_45-eps-conve
+rted-to.pdf figures/diuN2_45.eps>
+(epstopdf)             \includegraphics on input line 1205.
+runsystem(repstopdf --outfile=figures/diuN2_45-eps-converted-to.pdf figures/diu
+N2_45.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/diuN2_45-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:18
+(epstopdf)                    size: 11429 bytes.
+<figures/diuN2_45-eps-converted-to.pdf, id=153, 462.72874pt x 253.94875pt>
+File: figures/diuN2_45-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/diuN2_45-eps-converted-to.pdf>
+Package pdftex.def Info: figures/diuN2_45-eps-converted-to.pdf  used on input l
+ine 1205.
+(pdftex.def)             Requested size: 227.62204pt x 124.92033pt.
+
+Package natbib Warning: Citation `Sica:03' on page 16 undefined on input line 1
+230.
+
+
+Package natbib Warning: Citation `Pers:08' on page 16 undefined on input line 1
+230.
+
+
+Package natbib Warning: Citation `Toig:10' on page 16 undefined on input line 1
+232.
+
+
+LaTeX Warning: Reference `fg:tide' on page 16 undefined on input line 1241.
+
+
+Package natbib Warning: Citation `Toig:10' on page 16 undefined on input line 1
+247.
+
+
+LaTeX Warning: Reference `fg:tide' on page 16 undefined on input line 1252.
+
+
+LaTeX Warning: Reference `fg:tide' on page 16 undefined on input line 1255.
+
+
+LaTeX Warning: Reference `fg:wind2' on page 16 undefined on input line 1259.
+
+Package epstopdf Info: Source file: <figures/tide_T_0E_0N.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 38345 bytes
+(epstopdf)             Output file: <figures/tide_T_0E_0N-eps-converted-to.pdf>
+
+(epstopdf)             Command: <repstopdf --outfile=figures/tide_T_0E_0N-eps-c
+onverted-to.pdf figures/tide_T_0E_0N.eps>
+(epstopdf)             \includegraphics on input line 1271.
+runsystem(repstopdf --outfile=figures/tide_T_0E_0N-eps-converted-to.pdf figures
+/tide_T_0E_0N.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/tide_T_0E_0N-eps-converted-to.pdf>
+
+(epstopdf)                    date: 2018-11-04 12:15:18
+(epstopdf)                    size: 20985 bytes.
+<figures/tide_T_0E_0N-eps-converted-to.pdf, id=155, 520.94624pt x 349.305pt>
+File: figures/tide_T_0E_0N-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/tide_T_0E_0N-eps-converted-to.pdf>
+Package pdftex.def Info: figures/tide_T_0E_0N-eps-converted-to.pdf  used on inp
+ut line 1271.
+(pdftex.def)             Requested size: 227.62204pt x 152.62334pt.
+Package epstopdf Info: Source file: <figures/tide_T_0E_0N_pole2.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 64538 bytes
+(epstopdf)             Output file: <figures/tide_T_0E_0N_pole2-eps-converted-t
+o.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/tide_T_0E_0N_pole2
+-eps-converted-to.pdf figures/tide_T_0E_0N_pole2.eps>
+(epstopdf)             \includegraphics on input line 1272.
+runsystem(repstopdf --outfile=figures/tide_T_0E_0N_pole2-eps-converted-to.pdf f
+igures/tide_T_0E_0N_pole2.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/tide_T_0E_0N_pole2-eps-converted-t
+o.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:19
+(epstopdf)                    size: 34006 bytes.
+<figures/tide_T_0E_0N_pole2-eps-converted-to.pdf, id=157, 520.94624pt x 349.305
+pt>
+File: figures/tide_T_0E_0N_pole2-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/tide_T_0E_0N_pole2-eps-converted-to.pdf>
+Package pdftex.def Info: figures/tide_T_0E_0N_pole2-eps-converted-to.pdf  used 
+on input line 1272.
+(pdftex.def)             Requested size: 227.62204pt x 152.62334pt.
+
+LaTeX Warning: Reference `fg:section_wind' on page 16 undefined on input line 1
+295.
+
+
+LaTeX Warning: Reference `fg:section_wind' on page 16 undefined on input line 1
+303.
+
+
+LaTeX Warning: Reference `fg:section_wind' on page 16 undefined on input line 1
+310.
+
+[16] [17 <./figures/fig_hinson-eps-converted-to.pdf>] [18 <./figures/diuT-eps-c
+onverted-to.pdf> <./figures/diuT_pole-eps-converted-to.pdf> <./figures/diuT_fla
+t-eps-converted-to.pdf> <./figures/diuT_nocon-eps-converted-to.pdf> <./figures/
+diuN2_7-eps-converted-to.pdf> <./figures/diuN2_45-eps-converted-to.pdf>]
+
+Package natbib Warning: Citation `Toig:15' on page 19 undefined on input line 1
+327.
+
+
+Package natbib Warning: Citation `Grun:16' on page 19 undefined on input line 1
+339.
+
+
+LaTeX Warning: Reference `fg:section_wind' on page 19 undefined on input line 1
+344.
+
+
+Package natbib Warning: Citation `Bert:16ica' on page 19 undefined on input lin
+e 1346.
+
+
+LaTeX Warning: Reference `fg:section_wind' on page 19 undefined on input line 1
+349.
+
+
+Package natbib Warning: Citation `Lebo:10' on page 19 undefined on input line 1
+354.
+
+
+Package natbib Warning: Citation `Gier:75' on page 19 undefined on input line 1
+356.
+
+
+Package natbib Warning: Citation `Ross:79' on page 19 undefined on input line 1
+356.
+
+
+LaTeX Warning: Reference `fg:waves' on page 19 undefined on input line 1362.
+
+
+LaTeX Warning: Reference `fg:waves' on page 19 undefined on input line 1363.
+
+
+LaTeX Warning: Reference `fg:waves' on page 19 undefined on input line 1363.
+
+
+LaTeX Warning: Reference `fg:waves' on page 19 undefined on input line 1367.
+
+
+Package natbib Warning: Citation `Toig:15' on page 19 undefined on input line 1
+370.
+
+
+Package natbib Warning: Citation `Zalu:13' on page 19 undefined on input line 1
+372.
+
+
+Package natbib Warning: Citation `Zalu:16' on page 19 undefined on input line 1
+373.
+
+
+Package natbib Warning: Citation `Zalu:13' on page 19 undefined on input line 1
+373.
+
+
+Package natbib Warning: Citation `Zalu:16' on page 19 undefined on input line 1
+376.
+
+[19 <./figures/tide_T_0E_0N-eps-converted-to.pdf> <./figures/tide_T_0E_0N_pole2
+-eps-converted-to.pdf>]
+Package epstopdf Info: Source file: <figures/sectionU.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 38269 bytes
+(epstopdf)             Output file: <figures/sectionU-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/sectionU-eps-conve
+rted-to.pdf figures/sectionU.eps>
+(epstopdf)             \includegraphics on input line 1392.
+runsystem(repstopdf --outfile=figures/sectionU-eps-converted-to.pdf figures/sec
+tionU.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/sectionU-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:19
+(epstopdf)                    size: 25995 bytes.
+<figures/sectionU-eps-converted-to.pdf, id=207, 471.7625pt x 293.095pt>
+File: figures/sectionU-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/sectionU-eps-converted-to.pdf>
+Package pdftex.def Info: figures/sectionU-eps-converted-to.pdf  used on input l
+ine 1392.
+(pdftex.def)             Requested size: 227.62204pt x 141.41743pt.
+Package epstopdf Info: Source file: <figures/sectionU_pole.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 43912 bytes
+(epstopdf)             Output file: <figures/sectionU_pole-eps-converted-to.pdf
+>
+(epstopdf)             Command: <repstopdf --outfile=figures/sectionU_pole-eps-
+converted-to.pdf figures/sectionU_pole.eps>
+(epstopdf)             \includegraphics on input line 1393.
+runsystem(repstopdf --outfile=figures/sectionU_pole-eps-converted-to.pdf figure
+s/sectionU_pole.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/sectionU_pole-eps-converted-to.pdf
+>
+(epstopdf)                    date: 2018-11-04 12:15:20
+(epstopdf)                    size: 30493 bytes.
+<figures/sectionU_pole-eps-converted-to.pdf, id=209, 471.7625pt x 293.095pt>
+File: figures/sectionU_pole-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/sectionU_pole-eps-converted-to.pdf>
+Package pdftex.def Info: figures/sectionU_pole-eps-converted-to.pdf  used on in
+put line 1393.
+(pdftex.def)             Requested size: 227.62204pt x 141.41743pt.
+Package epstopdf Info: Source file: <figures/sectionV.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 30692 bytes
+(epstopdf)             Output file: <figures/sectionV-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/sectionV-eps-conve
+rted-to.pdf figures/sectionV.eps>
+(epstopdf)             \includegraphics on input line 1397.
+runsystem(repstopdf --outfile=figures/sectionV-eps-converted-to.pdf figures/sec
+tionV.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/sectionV-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:20
+(epstopdf)                    size: 19336 bytes.
+<figures/sectionV-eps-converted-to.pdf, id=211, 463.7325pt x 313.17pt>
+File: figures/sectionV-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/sectionV-eps-converted-to.pdf>
+Package pdftex.def Info: figures/sectionV-eps-converted-to.pdf  used on input l
+ine 1397.
+(pdftex.def)             Requested size: 227.62204pt x 153.72223pt.
+Package epstopdf Info: Source file: <figures/sectionV_pole.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 76193 bytes
+(epstopdf)             Output file: <figures/sectionV_pole-eps-converted-to.pdf
+>
+(epstopdf)             Command: <repstopdf --outfile=figures/sectionV_pole-eps-
+converted-to.pdf figures/sectionV_pole.eps>
+(epstopdf)             \includegraphics on input line 1398.
+runsystem(repstopdf --outfile=figures/sectionV_pole-eps-converted-to.pdf figure
+s/sectionV_pole.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/sectionV_pole-eps-converted-to.pdf
+>
+(epstopdf)                    date: 2018-11-04 12:15:21
+(epstopdf)                    size: 51980 bytes.
+<figures/sectionV_pole-eps-converted-to.pdf, id=213, 463.7325pt x 313.17pt>
+File: figures/sectionV_pole-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/sectionV_pole-eps-converted-to.pdf>
+Package pdftex.def Info: figures/sectionV_pole-eps-converted-to.pdf  used on in
+put line 1398.
+(pdftex.def)             Requested size: 227.62204pt x 153.72223pt.
+Package epstopdf Info: Source file: <figures/wave_T_0N_140km.eps>
+(epstopdf)                    date: 2018-10-30 23:57:53
+(epstopdf)                    size: 84765 bytes
+(epstopdf)             Output file: <figures/wave_T_0N_140km-eps-converted-to.p
+df>
+(epstopdf)             Command: <repstopdf --outfile=figures/wave_T_0N_140km-ep
+s-converted-to.pdf figures/wave_T_0N_140km.eps>
+(epstopdf)             \includegraphics on input line 1416.
+runsystem(repstopdf --outfile=figures/wave_T_0N_140km-eps-converted-to.pdf figu
+res/wave_T_0N_140km.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/wave_T_0N_140km-eps-converted-to.p
+df>
+(epstopdf)                    date: 2018-11-04 12:15:21
+(epstopdf)                    size: 45308 bytes.
+<figures/wave_T_0N_140km-eps-converted-to.pdf, id=215, 517.935pt x 349.305pt>
+File: figures/wave_T_0N_140km-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/wave_T_0N_140km-eps-converted-to.pdf>
+Package pdftex.def Info: figures/wave_T_0N_140km-eps-converted-to.pdf  used on 
+input line 1416.
+(pdftex.def)             Requested size: 227.62204pt x 153.51344pt.
+Package epstopdf Info: Source file: <figures/wave_T_60N_140km.eps>
+(epstopdf)                    date: 2018-10-30 23:57:53
+(epstopdf)                    size: 60390 bytes
+(epstopdf)             Output file: <figures/wave_T_60N_140km-eps-converted-to.
+pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/wave_T_60N_140km-e
+ps-converted-to.pdf figures/wave_T_60N_140km.eps>
+(epstopdf)             \includegraphics on input line 1417.
+runsystem(repstopdf --outfile=figures/wave_T_60N_140km-eps-converted-to.pdf fig
+ures/wave_T_60N_140km.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/wave_T_60N_140km-eps-converted-to.
+pdf>
+(epstopdf)                    date: 2018-11-04 12:15:22
+(epstopdf)                    size: 31650 bytes.
+<figures/wave_T_60N_140km-eps-converted-to.pdf, id=217, 517.935pt x 349.305pt>
+File: figures/wave_T_60N_140km-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/wave_T_60N_140km-eps-converted-to.pdf>
+Package pdftex.def Info: figures/wave_T_60N_140km-eps-converted-to.pdf  used on
+ input line 1417.
+(pdftex.def)             Requested size: 227.62204pt x 153.51344pt.
+Package epstopdf Info: Source file: <figures/rms_v_pole.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 59609 bytes
+(epstopdf)             Output file: <figures/rms_v_pole-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/rms_v_pole-eps-con
+verted-to.pdf figures/rms_v_pole.eps>
+(epstopdf)             \includegraphics on input line 1420.
+runsystem(repstopdf --outfile=figures/rms_v_pole-eps-converted-to.pdf figures/r
+ms_v_pole.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/rms_v_pole-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:22
+(epstopdf)                    size: 41653 bytes.
+<figures/rms_v_pole-eps-converted-to.pdf, id=219, 502.87875pt x 349.305pt>
+File: figures/rms_v_pole-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/rms_v_pole-eps-converted-to.pdf>
+Package pdftex.def Info: figures/rms_v_pole-eps-converted-to.pdf  used on input
+ line 1420.
+(pdftex.def)             Requested size: 227.62204pt x 158.10786pt.
+Package epstopdf Info: Source file: <figures/wave_V_60N_140km.eps>
+(epstopdf)                    date: 2018-10-30 23:57:53
+(epstopdf)                    size: 43071 bytes
+(epstopdf)             Output file: <figures/wave_V_60N_140km-eps-converted-to.
+pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/wave_V_60N_140km-e
+ps-converted-to.pdf figures/wave_V_60N_140km.eps>
+(epstopdf)             \includegraphics on input line 1421.
+runsystem(repstopdf --outfile=figures/wave_V_60N_140km-eps-converted-to.pdf fig
+ures/wave_V_60N_140km.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/wave_V_60N_140km-eps-converted-to.
+pdf>
+(epstopdf)                    date: 2018-11-04 12:15:23
+(epstopdf)                    size: 25021 bytes.
+<figures/wave_V_60N_140km-eps-converted-to.pdf, id=221, 503.8825pt x 349.305pt>
+
+File: figures/wave_V_60N_140km-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/wave_V_60N_140km-eps-converted-to.pdf>
+Package pdftex.def Info: figures/wave_V_60N_140km-eps-converted-to.pdf  used on
+ input line 1421.
+(pdftex.def)             Requested size: 227.62204pt x 157.79341pt.
+
+
+LaTeX Warning: Reference `fg:ch4' on page 20 undefined on input line 1452.
+
+
+LaTeX Warning: Reference `fg:ch4' on page 20 undefined on input line 1456.
+
+
+LaTeX Warning: Reference `fg:ch4' on page 20 undefined on input line 1462.
+
+
+Package natbib Warning: Citation `Lell:15' on page 20 undefined on input line 1
+464.
+
+
+Package natbib Warning: Citation `Lell:15' on page 20 undefined on input line 1
+470.
+
+
+LaTeX Warning: Reference `fg:ch4' on page 20 undefined on input line 1481.
+
+[20 <./figures/sectionU-eps-converted-to.pdf> <./figures/sectionU_pole-eps-conv
+erted-to.pdf> <./figures/sectionV-eps-converted-to.pdf> <./figures/sectionV_pol
+e-eps-converted-to.pdf>] [21 <./figures/wave_T_0N_140km-eps-converted-to.pdf> <
+./figures/wave_T_60N_140km-eps-converted-to.pdf> <./figures/rms_v_pole-eps-conv
+erted-to.pdf> <./figures/wave_V_60N_140km-eps-converted-to.pdf>]
+
+LaTeX Warning: Reference `fg:ch4' on page 22 undefined on input line 1485.
+
+
+LaTeX Warning: Reference `fg:ch4' on page 22 undefined on input line 1488.
+
+
+LaTeX Warning: Reference `eq:sflux' on page 22 undefined on input line 1493.
+
+
+LaTeX Warning: Reference `sc:pbl' on page 22 undefined on input line 1493.
+
+Package epstopdf Info: Source file: <figures/section_ch4_2010.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 33057 bytes
+(epstopdf)             Output file: <figures/section_ch4_2010-eps-converted-to.
+pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/section_ch4_2010-e
+ps-converted-to.pdf figures/section_ch4_2010.eps>
+(epstopdf)             \includegraphics on input line 1512.
+runsystem(repstopdf --outfile=figures/section_ch4_2010-eps-converted-to.pdf fig
+ures/section_ch4_2010.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/section_ch4_2010-eps-converted-to.
+pdf>
+(epstopdf)                    date: 2018-11-04 12:15:24
+(epstopdf)                    size: 15751 bytes.
+<figures/section_ch4_2010-eps-converted-to.pdf, id=253, 496.85625pt x 296.10625
+pt>
+File: figures/section_ch4_2010-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/section_ch4_2010-eps-converted-to.pdf>
+Package pdftex.def Info: figures/section_ch4_2010-eps-converted-to.pdf  used on
+ input line 1512.
+(pdftex.def)             Requested size: 238.71573pt x 142.26378pt.
+Package epstopdf Info: Source file: <figures/section_ch4_2015.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 33226 bytes
+(epstopdf)             Output file: <figures/section_ch4_2015-eps-converted-to.
+pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/section_ch4_2015-e
+ps-converted-to.pdf figures/section_ch4_2015.eps>
+(epstopdf)             \includegraphics on input line 1513.
+runsystem(repstopdf --outfile=figures/section_ch4_2015-eps-converted-to.pdf fig
+ures/section_ch4_2015.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/section_ch4_2015-eps-converted-to.
+pdf>
+(epstopdf)                    date: 2018-11-04 12:15:24
+(epstopdf)                    size: 15353 bytes.
+<figures/section_ch4_2015-eps-converted-to.pdf, id=255, 496.85625pt x 296.10625
+pt>
+File: figures/section_ch4_2015-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/section_ch4_2015-eps-converted-to.pdf>
+Package pdftex.def Info: figures/section_ch4_2015-eps-converted-to.pdf  used on
+ input line 1513.
+(pdftex.def)             Requested size: 238.71573pt x 142.26378pt.
+Package epstopdf Info: Source file: <figures/evol_ch4.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 267100 bytes
+(epstopdf)             Output file: <figures/evol_ch4-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/evol_ch4-eps-conve
+rted-to.pdf figures/evol_ch4.eps>
+(epstopdf)             \includegraphics on input line 1521.
+runsystem(repstopdf --outfile=figures/evol_ch4-eps-converted-to.pdf figures/evo
+l_ch4.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/evol_ch4-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:25
+(epstopdf)                    size: 228588 bytes.
+<figures/evol_ch4-eps-converted-to.pdf, id=257, 496.85625pt x 296.10625pt>
+File: figures/evol_ch4-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/evol_ch4-eps-converted-to.pdf>
+Package pdftex.def Info: figures/evol_ch4-eps-converted-to.pdf  used on input l
+ine 1521.
+(pdftex.def)             Requested size: 238.71573pt x 142.26378pt.
+Package epstopdf Info: Source file: <figures/section_ch4_pole_2015.eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 37752 bytes
+(epstopdf)             Output file: <figures/section_ch4_pole_2015-eps-converte
+d-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/section_ch4_pole_2
+015-eps-converted-to.pdf figures/section_ch4_pole_2015.eps>
+(epstopdf)             \includegraphics on input line 1522.
+runsystem(repstopdf --outfile=figures/section_ch4_pole_2015-eps-converted-to.pd
+f figures/section_ch4_pole_2015.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/section_ch4_pole_2015-eps-converte
+d-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:25
+(epstopdf)                    size: 21946 bytes.
+<figures/section_ch4_pole_2015-eps-converted-to.pdf, id=259, 496.85625pt x 296.
+10625pt>
+File: figures/section_ch4_pole_2015-eps-converted-to.pdf Graphic file (type pdf
+)
+<use figures/section_ch4_pole_2015-eps-converted-to.pdf>
+Package pdftex.def Info: figures/section_ch4_pole_2015-eps-converted-to.pdf  us
+ed on input line 1522.
+(pdftex.def)             Requested size: 238.71573pt x 142.26378pt.
+
+Overfull \hbox (7.47871pt too wide) in paragraph at lines 1507--1537
+ [] 
+ []
+
+
+LaTeX Warning: Reference `fg:map_clouds' on page 22 undefined on input line 154
+7.
+
+
+LaTeX Warning: Reference `fg:section_clouds' on page 22 undefined on input line
+ 1553.
+
+
+LaTeX Warning: Reference `fg:map_ts' on page 22 undefined on input line 1556.
+
+[22 <./figures/section_ch4_2010-eps-converted-to.pdf> <./figures/section_ch4_20
+15-eps-converted-to.pdf> <./figures/evol_ch4-eps-converted-to.pdf> <./figures/s
+ection_ch4_pole_2015-eps-converted-to.pdf>]
+Package epstopdf Info: Source file: <figures/fig_mapcloud.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 688335 bytes
+(epstopdf)             Output file: <figures/fig_mapcloud-eps-converted-to.pdf>
+
+(epstopdf)             Command: <repstopdf --outfile=figures/fig_mapcloud-eps-c
+onverted-to.pdf figures/fig_mapcloud.eps>
+(epstopdf)             \includegraphics on input line 1564.
+runsystem(repstopdf --outfile=figures/fig_mapcloud-eps-converted-to.pdf figures
+/fig_mapcloud.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/fig_mapcloud-eps-converted-to.pdf>
+
+(epstopdf)                    date: 2018-11-04 12:15:26
+(epstopdf)                    size: 241191 bytes.
+<figures/fig_mapcloud-eps-converted-to.pdf, id=276, 597.23125pt x 845.1575pt>
+File: figures/fig_mapcloud-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/fig_mapcloud-eps-converted-to.pdf>
+Package pdftex.def Info: figures/fig_mapcloud-eps-converted-to.pdf  used on inp
+ut line 1564.
+(pdftex.def)             Requested size: 483.69684pt x 684.49646pt.
+
+Overfull \hbox (15.69684pt too wide) in paragraph at lines 1564--1571
+ [] 
+ []
+
+
+LaTeX Warning: Float too large for page by 104.23645pt on input line 1573.
+
+Package epstopdf Info: Source file: <figures/section_ch4cloud_lat_lon180E_LT15.
+eps>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 24609 bytes
+(epstopdf)             Output file: <figures/section_ch4cloud_lat_lon180E_LT15-
+eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/section_ch4cloud_l
+at_lon180E_LT15-eps-converted-to.pdf figures/section_ch4cloud_lat_lon180E_LT15.
+eps>
+(epstopdf)             \includegraphics on input line 1586.
+runsystem(repstopdf --outfile=figures/section_ch4cloud_lat_lon180E_LT15-eps-con
+verted-to.pdf figures/section_ch4cloud_lat_lon180E_LT15.eps)...executed safely 
+(allowed).
+
+Package epstopdf Info: Result file: <figures/section_ch4cloud_lat_lon180E_LT15-
+eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:26
+(epstopdf)                    size: 11742 bytes.
+<figures/section_ch4cloud_lat_lon180E_LT15-eps-converted-to.pdf, id=278, 540.01
+75pt x 198.7425pt>
+File: figures/section_ch4cloud_lat_lon180E_LT15-eps-converted-to.pdf Graphic fi
+le (type pdf)
+<use figures/section_ch4cloud_lat_lon180E_LT15-eps-converted-to.pdf>
+Package pdftex.def Info: figures/section_ch4cloud_lat_lon180E_LT15-eps-converte
+d-to.pdf  used on input line 1586.
+(pdftex.def)             Requested size: 227.62204pt x 83.7715pt.
+Package epstopdf Info: Source file: <figures/section_ch4cloud_lat_lon0E_LT15.ep
+s>
+(epstopdf)                    date: 2018-10-30 23:57:52
+(epstopdf)                    size: 28856 bytes
+(epstopdf)             Output file: <figures/section_ch4cloud_lat_lon0E_LT15-ep
+s-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/section_ch4cloud_l
+at_lon0E_LT15-eps-converted-to.pdf figures/section_ch4cloud_lat_lon0E_LT15.eps>
+
+(epstopdf)             \includegraphics on input line 1587.
+runsystem(repstopdf --outfile=figures/section_ch4cloud_lat_lon0E_LT15-eps-conve
+rted-to.pdf figures/section_ch4cloud_lat_lon0E_LT15.eps)...executed safely (all
+owed).
+
+Package epstopdf Info: Result file: <figures/section_ch4cloud_lat_lon0E_LT15-ep
+s-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:27
+(epstopdf)                    size: 14630 bytes.
+<figures/section_ch4cloud_lat_lon0E_LT15-eps-converted-to.pdf, id=280, 540.0175
+pt x 198.7425pt>
+File: figures/section_ch4cloud_lat_lon0E_LT15-eps-converted-to.pdf Graphic file
+ (type pdf)
+<use figures/section_ch4cloud_lat_lon0E_LT15-eps-converted-to.pdf>
+Package pdftex.def Info: figures/section_ch4cloud_lat_lon0E_LT15-eps-converted-
+to.pdf  used on input line 1587.
+(pdftex.def)             Requested size: 227.62204pt x 83.7715pt.
+
+Overfull \hbox (13.74408pt too wide) in paragraph at lines 1580--1598
+ [] 
+ []
+
+
+LaTeX Warning: Reference `fg:evol_co' on page 23 undefined on input line 1607.
+
+
+Package natbib Warning: Citation `Lell:11co' on page 23 undefined on input line
+ 1614.
+
+
+Package natbib Warning: Citation `Lell:16' on page 23 undefined on input line 1
+617.
+
+
+LaTeX Warning: Reference `fg:evol_co' on page 23 undefined on input line 1625.
+
+
+LaTeX Warning: Reference `fg:evol_co' on page 23 undefined on input line 1629.
+
+
+Package natbib Warning: Citation `Grun:16' on page 23 undefined on input line 1
+639.
+
+
+LaTeX Warning: Reference `fg:evol_co' on page 23 undefined on input line 1641.
+
+
+Package natbib Warning: Citation `Merl:15' on page 23 undefined on input line 1
+645.
+
+Package epstopdf Info: Source file: <figures/evol_co.eps>
+(epstopdf)                    date: 2018-10-30 23:57:50
+(epstopdf)                    size: 271200 bytes
+(epstopdf)             Output file: <figures/evol_co-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=figures/evol_co-eps-conver
+ted-to.pdf figures/evol_co.eps>
+(epstopdf)             \includegraphics on input line 1656.
+runsystem(repstopdf --outfile=figures/evol_co-eps-converted-to.pdf figures/evol
+_co.eps)...executed safely (allowed).
+
+Package epstopdf Info: Result file: <figures/evol_co-eps-converted-to.pdf>
+(epstopdf)                    date: 2018-11-04 12:15:28
+(epstopdf)                    size: 227782 bytes.
+<figures/evol_co-eps-converted-to.pdf, id=282, 477.785pt x 320.19624pt>
+File: figures/evol_co-eps-converted-to.pdf Graphic file (type pdf)
+<use figures/evol_co-eps-converted-to.pdf>
+Package pdftex.def Info: figures/evol_co-eps-converted-to.pdf  used on input li
+ne 1656.
+(pdftex.def)             Requested size: 341.43306pt x 228.81642pt.
+
+LaTeX Warning: Reference `sc:cond' on page 23 undefined on input line 1738.
+
+
+LaTeX Warning: Reference `sc:dynamic' on page 23 undefined on input line 1741.
+
+[23] [24 <./figures/fig_mapcloud-eps-converted-to.pdf>] [25 <./figures/section_
+ch4cloud_lat_lon180E_LT15-eps-converted-to.pdf> <./figures/section_ch4cloud_lat
+_lon0E_LT15-eps-converted-to.pdf> <./figures/evol_co-eps-converted-to.pdf>]
+
+LaTeX Warning: Reference `eq:dpdt1' on page 26 undefined on input line 1766.
+
+
+Package natbib Warning: Citation `VanL:77' on page 26 undefined on input line 1
+791.
+
+
+Package natbib Warning: Citation `Hour:99' on page 26 undefined on input line 1
+791.
+
+
+LaTeX Warning: Reference `eq:transport1' on page 26 undefined on input line 180
+2.
+
+
+LaTeX Warning: Reference `eq:transport2' on page 26 undefined on input line 180
+2.
+
+)
+No file main.bbl.
+
+Package natbib Warning: There were undefined citations.
+
+[26] [27] (./main.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 4303 strings out of 492649
+ 62167 string characters out of 6129622
+ 132420 words of memory out of 5000000
+ 8029 multiletter control sequences out of 15000+600000
+ 52586 words of font info for 131 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 41i,14n,35p,929b,372s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2018/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/te
+xlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texl
+ive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texli
+ve/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive
+/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/20
+18/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2018/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2018/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2018/texmf
+-dist/fonts/type1/public/txfonts/rtxb.pfb></usr/local/texlive/2018/texmf-dist/f
+onts/type1/public/txfonts/rtxi.pfb></usr/local/texlive/2018/texmf-dist/fonts/ty
+pe1/public/txfonts/rtxmi.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/pu
+blic/txfonts/rtxr.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/tx
+fonts/txex.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/txfonts/t
+xsy.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></
+usr/local/texlive/2018/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/
+texlive/2018/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (27 pages, 2198271 bytes).
+PDF statistics:
+ 367 PDF objects out of 1000 (max. 8388607)
+ 243 compressed objects within 3 object streams
+ 0 named destinations out of 1000 (max. 500000)
+ 375 words of extra memory for PDF output out of 10000 (max. 10000000)
+

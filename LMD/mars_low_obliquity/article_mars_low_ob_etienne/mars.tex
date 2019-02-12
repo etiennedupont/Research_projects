@@ -1,0 +1,193 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sc:Intro}
+
+Presently, Mars' obliquity is 25.2$^{\circ}$, ressembling the Earth's. However,
+contrary to the terrestrial obliquity, Mars' is chaotic and may have oscillated around
+values as low as 10$^{\circ}$ during the past 250 Million years \citep{Lask:04}.
+Low obliquity epochs have had an important impact on Mars' climate system,
+causing the atmospheric CO$_2$ to condense. While permanent solid deposits of CO$_2$
+were formed, the atmosphere was depleted and became much thinner. This evolution is 
+often described as an atmospheric collapse. Some features that can presently be found
+on Mars are thought to be evidences for such low obliquity epochs. Kreslavsky and Head
+\citep{Kres:11} found ridges at relatively low latitudes (~70$^{\circ}$N) that they related
+to drop moraines that are left by episodes of advance and retreat of cold-based glaciers.
+They showed that those features were significantly different from landforms resulting from
+water-ice flow and rather interpreted these as the consequence of CO$_2$ ice flow
+during recent periods of very low obliquity.
+
+In this paper, we quantitatively address the effect of low obliquity epochs on Mars'
+environment. We study the resulting depletion of atmospheric CO$_2$ in term of drop of
+pressure and seasonal local changes in atmospheric composition that are at stake in such
+conditions. We focus on CO$_2$ ice deposition in term of total mass, localization and flow
+in order to discuss the link between those conditions and geological evidence.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Model description}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\label{sc:model}
+\label{sc:physi}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Generalities}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\label{sc:dynam}
+\label{sc:dynamic}
+
+The model we used is derived from the LMD Mars GCM \cite[]{Forg:99}. This model is made of a
+physical core computing physical processes and a dynamic core that performs temporal and 
+spatial integration of the equations of hydrodynamics. We choosed to drop the dynamic core of
+the initial model and replaced it with a simpler redistribution scheme detailled below in 
+order to ensure quicker simulations.
+
+In this paper, we present simulations with a horizontal grid of 32$\times$48, that is a 
+grid-point spacing of 11.25$^{\circ}$ in longitude by 3.75$^{\circ}$ in latitude. This 
+configuration allowed us to obtain accurate estimates of the latitudes where solid CO$_2$
+can be deposited. In term of vertical resolution, the model uses the terrain-following 
+"sigma" coordinate system in finite difference form (i.e. each layer is defined by a 
+constant value of the ratio pressure devided by surface pressure). As we worked in 
+conditions where the atmosphere is much thinner than presently, we choosed to divide the
+vertical coordinate in only 3 layers, with the pressure for the upper layer of %To complete%
+which corresponds to a spatial resolution of about %To complete% 
+for the case of 10$^{\circ}$ obliquity.
+
+We simulated the evolution of the planet during timescales ranging between 1000 and 20000
+martian years. As we did not need to resolve diurnal climate variations, we choosed timesteps
+of 10 martian days each for simulations. We found that these timesteps were sufficiently 
+short to provide interresting insights on seasonal evolutions of the climate over a year.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Model for dynamics}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sc:model_dynamics}
+
+We replaced the dynamic core of the original GCM by a newtonian return to the mean,
+that was already  used by Bertrand et al. to simulate the climate on Pluto on large timescales
+\citep{Forg:17}. We applied this redistribution scheme to potential temperature, surface
+pressure and CO$_2$ mixing ratio. For any mesh $i$, in any vertical layer $l$ between times
+$t$ and $t + \delta t$, we apply:
+
+\begin{equation}
+\label{rappel}
+	\theta_{(i,l)}(t+\delta t) = \theta_{(i,l)}(t) + \left( \overline{\theta_{l}}(t) -  \theta_{(i,l)}(t) \right) \left( 1 - e^{\frac{\delta t}{\tau_\theta}} \right)
+\end{equation}
+\begin{equation}
+	q_{(i,l)}(t+\delta t) = q_{(i,l)}(t) + \left( \overline{q_{l}}(t) -  q_i(t) \right) \left( 1 - e^{\frac{\delta t}{\tau_q}} \right)
+\end{equation}
+\begin{equation}
+	Ps_i(t+\delta t) = Ps_i(t) + \left( P_0 k_i(t) -  Ps_i(t) \right) \left( 1 - e^{\frac{\delta t}{\tau_P}} \right)
+\end{equation}
+
+where $\theta_{(i,l)}$ and $q_{(i,l)}$ are respectively the potential temperature and the CO$_2$ 
+mixing ratio of mesh $i$ in layer $l$, $Ps_i$ is the surface pressure of mesh $i$. The return is
+made toward the mean values $\overline{\theta_{l}}$, $\overline{q_{l}}$ and $P_0 k_i$ where 
+$k_i = e^{-\frac{z_i g}{RT}}$ with $z_i$ the elevation of the ground. Time constants for the 
+return are $\tau_\theta$, $\tau_q$ and $\tau_P$. The constraints of total mass and energy
+conservation lead to:
+
+\begin{equation}
+	\overline{\theta_{l}} = \frac{ <\theta_{.,l} \Delta P_{l}>}{< \Delta P_{l} >}
+\end{equation}
+\begin{equation}
+	\overline{q_{l}} =  \frac{< \Delta P_{l} q >}{< \Delta P_{l} >}
+\end{equation}
+\begin{equation}
+	P_0 = \frac{< Ps >}{< k >}
+\end{equation}
+
+where $\Delta P_{l}$ is the pressure loss in layer $l$ and $f \rightarrow < f >$ is the 
+surface-average operator. We compared test simulations between our model and the original GCM 
+to tune the value of the three time constants $\tau_\theta$, $\tau_q$ and $\tau_P$,
+so that our model gives a good account of the evolution of the climate in average. In our
+simulations, we use $\tau_\theta = 10^{-7}$s, $\tau_q = 10^{-5}$s and $\tau_P = 1$s
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Insolation on slopes}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sc:insolation_slopes}
+
+Kreslavsky and Head studied with a simple energy balanced model the atmospheric collapse and 
+deposition of solid CO$_2$ in low obliquity conditions \citep{Kres:05}. They insisted in their
+article on the role of topographic slopes on the  insolation regime. Regarding 
+their results, we found important to take local slopes into account. Given the extension of the 
+mesh grid (more than 100 km large), associating each grid area to a singe slope would 
+not be relevant. To characterize the slopes on a mesh, we binned its local slopes extracted from
+MOLA observations (with \textasciitilde 300 m resolution) into 7 characteristic slopes, based on
+their value of $\mu = \theta ~cos(\psi)$ where $\theta$ and $\psi$ are the local inclination and 
+orientation of the slope, meaning that $\mu$ is the projection of the orientation on the 
+south-north axis. We found that slopes having close parameters $\mu$ also receive close mean daily
+insolation.
+
+Computation of the insolation on each of the characteristic slopes is done accordingly to Spiga
+and Forget article on estimations of the solar irradiance on Martian slopes using 3D Monte-Carlo
+calculations \citep{Spig:08grl}. Using this method, the mean daily insolation is estimated on the
+first day of the timestep, assuming that it approximately remains the same during the 10-days timestep.
+Similarly, surface temperature, soil temperature and mass of CO$_2$ ice deposits are computed separately
+on each characteristic slope. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{CO$_2$ glaciers flow}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sc:glaciers_flow}
+
+\citep{Fast:17} used models of rheology to compute maximum thickness and velocity of CO$_2$ ice in
+the conditions of sloppy topography. They showed that, even on tiny slopes, the CO$_2$ ice sheet is
+very thin and has high velocity: looking at the maximum inclination of 0.1$^{\circ}$ they studied,
+we find that the related maximum thickness remains under 100m.
+Among the 7 characteristic slopes we choosed to describe the topography, the 6 that are not flat have
+inclinations ranging between 6$^{\circ}$ and 31.5$^{\circ}$, being much steeper than the ones studied
+by \citep{Fast:17}. We thus expect the CO$_2$ ice layer upon those slopes to be very thin and of
+high velocity, meaning they would not impact quantitatively the geographic deposition of CO$_2$
+while they would errode and shape the ground on which they are moving fast. Also, we expect that the
+steeper the slope, the more likely CO$_2$ deposition is to occur.
+
+Those preliminary observations lead us to designing a very simple model to simulate the flow of CO$_2$. 
+We arbitrary defined a maximum thickness of 10m on every characteristic slopes that are not flat. When
+the CO$_2$ mantle reach this thickness on one of those characteristic slopes, all further deposition 
+will be directly transmitted to the slope of neighboring inclination. This phenomenon account for the
+flow of CO$_2$ ice from the slopiest ground to the flat ground. We found during that taking
+into account the CO$_2$ flow has an important impact on simulations concerning the time needed 
+to reach an equilibrium when changing the obliquity.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Initial parameters and simulations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sc:init}
+
+
+Although we have accurate models and observations of the present Mars' environment, estimating it
+for very different obliquities remains a difficult task. To obtain rough estimates of what Mars looks
+like with a certain obliquity, we carried out preliminary simulations with constant values of orbital
+parameters. Those simulations provided us with initial states for further simulations in which we
+took into account the variation of orbital parameters.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Preliminary simulations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sc:preli_simu}
+
+As a first step, we ran our model without excentricity and with constant obliquities ranging between 
+0$^{\circ}$ and 15$^{\circ}$ for 10000 years. The initial state for those simulations corresponds
+to present Mars, with obliquity 25.2$^{\circ}$ and excentricity 0.05. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Reference simulations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sc:ref_simu}

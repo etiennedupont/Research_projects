@@ -1,0 +1,33 @@
+\begin{thebibliography}{5}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{\texttt{#1}}\fi
+\expandafter\ifx\csname urlprefix\endcsname\relax\def\urlprefix{URL }\fi
+
+\bibitem[{Forget et~al.(1999)Forget, Hourdin, Fournier, Hourdin, Talagrand,
+  Collins, Lewis, Read, and Huot.}]{Forg:99}
+Forget, F., Hourdin, F., Fournier, R., Hourdin, C., Talagrand, O., Collins, M.,
+  Lewis, S.~R., Read, P.~L., Huot., J.-P., 1999. Improved general circulation
+  models of the {Martian} atmosphere from the surface to above 80~km.
+  J.~Geophys.~Res. 104, 24,155--24,176.
+
+\bibitem[{{Kreslavsky} and {Head}(2005)}]{Kres:05}
+{Kreslavsky}, M.~A., {Head}, J.~W., 2005. {Mars at very low obliquity:
+  Atmospheric collapse and the fate of volatiles}. Geophys.~Res.~Lett. 32,
+  12202.
+
+\bibitem[{{Kreslavsky} and {Head}(2011)}]{Kres:11}
+{Kreslavsky}, M.~A., {Head}, J.~W., 2011. {Carbon dioxide glaciers on Mars:
+  Products of recent low obliquity epochs (?)}. Icarus 216, 111--115.
+
+\bibitem[{{Laskar} et~al.(2004){Laskar}, {Correia}, {Gastineau}, {Joutel},
+  {Levrard}, and {Robutel}}]{Lask:04}
+{Laskar}, J., {Correia}, A.~C.~M., {Gastineau}, M., {Joutel}, F., {Levrard},
+  B., {Robutel}, P., 2004. {Long term evolution and chaotic diffusion of the
+  insolation quantities of Mars}. Icarus 170, 343--364.
+
+\bibitem[{Spiga and Forget(2008)}]{Spig:08grl}
+Spiga, A., Forget, F., 2008. {Fast and accurate estimation of solar irradiance
+  on Martian slopes}. Geophys.~Res.~Lett. 35, L15201.
+
+\end{thebibliography}

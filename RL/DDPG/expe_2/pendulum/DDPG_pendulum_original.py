@@ -44,8 +44,8 @@ NOISE_DECAY = 0.99
 # Parameters for the exploration noise process:
 # dXt = theta*(mu-Xt)*dt + sigma*dWt
 EXPLO_MU = 0.0
-EXPLO_THETA = 0.15
-EXPLO_SIGMA = 0.2
+EXPLO_THETA = 0.
+EXPLO_SIGMA = 0.
 
 MAX_STEPS = 200
 EPS = 0.001

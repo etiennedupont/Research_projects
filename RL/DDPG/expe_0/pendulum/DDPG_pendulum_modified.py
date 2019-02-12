@@ -45,11 +45,11 @@ NOISE_DECAY = 0.99
 # Parameters for the exploration noise process:
 # dXt = theta*(mu-Xt)*dt + sigma*dWt
 EXPLO_MU = 0.0
-EXPLO_THETA = 0.15
-EXPLO_SIGMA = 0.2
+EXPLO_THETA = 0.
+EXPLO_SIGMA = 0.
 
 MAX_STEPS = 200
-MAX_EPISODES = 200
+MAX_EPISODES = 400
 EPS = 0.001
 
 
@@ -134,7 +134,7 @@ def update_targets(target, original):
             targetParam.data.copy_((1 - TAU)*targetParam.data + TAU*orgParam.data)
             
 ##### Etienne : compute the max of the action value function for a given state
-NB_SAMPLES = 5
+NB_SAMPLES = 10
 
 # Compute a "max" over NB_SAMPLES random actions (very poor approximation of the max)
 def compute_max_poor(next_state_action):
@@ -258,7 +258,7 @@ optimizer_actor = optim.Adam(actor_nn.parameters(), lr=LEARNING_RATE_ACTOR)
 target_actor_nn.eval()
 
 ## Benchmark parameter
-MAX_TIME_SEC = 400
+MAX_TIME_SEC = 600
 reward_time = np.zeros(MAX_TIME_SEC)
 
 
@@ -335,11 +335,11 @@ def main():
     print('Average duration of one episode : ', round(time_execution/MAX_EPISODES, 3), 's')
     print('---------------------------------------------------')
 
-    #plt.plot(episode_reward[:i_episode])
-    #plt.show()
+    plt.plot(episode_reward[:i_episode])
+    plt.show()
     
     return reward_time[:i_sec]
 
 
-#if __name__ == '__main__':
-#    main()
+if __name__ == '__main__':
+    main()

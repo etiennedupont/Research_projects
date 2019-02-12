@@ -1,0 +1,610 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage[export]{adjustbox}
+\usepackage[titlepage,fancysections,sectionmark]{polytechnique}
+\usepackage{graphicx}
+\graphicspath{{./pictures/}}
+\usepackage[french]{babel}
+
+
+
+\title{Modélisation de l'environnement martien en période de faible obliquité}
+\subtitle{ Rapport de stage 3A\\ 
+             Laboratoire de météorologie dynamique de Paris}
+\author{Auteur : Etienne Dupont \\ Maître de stage : François Forget}
+\logo{lmd_logo.jpg}
+
+
+\begin{document}
+\maketitle
+
+\newpage
+\thispagestyle{empty}
+\hfill
+\newpage
+\addtocounter{page}{-1}
+
+\newpage
+\thispagestyle{empty}
+\hfill
+\newpage
+\addtocounter{page}{-1}
+
+\clearpage
+\section*{Résumé}
+Ce rapport de stage porte sur l'étude de la surface et de l'atmosphère de Mars à l'aide d'un nouveau type de modèle dérivé du modèle de climat global (GCM) développé au LMD.  L'obliquité de la planète rouge est caractérisée par une évolution chaotique. Durant l'ère de l'Amazonien, à savoir les trois derniers milliards d'années, elle a atteint des valeurs basses voire très basses, entrainant d'importants changements climatiques. Dans de telles conditions, la condensation du dioxyde de carbone de l'atmosphère sur le sol entraine la formation de glaciers dont la dynamique sculpte durablement les reliefs martiens. La composition de l'atmosphère est alors grandement modifiée : l'argon et l'azote, minoritaires aujourd'hui, occupent dans ces conditions une proportion plus importante, parfois prépondérante. 
+
+Pour simuler l'effondrement atmosphérique dû à la formation de glaciers permanents de CO$_2$ sur des milliers d'années et avec une haute résolution spatiale, j'ai modifié le GCM de deux manières. Premièrement, le transport atmosphérique et la dynamique ont été paramétrés en utilisant une redistribution simplifiée du CO$_2$ qui rend compte du cycle du CO$_2$ sur le long terme. Deuxièmement, j'ai introduit une paramétrisation fine de la distribution de topographie sur des échelles kilométriques pour tenir compte des microclimats générés par les pentes locales. Avec cet outil, j'ai pu simuler, localiser et quantifier la formation de glaciers de CO$_2$ et leur dynamique sur les pentes orientées vers les pôles à hautes latitudes comme suggéré dans l'article de Kreslavsky et Head \citep{Kres:05}. J'ai aussi mis en évidence d'importantes variations annuelles et locales de composition atmosphérique dans les états finals obtenus, qui encouragent une étude postérieure qui prendrait en compte le modèle complet de la dynamique et du transport au cours des saisons.
+
+\section*{Abstract}
+This internship report deals with the study of Mars' surface and atmosphere thanks to a new type of model derived from LMD's global climate model (GCM). Mars' obliquity is chaotic: during amazonian years - the past three thousand years - it reached very low values which brought important climate changes. In such extreme conditions, the condensation of atmospheric carbon dioxyde on the ground lead to the formation of permanent glaciers of which dynamics erode martian reliefs lastingly. The atmospheric composition is then highly modified: argon and azote, which are marginal volatiles today, occupy a much more significant proportion.
+
+To simulate the atmospheric collapse dued to the formation of CO$_2$ perennial  glaciers over thousand of years end with high spatial resolution, I have modified the GCM in two ways. First, atmospheric dynamics and transport were parameterized using a simple redistribution of CO$_2$ which gives an accurate account of the long term CO$_2$ cycle. Second, I carefully introduced a detailed parametrization of the topography distribution at kilometer scale in order to account for the microclimate on local slopes. With such a tool I could simulate, map and quantify the formation of CO$_2$ glaciers and their flow on high latitude poleward slopes as suggested in Kreslavsky and Head's paper \cite{Kres:05}. I also found important annual and local variations of the atmospheric composition in the final states obtained, which encourage a subsequent study that would into account full dynamics and transport models.
+
+\clearpage
+\section*{Remerciements}
+Je tiens à remercier très chaleureusement François Forget qui est à l'initiative de mon projet de stage au Laboratoire de Météorologie Dynamique. En dépit de mes maigres connaissances dans le domaine de la planétologie au début de ce stage, il a fait preuve d'une grande patience et surtout d'une formidable pédagogie pour m'apprendre tout ou presque : des caractéristiques essentielles de la planète rouge jusqu'aux subtilités du modèle climatique et du langage Fortran. Malgré son investissement dans les missions spatiales, son poste à l'académie des sciences, les solicitations reçues de toutes parts pour participer à des conférences, il est resté très attentif à mon travail et m'a grandement enrichi de ses qualités scientifiques et humaines.\\
+Je voudrais remercier également tout ceux qui m'ont aussi apporté une aide et des conseils précieux  lors de mon projet : Tanguy Bertrand, Margaux Vals, Ehouarn Millour, Karine Marquois. Je remercie également les autres stagiaires et amis du laboratoire qui m'ont aussi soutenu dans ce projet : Hugues Dellatre, Romain Fouchard, Arthur le Saux \\
+Je remercie enfin l'équipe du Laboratoire qui m'a offert un excellent accueil.
+
+\clearpage
+\tableofcontents
+\newpage
+\thispagestyle{empty}
+\hfill
+\newpage
+\addtocounter{page}{-1}
+
+\clearpage
+\section{Introduction}
+%\addcontentsline{toc}{section}{Introduction}
+
+\subsection{La découverte et l'exploration de Mars}
+L'invention du télescope au XVII$^{e}$ siècle initie la description de la planète rouge. Si la durée du jour martien est rapidement déterminée par Christiaan Huygens puis Giovanni Domenico Cassini, les premières avancées majeures concernant la description de Mars sont l'\oe uvre de Frederick William Herschel, célèbre pour la découverte d'Uranus en 1781. Herschel mesure l'obliquité de Mars et postule la présence de saisons analogues à celles qu'on observe sur Terre en observant la formation et le retrait des calottes polaires. Il remarque aussi que les étoiles ne sont pas occultées par le bord du disque planétaire et en conclut l'existence d'une atmosphère ténue. Des observations postérieures permettent notamment de cartographier Mars (voir figure \ref{flammarion}), de détecter le dioxyde de carbone atmosphérique et même d'envisager la présence d'océans, attribués à l'alternance de zones sombres et claires à la surface. \\ 
+
+Cependant, avant les années 1960, on ne sait encore que très peu de choses sur les caractéristiques de Mars ; les premières observations  et la proximité de Mars à notre planète en ont fait un sujet d'étude privilégié et une destination idéale pour les missions spatiales. Après l'échec de plusieurs missions soviétiques entre 1961 et 1964, les sondes Mariner 4 puis Mariner 9 fournissent pour la première fois une multitude de données photographiques, à plusieurs longueurs d'ondes. Elles révèlent la présence de canyons, de volcans éteints et de lits de rivières ainsi que la survenue de tempêtes de poussière, preuves d'une riche activité géologique et atmosphérique. La possibilité d'une forme de vie sur Terre encourage la progression des missions spatiales et en 1976, Viking 1 est la première sonde à se poser sur  le sol martien. Le \emph{lander} ne découvre pas de forme de vie ou de fossiles sur son site d'atterrissage. En outre, les conditions de pression et de températures ne sont pas adaptée à la présence d'eau liquide, qui est considérée comme l'un des préalables essentiels à la vie. Pourtant, de nombreuses traces d'érosion laissent toujours penser que ces conditions ont pu être réalisées dans l'histoire de la planète. \\ 
+
+%[map de Mars d'époque]
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.5]{Flammarion_Mars}
+\caption{Carte de Mars proposée par Camille Flammarion ( \emph{Les Terres du ciel}, 1877)}
+\label{flammarion}
+\end{center}
+\end{figure}
+
+
+
+C'est pour répondre aux questions du passé martien et pour comprendre la richesse de l'activité martienne de manière plus générale que les modèles de simulations numériques sont nés à la fin du XX$^e$ siècle. En particulier, le laboratoire de météorologie dynamique fait partie des pionniers de la modélisation climatique de Mars et a créé un modèle de climat global adapté à Mars. Son fonctionnement sera détaillé dans la section \ref{gcm}. \\
+
+\subsection{Les caractéristiques générales de Mars actuelle}
+Mars est une des quatre planètes telluriques : comme la Terre, elle est composée essentiellement de roches et de métal. Son diamètre vaut $6779$ km, environ la moitié de celui de la Terre et sa masse vaut $6,24.10^{23}$ kg soit à peine $10\%$ de la masse terrestre. Comme conséquence immédiate de ces paramètres fondamentaux, la gravité sur Mars est plus faible que sur Terre, elle vaut $3,72$ m.s$^{-2}$. Concernant les caractéristiques orbitales, Mars est la quatrième planète par ordre de distance croissante au Soleil, située à une distance de celui-ci variant entre $1,384$ et $1,664$ Unité Astronomique (UA) : son orbite est excentrique. L'année martienne vaut $687$ jours terrestres et la durée du jour est similaire à celle sur Terre, elle vaut $24$ h $39$ min $35$ s.  \\
+
+Une des différence majeures avec la Terre réside dans la composition de l'atmosphère. Elle est d'abord beaucoup plus fine que celle de la Terre : la pression moyenne à la surface vaut $6$ hPa. Elle est essentiellement composée de gaz carbonique ($95\%$) et contient aussi de l'azote ($1.9\%$), de l'argon ($1.9\%$), de l'oxygène ($0.1\%$). La particularité de cette atmosphère tient dans le fait que les conditions de température et de pression sur Mars autorisent la condensation de son élément majoritaire à la surface, ce qui entraine des variations locales et saisonnières de composition atmosphériques. Ainsi on trouve au niveau du pole sud de la planète une calotte de glace de CO$_2$ permanente, qui serait un héritage d'une ancienne période plus froide sur Mars, tandis qu'au cours de chaque année martienne on observe des dépôts saisonniers au niveau des deux pôles. On trouve en outre une grande quantité de poussière en suspension dans le ciel martien qui lui confère sa couleur orange, dont l'opacité engendre des phénomènes thermiques importants. \\
+
+\subsection{L'obliquité : un enjeu majeur}
+L'obliquité de la planète Mars vaut actuellement $25,2^{\circ}$, c'est une valeur comparable à celle de la Terre ; cependant, cela n'a pas toujours été le cas. En effet, l'évolution de l'obliquité de la Terre est périodique, elle oscille entre $21,8^{\circ}$ et $24,4^{\circ}$ avec une période de $26000$ ans. Mars possède au contraire obliquité à l'évolution chaotique : celle-ci valait environ $15^{\circ}$ il y a $800000$ ans (voir figure \ref{marsob}) et a probablement atteint des valeurs d'à peine quelques degrés pendant l'ère de l'amazonien, c'est à dire lors des $3.2$ derniers milliards d'années \citep{Lask:04}. Comme on sait les immenses variations climatiques qu'entraînent les petites oscillations de l'obliquité terrestre, on peut donc s'attendre à de véritables bouleversements climatiques sur Mars. \\
+
+Ces modifications dans le passé martien pourraient expliquer certaines observations des sondes martiennes.  Par exemple, la présence de traces s'apparentant à des moraines dans les hautes latitudes (figure \ref{moraine}) pourrait être la conséquence de l'écoulement de glaciers qui ne pourraient exister dans les conditions actuelles d'obliquité, comme le proposent Kreslavsky et Head \citep{Kres:05}. Une autre découverte des orbiteurs martiens pourrait être un enjeu majeur dans la détermination de la possibilité d'une forme de vie sur Mars. En 2011, le Mars Reconnaissance Orbiter (MRO) chargé de sonder le sous-sol martien avec un radar, révèle la présence d'une importante quantité de CO$_2$ enfouie sous la surface du pole sud : le dépôt occupe un volume de $9500$ à $125000$ km$^3$, ce qui représente environ l'équivalent du CO$_2$ présent dans toute l'atmosphère \citep{Phil:11}. Cette découverte constitue une énigme en ce que le phénomène de dépôt d'une telle quantité de CO$_2$ n'est pas bien compris : des conditions particulières ont dû être réunies pour que celui-ci soit stabilisé au cours du temps et ne se sublime pas dans l'atmosphère. Comprendre ce phénomène permettrait d'envisager des époques passées ou futures pendant lesquelles l'atmosphère, deux fois plus épaisse et animée d'une dynamique et d'un transport plus intenses, autoriserait la présence d'eau liquide en surface. L'étude de Mars dans les dernières périodes froides de faible obliquité semble être une piste privilégiée pour mieux comprendre cette observation. \\
+
+%figure glaciers krevlavsky
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=3]{moraine}
+\caption{Moraines caractéristiques de glaciers sur la surface de Mars à la latitude $71^\circ N$ \citep{Kres:11}}
+\label{moraine}
+\end{center}
+\end{figure}
+
+%insérer variations de l'ob de Laskar
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.6]{marsob_laskar}
+\caption{Evolution de l'obliquité martienne pendant les 20 derniers et les 10 prochains millions d'années \citep{Lask:04}}
+\label{marsob}
+\end{center}
+\end{figure}
+
+\subsection{Mars à faible obliquité : les études de Kreslavsky and Head}
+Malgré son intérêt non négligeable pour l'étude de Mars, le cas de faible obliquité n'a été que très peu traité dans la littérature scientifique. La référence dans ce domaine reste le travail de Kreslavsky et Head en 2005 sur l'effondrement de l'atmosphère à faible obliquité \citep{Kres:05} et en 2011 sur les glaciers de CO$_2$ \citep{Kres:11}. Leur démarche reste volontairement qualitative, ils utilisent un simple modèle d'équilibre radiatif, en considérant que la température moyenne de surface est égale à celle du point de condensation du CO$_2$ et sans considérer les effets dynamiques de l'atmosphère, ni l'écoulement de la glace de CO$_2$, l'effet de l'opacité due à la poussière, la diffraction par la poussière, l'inertie thermique du sous-sol, les flux thermiques infrarouges, les variations de l'albedo. Ils tirent les conclusions suivantes :
+\begin{itemize}
+\item Quand l'obliquité descend sous une certaine valeur (environ $5^\circ$), tout le CO$_2$ est condensé à la surface et il persiste une atmosphère résiduelle d'argon et d'azote de $0.25$ mbar de pression.
+\item A faible obliquité, la topographie de surface joue un rôle majeur dans le processus de condensation / sublimation du CO$_2$. Les dépôts de CO$_2$ sont formés sur les pentes raides orientées vers les poles, à latitude relativement élevée, plutôt qu'au niveau des poles eux-mêmes comme c'est le cas lorsque les pentes locales ne sont pas considérées.
+\item La masse totale des dépôts dépend davantage de l'histoire du système climatique que des variations d'obliquité : pour une même obliquité, la masse finale déposée dépend de l'état initial. On observe en particulier lors des changement d'une obliquité basse à une obliquité élevée de larges hystérésis au niveau de la masse de CO$_2$ condensée à la surface. En effet, les dépôts de CO$_2$ formés sont très épais mais occupent une petite surface. Comme le taux de sublimation total est proportionnel à la surface, ils sont sublimés très lentement lors du changement d'obliquité. \\
+\end{itemize} 
+
+L'étude de Kreslavsky et Head est intéressante car elle montre que la prise en compte des pentes locales est importante dans l'étude de Mars à faible obliquité en ce qu'elle a des effets durables sur la masse et la localisation des dépôts.
+
+\subsection{Objectifs du projet} 
+Mon travail d'investigation et de modélisation s'est concentré sur l'étude de l'atmosphère et de la surface de Mars en conditions de faible obliquité et sur des échelles de temps de plusieurs milliers d'années. À la lumière de la lecture de Kreslavsky et Head, l'objectif du projet est de fournir une étude quantitative de la condensation du  CO$_2$ atmosphérique à la surface de Mars dans des conditions de faible obliquité : il s'agit de localiser les dépôts et d'estimer leur masse et leur évolution à partir d'un même état initial, pour plusieurs valeurs d'obliquité. Pour n'étudier que l'effet de l'obliquité, nous nous restreindrons au cas d'une orbite circulaire. 
+
+
+\clearpage
+\section{Le modèle numérique du climat martien}
+\subsection{Description du modèle du GCM sur Mars }
+\label{gcm}
+Le modèle du GCM martien est développé par l'équipe de planétologie du LMD sur la base des modèles existant sur Terre à la fin du XX$^e$ siècle \citep{Forg:99}. Ce modèle est basé sur une représentation géométrique de la planète par des mailles définies par une grille discrète latitude/longitude/altitude (figure \ref{gcm3d}): 
+\begin{itemize}
+\item la grille horizontale typique dans les simulation est composée de 48 mailles latitudinales pour une longitude donnée et de 64 mailles longitudinales pour une latitude donnée, espacées régulièrement, ce qui correspond à une résolution d'environ 300 km en longitude et 220 km en latitude. 
+\item L'axe vertical utilise un système de coordonnées "sigma" : chaque couche est définie par la valeur d'une constante $\sigma = P / P_s$, avec $P$ la pression de couche et $P_s$ la pression de surface ; $\sigma$ est donc compris entre $0$ et $1$. On peut aussi utiliser un système de coordonnées hybrides qui utilise les coordonnées sigma proche de la surface et des coordonnées de pression à plus haute altitude. Un nombre de niveaux typique dans les simulation est de 29. \\
+\end{itemize}
+
+%figure gcm 3d
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.4]{gcm3d}
+\caption{ Dessin de la géométrie du GCM (\emph{Fairhead }LMD/IPSL)}
+\label{gcm3d}
+\end{center}
+\end{figure}
+
+Le modèle fonctionne à partir de deux routines distinctes qu'il appelle à chaque pas de temps :
+\begin{itemize}
+\item La routine physique traite à intervalle de temps donné les différents processus physiques à l'\oe{}uvre comme la condensation au sol, la condensation dans l'atmosphère, le transfert radiatif ou encore la conduction dans le sous-sol. Elle opère en 1D, en traitant indépendamment chaque colonne verticale de la grille. Cette routine est spécifique à chaque planète ; pour Mars par exemple, elle traite le transfert radiatif et la distribution de la poussière.
+\item La routine dynamique traite l'intégration temporelle et spatiale des équations de la dynamique des fluides. Elle résout les équations de Navier-Stokes en 3D pour la circulation atmosphérique en prenant en compte les phénomènes de diffusion turbulente et de convection dans la couche limite ; c'est donc elle qui assure la "communication" entre les colonnes verticales de la grille. \\
+\end{itemize}
+Les deux routines traduisent des tendances (dérivées partielles) sur les variables d'états et sur les variables dynamiques dans l'intervalle de temps considéré, ces tendances sont ensuite intégrées par le modèle et le même schéma se répète au pas de temps suivant. L'ensemble des processus pris en compte dans le modèle est détaillé dans le papier \cite{Forg:99}. \\
+
+
+\subsection{Un nouveau modèle de climat pour l'étude à faible obliquité}
+Mon travail de stage a consisté à concevoir un nouveau modèle répondant aux contraintes suivantes :
+\begin{itemize}
+\item Le modèle doit pouvoir simuler la planète Mars sur des échelles de plusieurs milliers d'années en un temps raisonnable (de l'ordre de la journée).
+\item Il doit intégrer le calcul de l'insolation en fonction des caractéristiques topographiques, à savoir la pente locale.
+\item Il doit pouvoir traiter les "micro-climats" sur les pentes locales de manière précise et indépendante, c'est à dire sur des échelles subkilométrique, bien plus petites que la résolution horizontale des mailles.
+\item Il doit pouvoir prendre en compte l'écoulement des glaciers de CO$_2$ éventuellement formés. \\
+\end{itemize}
+La principale difficulté dans ce travail a été de réussir à accélérer le modèle tout en traitant des phénomènes comme la condensation sur les pentes avec une résolution très fine. J'ai donc créé un nouveau modèle à partir du GCM décrit plus haut, choisi dans une résolution de grille horizontale de 32 en longitude pour 48 en latitude. \\
+
+\subsubsection{Diminution de la fréquence de traitement}
+Le modèle initial du GCM fonctionne typiquement avec 96 pas de temps physiques par jour martien. Cela permet de rendre compte assez finement des variations climatiques journalières tout en donnant des résultats précis. Cependant, dans notre cas, nous ne souhaitions pas rendre compte du cycle diurne mais plutôt des transformations générales concernant la distribution de CO$_2$ à la surface sur de longues périodes de temps. Par conséquent nous avons pu diminuer drastiquement le nombre de pas de temps par jour, notamment en exploitant une fonction du GCM qui permet d'effectuer les calculs radiatifs en moyenne diurne. Toutefois, les conditions extrêmes de faible obliquité causant des problèmes de stabilité, nous avons modifié les routines de calcul des variables d'état sensibles, comme la température de surface, en intégrant un système de sous pas de temps et en passant d'un schéma d'intégration explicite à un schéma implicite. Nous avons ainsi pu conserver un modèle stable avec un seul pas de temps par période de 10 jours.  \\
+
+\subsubsection{Simplification de la dynamique du modèle}
+\label{dyn}
+Le c\oe ur dynamique du GCM est de loin la partie la plus chronophage du modèle, car c'est lui qui traite tous les phénomènes de transport sur l'intégralité de la grille à partir de la résolution des équations de Navier-Stokes. La dynamique de l'atmosphère est un élément crucial de la simulation car c'est elle qui permet le transport de matière et d'énergie entre les colonnes verticales de la grille. Cependant, dans les conditions de faible obliquité, l'effondrement de l'atmosphère provoque nécessairement une baisse significative de l'influence de l'atmosphère sur la thermique de surface qui contrôle la condensation du CO$_2$. La première conclusion à tirer de cette conséquence est que la résolution verticale du modèle peut être largement diminuée par rapport aux simulations standards. Nous avons donc travaillé par la suite sur le modèle avec 3 couches verticales. \\
+
+Concernant le transport dynamique horizontal, nous avons choisi de simplifier celui-ci de manière à reproduire les effets moyens de la dynamique sans résoudre les équations de la dynamique des fluides. Pour cela, nous avons remplacé le schéma dynamique initial par une redistribution des variables d'état par un schéma de type rappel Newtonien vers la moyenne.
+J'ai appliqué cette redistribution pour la pression de surface, le rapport de mélange de CO$_2$ et la température potentielle. Je détaille ci dessous la démarche théorique d'une telle redistribution. \\
+
+\paragraph{Redistribution de la température potentielle \\} 
+Pour ce cas et dans la suite, on se place dans l'une des trois couches verticales de l'atmosphère (le raisonnement est le même dans chacune). La température potentielle $\theta$ est définie comme la température qu'aurait une masse d'air après une transformation adiabatique vers la pression de surface. On préfère généralement utiliser cette variable d'état plutôt que la température usuelle. Par définition (en considérant le gaz comme étant parfait) on a donc pour tout pas de temps $t$ et pour toute maille de la grille horizontale $i$ :
+
+\begin{equation}
+\theta_i(t) = T(t)  \left( \frac{Ps_i(t)}{P_i(t)} \right) ^\frac{R}{Cp}
+\end{equation}
+Où $T$ est la température usuelle, $Ps_i$ la pression de surface de la maille $i$, $P_i$ la pression de la couche considérée pour la maille $i$, $R$ la constante des gaz parfait pour l'atmosphère martien, $C_p$ la chaleur massique à pression constante de l'atmosphère martien. \\
+On définit le rappel newtonien appliqué à $\theta$ entre $t$ et $t + \delta t$ :
+\begin{equation}
+\label{rappel}
+\theta_i(t+\delta t) = \theta_i(t) + \left( \overline{\theta}(t) -  \theta_i(t) \right) \left( 1 - e^{\frac{\delta t}{\tau_\theta}} \right)
+\end{equation}
+Où $\tau_\theta$ est une constante de temps caractéristique de la redistribution et $\overline{\theta}$ est défini par la contrainte de conservation de l'énergie dans la couche considérée. Celle-ci s'écrit au temps $t$ :
+\begin{equation}
+H(t) = C_p \sum_i T_i(t) m_i = C_p \sum_i T_i(t) \frac{\Delta P_i(t)}{g} A_i
+\end{equation}
+Où $m_i$ est la masse de la couche considérée pour la maille $i$, $\Delta P_i$ est la différence de pression entre le haut et le bas de la couche, $g$ la gravité sur Mars, $A_i$ l'aire de la maille $i$. Comme on définit les couches par les coordonnées sigma $\sigma = P/P_s$, on peut réécrire la quantité précédente :
+\begin{equation}
+H(t) = C_p  \sum_i \theta_i(t) \sigma^{\frac{R}{C_p}} \frac{\Delta P_i(t)}{g} A_i = \frac{C_p \sigma^{\frac{R}{C_p}}}{g} \sum_i \theta_i(t) \Delta P_i(t) A_i 
+\end{equation}
+L'égalité $H(t) = H(t+\delta t)$ donne en regard de l'équation de rappel (\ref{rappel}) :
+\begin{equation}
+\overline{\theta}(t) = \frac{\sum_i \theta_i(t) \Delta P_i(t) A_i}{\sum_i \Delta P_i(t) A_i} = \frac{ <\theta(t) \Delta P(t)>}{< \Delta P(t) >}
+\end{equation}
+Où  $f \rightarrow < f >$ désigne l'opérateur de moyenne surfacique. Le dernier paramètre à déterminer est arbitraire, c'est la constante de temps $\tau_\theta$. Nous l'avons fixée à $10^{-7}$ s en comparant les simulations avec celles du GCM prenant en compte la dynamique "exacte". \\
+
+\paragraph{Redistribution du rapport de mélange de CO$_2$ \\} 
+Le principe est le même que pour la température potentielle, on définit donc une quantité $\overline{q}$ et une constante de temps $\tau_P$ telles qu'on ait entre $t$ et $t+\delta t$ en chaque maille $i$ :
+\begin{equation}
+q_i(t+\delta t) = q_i(t) + \left( \overline{q}(t) -  q_i(t) \right) \left( 1 - e^{\frac{\delta t}{\tau_q}} \right)
+\end{equation}
+On contraint $\overline{q}$ par la conservation de la masse de CO$_2$ dans la couche:
+\begin{equation}
+M(t) = \sum_i \frac{q_i \Delta P_i(t)}{g} A_i
+\end{equation}
+L'égalité $M(t) = M(t+\delta t)$ permet d'obtenir :
+\begin{equation}
+\overline{q}(t) =  \frac{< \Delta P(t)q(t) >}{< \Delta P(t) >}
+\end{equation}
+ Comme pour le cas précédent, les simulations avec le GCM nous ont permis d'estimer la valeur de $\tau_q$ : nous l'avons fixé à $10^5s$. \\
+ 
+\paragraph{Redistribution de la pression de surface \\} 
+Pour la pression de surface, on souhaite tenir compte de la topographie. On rappelle la pression vers $P_0 k_i$ avec $k_i = e^{-\frac{z_i g}{RT}}$ et on définit la constante de temps $\tau_p$. On a donc entre $t$ et $t + \delta t$ en chaque maille $i$ :
+\begin{equation}
+Ps_i(t+\delta t) = Ps_i(t) + \left( P_0 k_i(t) -  Ps_i(t) \right) \left( 1 - e^{\frac{\delta t}{\tau_P}} \right)
+\end{equation}
+La contrainte de la conservation de la masse totale permet alors d'obtenir :
+\begin{equation}
+P_0 = \frac{< Ps(t) >}{< k(t) >}
+\end{equation}
+Après comparaison avec les simulations du GCM, nous avons choisi de prendre $\tau_p = 10^5 s$. \\
+
+\subsubsection{La contribution des pentes}
+Dans l'étude qu'ils mènent sur l'effondrement de l'atmosphère en période de faible obliquité, Krevlavsky et Head \citep{Kres:05} insistent sur le rôle des pentes locales sur le bilan thermique au niveau de la surface. Ils écrivent un tel bilan en moyenne journalière comme suit :
+\begin{equation}
+\label{fonda}
+\frac{dM}{dt}L=E\sigma_{SB}T^4_{CO_2} - (1-A)S,
+\end{equation}
+où $M$ désigne la mass de la colonne de CO$_2$ solide par unité de surface, $t$ est le temps, $L$ la chaleur latente de sublimation du CO$_2$, $E$ l'émissivité effective thermique infrarouge, $\sigma_{SB}$ la constante de Stephan-Boltzmann, $T_{CO_2}$ la température du point de condensation du CO$_2$ à pression donnée, $A$ l'albedo visible et $S$ l'insolation moyenne journalière. Les deux paramètres dépendants de la pente locale sont alors $S$ et $E$. \\
+
+Définissons pour une pente donnée, l'inclinaison $\theta$ comme étant l'angle entre la verticale locale et la normale à la surface et l'orientation $\psi$ comme étant l'angle entre les projetés de l'axe Nord-Sud et de la normale à la surface sur le plan horizontal local. Dans cet article et dans l'article concernant la formation de glaciers de CO$_2$ en période de faible obliquité \citep{Kres:11} Krevlavsky et Head suggèrent le résultat suivant :
+\begin{itemize}
+\item Dans l'hémisphère nord, l'insolation moyenne $S$ est d'autant plus faible que la pente locale est fortement inclinée (soit que $\theta$ est proche de $90^\circ$) et qu'elle est orientée vers le Nord (soit que $\psi$ est proche de $0^\circ$) 
+\item Dans l'hémisphère sud, l'insolation moyenne $S$ est d'autant plus faible que la pente locale est fortement inclinée (soit que $\theta$ est proche de $90^\circ$) et qu'elle est orientée vers le Sud (soit que $\psi$ est proche de $0^\circ$) \\
+\end{itemize}
+
+\paragraph{Sensibilité de l'insolation aux caractéristique des pentes \\}
+Pour me convaincre qualitativement de ce résultat, et tenter de trouver un paramètre pertinent reliant les pentes à leur insolation moyenne, j'ai utilisé une version unidimensionnelle du modèle climatique du LMD dans lequel le calcul de l'insolation sur les pentes est réalisé conformément au papier de Spiga et Forget \citep{Spig:08grl} selon une méthode de simulation de Monte Carlo. J'ai écrit un algorithme permettant de moyenner l'insolation calculée par le modèle sur une journée martienne pour un ensemble discret de valeurs d'orientations $\psi$ et d'inclinaison $\theta$ de pente, pour pouvoir ensuite tracer l'insolation moyenne $S$ en fonction du projeté de l'orientation sur l'axe Nord-Sud, soit $cos(\psi)$. Le résultat pour une surface située à la latitude $30^\circ N$ et une longitude solaire initiale de $0^\circ$ est présenté figure \ref{flux}. On obtient qualitativement un flux moyen qui a la forme suivante :
+
+\begin{equation}
+S = S_0 - k_0 \theta cos(\psi)
+\end{equation}
+
+Où $S_0$ et $k_0$ seraient constantes. Par conséquent, ce résultat même s'il reste qualitatif, est bien en accord avec l'hypothèse de Krevlavsky et Head. En outre, on a mis ici en lumière une corrélation entre le paramètre $\mu =  \theta cos(\psi)$ et l'insolation moyenne reçue $S$. Le paramètre $\mu$ nous permettra par la suite de regrouper les différentes pentes selon qu'elles reçoivent plus ou moins d'ensoleillement en moyenne.  \\
+
+%figure flux moyen
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.8]{flux_moy}
+\caption{Flux moyen reçu sur une pente à la latitude ($30^\circ N$) pour différentes valeurs d'inclinaison, tracé en fonction du projeté de l'orientation de la pente sur l'axe Nord-Sud, qui varie entre -1 (pente orientée plein sud) et 1 (pente orientée plein nord). }
+\label{flux}
+\end{center}
+\end{figure}
+
+\paragraph{Traitement des pentes sous maille \\}
+Le traitement des pentes est rendu compliqué par les contraintes d'efficacité du modèle. En effet, le calcul des pentes locales nécessite d'employer des échelles spécifiques de distance. D'une part, la pente moyenne d'une maille de $200$ km de côté n'est pas représentative des pentes locales sous la maille. D'autre part, Kreslavsky et Head expliquent dans leur papier \citep{Kres:05} l'importance de ne pas considérer les pentes avec une résolution trop grande pour pouvoir s'abstenir de la modification de la topographie engendrée par l'accumulation de glace de CO$_2$. Ils choisissent de calculer les pentes sur des échelles kilométriques. Cependant, il était inenvisageable pour nous de diviser la taille des maille par 100, ce qui multiplierait le temps de calcul d'un facteur $10000$. Nous avons donc trouvé un compromis permettant de s'affranchir d'une augmentation de résolution en opérant une statistique sur les pentes sous mailles. En nous basant sur l'étude préalable de la sensibilité de l'insolation aux paramètres des pentes, nous avons choisi d'allouer à chaque maille un tableau caractéristique de taille $7$ qui donne la distribution des pentes selon leur paramètre $\mu = \theta cos(\psi)$  explicité ci-dessus. En d'autres termes, on sépare chaque maille en $7$ pentes caractéristiques occupant chacune l'aire correspondant à leur proportion (figure \ref{subslope_dist}).  \\ 
+
+\begin{figure}[h!]
+\begin{center}
+\begin{tabular}[centered]{| l | l | | l |}
+\hline
+indice & contenu & pente caractéristique associée \\
+\hline \hline
+1 & $\%$ pentes avec $-43^\circ \leq \mu<-20^\circ$ & $\mu = -31.5^\circ$\\ \hline
+2 & $\%$ pentes avec $-20^\circ \leq \mu<-9^\circ$ & $\mu = -14.5^\circ$\\ \hline
+3 & $\%$ pentes avec $-9^\circ \leq \mu<-3^\circ$ & $\mu = -6^\circ$\\ \hline
+4 & $\%$ pentes avec $-3^\circ \leq \mu<3^\circ$ & $\mu = 0^\circ$\\ \hline
+5 & $\%$ pentes avec $3^\circ \leq \mu<9^\circ$ & $\mu = 6^\circ$\\ \hline
+6 & $\%$ pentes avec $9^\circ \leq \mu<20^\circ$ & $\mu = 14.5^\circ$\\ \hline
+7 & $\%$ pentes avec $20^\circ \leq \mu<43^\circ$ & $\mu = 31.5^\circ$\\ \hline
+\end{tabular}
+\caption{Schéma du tableau caractéristique des pentes utilisé dans nos simulations}
+\label{subslope_dist}
+\end{center}
+\end{figure}
+
+Pour prendre en compte les pentes de manière précise, j'ai utilisé les données issues du radar MOLA (Mars Orbiter Laser Altimeter) qui a sondé la topographie de Mars. Le satellite mesure le niveau de la surface avec une résolution de 32 points par degré, ce qui correspond à un espacement de l'ordre du kilomètre entre chaque point. Les données sont récoltées sous la forme d'un tableau associant aux coordonnées $(longitude,latitude)$ des points leur altitude. J'ai ensuite développé un algorithme utilisant ces données pour calculer les pentes locales en chaque point du tableau MOLA puis pour associer à chaque maille de la grille son tableau caractéristique. La figure \ref{subslope_dist03} donne un exemple de carte de pentes locales obtenue. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.7]{subslope_dist03}
+\caption{Carte des proportions de pentes pour $3^\circ \leq \mu<9^\circ$ ($\%$)}
+\label{subslope_dist03}
+\end{center}
+\end{figure}
+
+
+\paragraph{L'intégration des pentes au modèle \\}
+Le principe du GCM initial est qu'à chaque maille est associée une seule valeur pour chaque variable d'état. Pour utiliser à bon escient la statistique des pentes sous maille, j'ai transformé les variables du GCM initial pour que le calcul des paramètres $E$ et $S$ de l'équation \ref{fonda} soit effectué séparément pour chaque pente caractéristique. Le principe est explicité dans le schéma \ref{schema_slopes}. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.6]{schema_subslope}
+\caption{Schéma explicatif du traitement des pentes dans le nouveau modèle}
+\label{schema_slopes}
+\end{center}
+\end{figure}
+
+\subsubsection{L'écoulement des glaciers}
+De manière analogue à la dynamique des glaciers d'eau sur Terre, on peut s'attendre à observer un phénomène d'écoulement pour les glaciers de CO$_2$ sur Mars. En plus de rendre mieux compte de la réalité, la prise en compte de ce phénomène est importante car il constitue un effet inhibiteur de l'accumulation de CO$_2$ sur les pentes et donc a une influence sur la distribution globale de CO$_2$ au cours du temps. L'étude de Fastook \citep{Fast:17} (figure \ref{profil_glacier}), basée sur la rhéologie du CO$_2$ solide, met en avant la sensibilité du profil et de la vitesse d'avancée d'un glacier de CO$_2$ en fonction de la pente. Il montre que l'inclinaison de la pente a une influence considérable sur l'épaisseur maximale du glacier de CO$_2$. \\
+
+%figure fastook
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.4]{profil_glacier}
+\caption{Profil de glaciers sur une pente de $0^\circ$, $0.05^\circ$,$0.1^\circ$ (\emph{Fastook 2017})}
+\label{profil_glacier}
+\end{center}
+\end{figure}
+
+Comme dans notre modèle les pentes caractéristiques non plates ont des valeurs de $\mu$ supérieures à $6^\circ$, celui-ci constitue un regroupement assez grossier des pentes pour pouvoir utiliser un schéma simple d'écoulement. Nous avons décidé d'une épaisseur maximale de dépôt de CO$_2$ pour les pentes caractéristiques non plates (\emph{i.e.} avec $\mu \neq 0$). On s'attend naturellement à ce que les pentes les plus "raides", avec le paramètre $\mu$ le plus extrême, soient les plus privilégiées pour la condensation du CO$_2$. Ainsi, une fois l'épaisseur limite atteinte,  l'excédent de CO$_2$ condensé  à chaque pas de temps est transmis directement à la pente caractéristique "voisine moins raide", c'est à dire avec le paramètre $\mu$ voisin et inférieur en module. Une fois toutes les pentes caractéristiques non plates remplies, l'excédent se dépose sur la pente caractéristique plate. D'après nos estimations, pour les échelles de temps considérées, l'épaisseur des glaciers de CO$_2$ formés sur le plat est suffisamment élevée pour pouvoir stocker des quantités considérables de CO$_2$ sans avoir à prendre en compte un écoulement vers les mailles voisines.
+
+\clearpage
+\section{Résultats des simulations numériques}
+\subsection{Expériences réalisées}
+Nous avons tout d'abord choisi d'étudier les effets de la variation d'obliquité sur notre modèle témoin : le nouveau modèle sans contribution des pentes (noté "smooth" dans la suite). Nous avons choisi des valeurs d'obliquité de $0^\circ$, $7.5^\circ$ et $15^\circ$. Puis nous avons utilisé le modèle avec contribution des pentes (noté "rough" dans la suite) pour comparer les résultats sur la distribution et la quantité de glace de CO$_2$ déposée pour une obliquité de $7.5^\circ$ et $15^\circ$. Enfin nous avons effectué les mêmes simulations avec l'option d'écoulement des glaciers. Enfin, nous avons testé l'impact d'une variation d'albedo et d'opacité de l'atmosphère sur le modèle complet : avec contribution des pentes et écoulement des glaciers. Notre démarche est schématisée figure \ref{schema_exp}. Dans le but d'éclairer certaines observations issues de cette salve d'expériences, nous avons ensuite réalisé quelques autres simulations ponctuellement. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.6]{schema_exp}
+\caption{Schéma récapitulatif des différentes expériences réalisées}
+\label{schema_exp}
+\end{center}
+\end{figure}
+
+\subsubsection{Temps de simulation}
+Le nouveau modèle créé affiche des performances suffisantes pour pouvoir effectuer des simulations de plusieurs milliers d'années. Il fonctionne à un rythme de 500 années martiennes par heure, là où le GCM dans sa configuration typique avait un rythme de l'ordre d'une année par heure. Par conséquent nous avons choisi d'effectuer des simulation de 5000 ans ; nous verrons que cette durée est suffisante pour atteindre un état quasi-équilibré en température et pression. Pour étudier les quantités qui ne sont pas à l'équilibre à la fin de la simulation, nous observerons leurs tendances en fin de simulation. \\
+
+\subsubsection{\' Etat initial}
+L'un des paramètres important du modèle est l'état initial choisi. D'après Kreslavsky et Head \citep{Kres:05}, l'état initial aurait une influence sur la quantité totale de CO$_2$ condensé sur des échelles de temps caractéristiques inférieures à la variation de l'obliquité soit des durées inférieures à $100000$ ans, ce qui correspond à nos temps de simulation. Cependant, nous n'avions pas accès, en début d'expérience, à des états initiaux représentatifs des cas d'étude comme nous cherchions justement à tendre vers de tels états. Par conséquent, nous avons choisi d'appliquer pour chaque simulation un état initial typique de Mars d'aujourd'hui (figure \ref{etat_init}) caractérisée en particulier par une obliquité de $25.2^\circ$ et une excentricité de $0.093$, pour une longitude solaire égale à $0^\circ$ ce qui correspond au solstice de printemps nord. On observe donc initialement les caractéristiques classique d'une telle saison sur Mars actuelle : présence d'un dépôt saisonnier dans l'hémisphère nord et d'une calotte polaire permanente au pole sud. Nous avons facilement pu obtenir un tel état initial à partir du GCM de Mars, conçu pour étudier la planète dans ses conditions actuelles. En particulier, l'état initial ne tient pas compte de la distribution des pentes locales ni de l'écoulement des glaciers. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.9]{etat_init}
+\caption{Distribution de la glace de CO$_2$ en surface à l'état initial}
+\label{etat_init}
+\end{center}
+\end{figure}
+
+\subsection{Résultats des simulations}
+\subsubsection{\' Etude du modèle "smooth"}
+\label{smooth_section}
+L'étude du modèle sans contribution des pentes donne déjà une base de réflexion sur la dynamique de condensation de la glace de CO$_2$. Nous avons en particulier testé le cas extrême d'obliquité nulle qui nous a permis de comparer les premiers résultats avec l'étude de Kreslavsky et Head \citep{Kres:05}.
+
+
+\paragraph{Dynamique des dépôts de CO$_2$ \\}
+l'évolution de la distribution de glace de CO$_2$ pour une obliquité de $7.5^\circ$ est présentée figure \ref{film_ob7.5_smooth}. On peut déjà émettre plusieurs remarques générales.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.25]{film_ob75_smooth}
+\caption{Distribution de la glace de CO$_2$ en surface (kg/m$^{-2}/100$) au cours du temps pour le modèle smooth avec obliquité $7.5^\circ$}
+\label{film_ob7.5_smooth}
+\end{center}
+\end{figure}
+
+On remarque d'abord la condensation rapide d'une importante quantité de CO$_2$ aux niveau des pôles. On a donc a priori un net désaipaississement de l'atmosphère qui vient se condenser à la surface. La dynamique de condensation est intéressante : le CO$_2$ se condense pendant les 50 premières années au niveau des deux pôles puis on observe un transport de la glace de CO$_2$ du pôle sud vers le pôle nord, jusqu'à ce que le seul dépôt permanent soit localisé au pôle nord. \\
+Ce premier constat peut s'expliquer de la manière suivante. Au début de la simulation, on est très loin d'un état d'équilibre car la basse obliquité favorise de très faibles insolations à proximité des pôles. L'atmosphère riche en CO$_2$ commence à s'effondrer indifféremment aux pôles nord et sud. Quand la pression de surface devient plus faible et qu'on approche de l'équilibre, la condensation du CO$_2$ commence a être contrôlée par la topographie.  En effet, une plus faible altitude correspond à une pression de surface plus importante ce qui augmente la température du point de condensation-sublimation donc favorise\footnote{Au premier ordre le taux de condensation est proportionnel au refroidissement radiatif thermique de la surface, lui même proportionnel à $T^4$ (avec $T$ la température de la glace), d'après la loi de Stephan-Boltzmann.} la condensation du CO$_2$ atmosphérique. Or, la planète Mars est caractérisée par un gradient important de topographie entre le nord et le sud (figure \ref{topo_north_south}). Le pôle nord étant plus bas que le pôle sud, on s'attends donc à observer une migration du CO$_2$ vers celui-ci. C'est effectivement ce qu'on observe dans la simulation. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.1]{topo_north_south}
+\caption{Coupe latitudinale (pôle nord à gauche) de la topographie martienne autour de la longitude $180^\circ O$ (Nasa SVS)}
+\label{topo_north_south}
+\end{center}
+\end{figure}
+
+La seconde remarque importante concerne la vitesse d'évolution de la distribution de glace de CO$_2$. On voit sur la figure \ref{film_ob7.5_smooth} que celle-ci n'a pas fini d'évoluer entre 1000 et 2000 ans de simulation. En plus de la migration vers le pôle nord, le CO$_2$ semble se localiser de plus en plus au nord. À la fin de la simulation de 5000 ans (figure \ref{5000y_ob7.5_smooth}), l'équilibre de distribution n'est toujours pas atteint. En fait, on a à faire au même phénomène que celui observé à plus grande échelle entre les pôles : la glace de CO$_2$ est transportée lentement vers les points les plus favorables en termes d'insolation et de topographie. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.45]{5000y_ob75_smooth}
+\caption{Distribution de la glace de CO$_2$ en surface après 5000 ans (obliquité $7.5^\circ$)}
+\label{5000y_ob7.5_smooth}
+\end{center}
+\end{figure}
+
+
+\paragraph{\' Etude de l'effondrement de l'atmosphère \\}
+Comme observé qualitativement dans les figures précédentes, la figure \ref{co2ice_ave_smooth} quantifie l'augmentation de la masse totale de glace de CO$_2$. Pour les trois obliquités simulées, on observe une augmentation significative de la quantité totale de CO$_2$ condensé à la surface. Comme attendu, on voit que plus l'obliquité est faible, plus la masse de glace de CO$_2$ formée est importante. En plus des variation sur le long terme, on remarque pour les obliquités non nulles des variations saisonnières de condensation, d'autant plus marquées que l'obliquité est élevée. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.75]{co2ice_ave_smooth}
+\caption{\' Evolution de la masse moyenne de glace de CO$_2$ en surface au cours des 1000 premières années de simulation}
+\label{co2ice_ave_smooth}
+\end{center}
+\end{figure}
+
+En outre, on voit que la quantité totale de CO$_2$ condensé tend assez rapidement vers un équilibre, d'autant plus vite que l'obliquité est faible. A partir de 750 années simulées, les trois expériences ont atteint un équilibre en terme de masse globale de dépôt de CO$_2$. Pourtant, le paragraphe précédent nous permet d'affirmer qu'il ne s'agit que d'un équilibre global, car la masse de CO$_2$ condensé continue à varier localement. En cela, on obtient déjà un résultat qui va à l'encontre des résultats de Kreslavsky et Head \citep{Kres:05} qui affirment : "The total mass of the deposits is not a function of obliquity, but strongly depends on the pre-history of the climate system". En effet, on atteint bien dans nos simulation un équilibre indépendant de l'état initial considéré, et ce avec des durées caractéristiques très inférieures à celles utilisées par Kreslavsky et Head. \\ \\
+Pour s'en convaincre, nous avons complété les simulations sur le problème à obliquité $7.5^\circ$ en prenant comme état initial soit l'état final pour le problème à obliquité $0^\circ$, soit l'état final pour le problème à obliquité $15^\circ$. L'observation des moyennes globales du rapport de mélange de CO$_2$ pour les différents états initiaux (figure \ref{comp_etat_init_ob75}) montre qu'on converge vers le même rapport de mélange de CO$_2$ moyen donc vers la même masse totale de dépôts de glace de CO$_2$ pour les différents cas de figure. \\
+%autre remarque : la quantité finale de CO2 dans l'atmosphère n'est pas si ridicule même pour ob0
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.8]{comp_etat_init_ob75}
+\caption{Evolution des moyennes globales du rapport de mélange du CO$_2$ atmosphérique sur 4000 années simulées pour un état initial correspondant à la référence (courbe noire), la simulation à obliquité $0^\circ$ après 4000 années simulées (courbe verte), la simulation à obliquité $15^\circ$ après 4000 années simulées (courbe jaune)}
+\label{comp_etat_init_ob75}
+\end{center}
+\end{figure}
+
+L'effondrement de l'atmosphère à proprement parlé s'observe directement à partir des variations de la pression de surface moyenne. L'observation de l'évolution du rapport de mélange moyen du CO$_2$ atmosphérique montre qu'il s'agit bien de la condensation de celui-ci qui provoque l'effondrement (figure \ref{eff_smooth}). \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.6]{eff_smooth}
+\caption{Evolution des moyennes globales de la pression (gauche) et du rapport de mélange du CO$_2$ atmosphérique (droite)}
+\label{eff_smooth}
+\end{center}
+\end{figure}
+
+\paragraph{Observations saisonnières \\}
+\label{seasonnal_var}
+En plus des tendances générales sur la condensation du CO$_2$ et l'effondrement de l'atmosphère associé, notre modèle résout assez finement la dynamique saisonnière du CO$_2$. Nous nous sommes intéressés en particulier aux phénomènes à l'\oe uvre sur les glaciers permanents de CO$_2$, une fois l'équilibre global atteint. La figure \ref{season_smooth_north_pole} présente les variations saisonnières de température de surface et de rapport de mélange du CO$_2$ au niveau du pôle nord pendant 3 années martiennes pour le cas d'obliquité $7.5^\circ$. On remarque de très importantes variations de rapport de mélange au cours de l'année : 
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.6]{season_smooth_north_pole}
+\caption{Evolution de la température de surface (gauche) et du rapport de mélange du CO$_2$ atmosphérique (droite) au niveau du pôle nord entre les années martiennes 3000 et 3003 de simulation (obliquité $7.5^\circ$) }
+\label{season_smooth_north_pole}
+\end{center}
+\end{figure}
+\begin{itemize}
+\item À chaque période de sublimation (été de l'hémisphère nord), la colonne d'atmosphère au niveau du pôle nord est temporairement saturée en CO$_2$. Le rapport de mélange de CO$_2$ atmosphérique culmine à $90\%$, excédant largement la moyenne globale de $75\%$ (figure \ref{eff_smooth}). Ce phénomène a pour conséquence immédiate l'augmentation de la température du point de condensation-sublimation, ce qui freine la sublimation. 
+\item À l'inverse, pendant les périodes de grande condensation (hiver de l'hémisphère nord), le rapport de mélange du CO$_2$ chute à $47\%$ : la température du point de condensation-sublimation diminue et il devient plus difficile de poursuivre le processus de condensation.\\ 
+\end{itemize}
+
+
+
+La conséquence fondamentale d'une telle observation est que dans des situations d'obliquité très basse, les phénomènes de condensation et de sublimation sont si intenses qu'ils ne sont plus uniquement contrôlés par le flux  thermique incident reçu et donc par l'enchaînement des saisons, mais aussi par le transport atmosphérique. Ainsi, dans de telles conditions, on observe chaque année un gradient de rapport de mélange de CO$_2$, et donc un gradient de masse moléculaire, entre le pôle nord et le pôle sud. Ce gradient est d'autant plus faible que la dynamique assure un transport intense entre les deux régions. \\
+
+
+\subsubsection{Comparaison des modèles "smooth" et "rough"}
+Après les observations générales appliquées au modèle smooth, nous avons observé la contribution des pentes sur les bilans local et global.
+
+\paragraph{Bilan local de glace de CO$_2$ \\}
+Lorsqu'on compare les états finals des simulations avec et sans contribution des pentes, on voit tout d'abord que la distribution de glace de CO$_2$ (figure \ref{comp_smooth_rough_co2ice_final} pour le cas de l'obliquité $7.5^\circ$) est plus étalée lorsqu'on prend en compte la contribution des pentes. On observe même dans le cas du modèle rough des dépôts de CO$_2$ permanents dans l'hémisphère sud à relativement basse latitude ($70^\circ $S). Ce résultat découle du fait qu'à basse obliquité, certaines pentes orientées vers les pôles mais localisées à latitudes plus basses que ceux-ci reçoivent une insolation comparable, si bien qu'elles peuvent accumuler de la glace de CO$_2$. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.8,center=5cm]{comp_smooth_rough_co2ice_final}
+\caption{Distribution de la glace de CO$_2$ après 5000 années martiennes simulées pour les modèles smooth à gauche et rough à droite (obliquité $7.5^\circ$)}
+\label{comp_smooth_rough_co2ice_final}
+\end{center}
+\end{figure}
+
+Comme les dépôts les plus épais restent visiblement localisés au nord même dans le cas du modèle rough, nous avons souhaité vérifier si les pentes allaient effectivement céder leur glace de CO$_2$ au profit du pôle nord. Pour cela, nous avons allongé la simulation de 5000 années martiennes et nous avons calculé la tendance sur la distribution de glace de CO$_2$ à la fin de la simulation ; la figure \ref{co2ice_co2icetend_10000y_rough} montre le résultat. On voit qu'au contraire, pendant les 5000 années de simulation supplémentaires, les pôles ont cédé de la glace de CO$_2$ aux pentes situées à plus basses latitudes. En outre, la tendance en fin de simulation montre que les pôles sont en train de s'appauvrir en glace de CO$_2$ au profit des pentes. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.7, center=5cm]{co2ice_co2icetend_10000y_rough}
+\caption{Distribution de glace de CO$_2$ (gauche) et tendance sur la distribution de glace de CO$_2$ (droite) pour le modèle rough après 10000 années martiennes de simulation (obliquité $7.5^\circ$)}
+\label{co2ice_co2icetend_10000y_rough}
+\end{center}
+\end{figure}
+
+\paragraph{Bilan global de glace de CO$_2$ \\}
+Après avoir comparé la distribution locale de la glace de CO$_2$ à la surface, nous avons cherché à comparer la masse totale de dépôt de CO$_2$. Pour cela, il nous suffit de comparer les moyennes globale du rapport de mélange du CO$_2$ atmosphérique (figure \ref{comp_co2_rough_smooth}). On remarque que l'équilibre atteint pour cette quantité est sensiblement différent dans les deux cas : la moyenne du rapport de mélange de CO$_2$ tend vers $69\%$ pour le modèle smooth et $76\%$ pour le modèle rough. En d'autres termes, le modèle sans contribution des pentes surestime la quantité de CO$_2$ condensé à la surface. Une explication plausible pour expliquer cette différence est la contribution du flux infrarouge reçu par les pentes, issu des portions plates, qui est pris en compte dans le modèle. Ce flux a tendance à réchauffer les pentes donc à limiter la condensation. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.7, center=5cm]{comp_co2_rough_smooth}
+\caption{Moyenne globale du rapport de mélange du CO$_2$ atmosphérique pour le modèle smooth à gauche et pour le modèle rough à droite (obliquité $7.5^\circ$)}
+\label{comp_co2_rough_smooth}
+\end{center}
+\end{figure}
+
+\subsubsection{Impact de l'écoulement des glaciers}
+La prise en compte de l'écoulement des glaciers fait naître un conflit entre deux phénomènes :
+\begin{itemize}
+\item Plus les pentes sont raides et orientées vers les pôles (soit plus le paramètre $\mu$ est grand dans l'hémisphère nord ou petit dans l'hémisphère sud), plus celles-ci vont accumuler de CO$_2$.
+\item Plus les pentes sont raides, plus la glace de CO$_2$ accumulée va s'écouler en aval. \\
+\end{itemize}
+En d'autres termes, l'écoulement des glaciers agit comme un inhibiteur de l'accumulation de CO$_2$ sur les pentes. Nous avons dans nos observations cherché à quantifier la force de ce nouveau phénomène introduit. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.8,center=5cm]{comp_co2ice_iceflow_5000y}
+\caption{Distribution de la glace de CO$_2$ après 5000 années martiennes simulées pour les modèles smooth à gauche et rough à droite (obliquité $7.5^\circ$)}
+\label{comp_co2ice_iceflow_5000y}
+\end{center}
+\end{figure}
+
+\paragraph{Bilan local de glace de CO$_2$ \\}
+Les observations concernant la distribution de la glace de CO$_2$ à la surface  (figure \ref{comp_co2ice_iceflow_5000y}) sont conformes à nos attentes. 
+
+
+En effet, on distingue nettement le moindre étalage de la glace de CO$_2$ dans le cas où l'écoulement est pris en compte : les pentes raides orientées vers les pôles, situées aux latitudes plus basses que ceux-ci, ne peuvent stocker qu'une quantité limitée de glace de CO$_2$. L'excédent de CO$_2$ déposé sur les pentes raides s'écoule sur les pentes plus faibles voire sur le plat où il est sublimé car les conditions ne lui permettent plus de persister à l'état solide. En conséquence, la distribution de la glace de CO$_2$ ressemble davantage à celle du modèle smooth. La différence essentielle avec le modèle smooth est qu'on forme tout de même des glaciers qui s'écoulent en dehors des pôles. La figure \ref{sat_slope_5000y} met en évidence ces glaciers. Leur localisation semble compatible avec les images des moraines de mars (figure \ref{moraine}). \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.8,center=5cm]{sat_slope_5000y}
+\caption{Distribution de glace de CO$_2$ sur les pentes moyennes ($|\mu| < 9^\circ $) après 5000 années martiennes de simulation (obliquité $7.5^\circ$). Les zones bleues claires sont vides de glace de CO$_2$. Les zones intermédiaires indiquent les pentes qui ont accumulé de la glace CO$_2$ mais qui ne sont pas saturées. Les zones bleues foncées identifient les pentes saturées en glaces de CO$_2$ : celles-ci sont le siège d'un écoulement de glaciers pouvant potentiellement former des moraines comme observé dans la figure \ref{moraine}. }
+\label{sat_slope_5000y}
+\end{center}
+\end{figure}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.9,center=5cm]{co2tend_iceflow_5000y}
+\caption{ Tendance sur la distribution de glace de CO$_2$ après 5000 années martiennes de simulation (obliquité $7.5^\circ$) }
+\label{co2tend_iceflow_5000y}
+\end{center}
+\end{figure}
+
+Un des effets notables de l'introduction de l'écoulement des glaciers de CO$_2$ est la convergence plus rapide vers un état d'équilibre de la distribution. En dehors des pôles, les pentes saturées ne peuvent plus accumuler de glace CO$_2$, l'excédent de CO$_2$ étant sublimé à cause de l'écoulement ; elles atteignent de fait un équilibre car la quantité de glace de CO$_2$ déposé à atteint un maximum. Après 5000 années de simulation, les zones hors pôles sont quasiment à l'équilibre en terme d'accumulation de glace CO$_2$ (figure \ref{co2tend_iceflow_5000y}), les seuls transports de glace de CO$_2$ qui persistent ont lieu au sein du pôle nord. 
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.7, center=5cm]{comp_co2_iceflow_5000y}
+\caption{Moyenne globale du rapport de mélange du CO$_2$ atmosphérique avec (droite) et sans (gauche) prise en compte de l'écoulement des glaciers de CO$_2$ (obliquité $7.5^\circ$)}
+\label{comp_co2_iceflow_5000y}
+\end{center}
+\end{figure}
+
+\paragraph{Bilan global de glace de CO$_2$ \\}
+La figure \ref{comp_co2_iceflow_5000y} rend compte de la différence d'accumulation globale de glace de CO$_2$ en surface. La masse totale de CO$_2$ condensé est légèrement plus élevée lorsqu'on ne prend pas l'écoulement des glaciers de CO$_2$ en compte. Ce résultat n'est pas forcément évident car même si l'écoulement provoque la sublimation du CO$_2$ au niveau des pentes, l'atmosphère qui est alors plus riche en CO$_2$ peut plus facilement en céder au pôles.  \\ 
+
+
+
+\subsubsection{Impact de l'albedo et de l'opacité}
+Pour conclure notre batterie de simulations, nous avons voulu déterminer l'importance de deux paramètres que nous jugions importants dans les phénomènes en jeu : l'albedo de la glace de CO$_2$ et l'opacité de l'atmosphère.
+
+\paragraph{Impact de l'albedo de la glace de CO$_2$ \\}
+L'albedo de la glace de CO$_2$ est un paramètre très sensible sur Mars. Il varie entre $0.5$ et $0.8$ et dépend à la fois de la pureté de la glace (présence d'une quantité plus ou moins importante de poussière) mais aussi directement de l'insolation. Il reste aujourd'hui un paramètre difficile à estimer. La référence dans nos simulations était un albedo de $0.57$. Nous avons simulé le modèle rough avec écoulement des glaciers, dans les conditions d'une obliquité de $7.5^\circ$ et avec un albedo de $0.80$ pour comparer à la référence. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.8,center=5cm]{comp_co2ice_alb_5000y}
+\caption{Distribution de la glace de CO$_2$ après 5000 années martiennes simulées pour un albedo de la glace de CO$_2$ de $0.57$ (référence) à gauche et $0.80$ à droite (obliquité $7.5^\circ$)}
+\label{comp_co2ice_alb_5000y}
+\end{center}
+\end{figure}
+
+Si la distribution locale de glace de CO$_2$ après 5000 années de simulation est assez similaire (figure \ref{comp_co2ice_alb_5000y}), il en est tout autre pour la distribution globale (figure \ref{comp_co2_alb_5000y}). L'augmentation de l'albedo a une influence considérable sur la masse totale de CO$_2$ condensé et on a un véritable effondrement de l'atmosphère dans le cas de l'albedo à $0.80$ : le rapport de mélange du CO$_2$ atmosphérique chute à environ $10\%$. On remarque que cet effondrement atmosphérique entraine une diminution des variations saisonnières ; on peut s'attendre dans de telles conditions à une dynamique de l'atmosphère beaucoup moins intense. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.7, center=5cm]{comp_co2_alb_5000y}
+\caption{Moyenne globale du rapport de mélange du CO$_2$ atmosphérique pour un albedo de la glace de CO$_2$ de $0.57$ (référence) à gauche et $0.80$ à droite  (obliquité $7.5^\circ$)}
+\label{comp_co2_alb_5000y}
+\end{center}
+\end{figure}
+
+L'albedo possède donc une assez faible influence qualitative mais une très forte influence quantitative sur la quantité de glace de CO$_2$ condensé à la surface. \\
+
+\paragraph{Impact de l'opacité de l'atmosphère \\}
+L'opacité de l'atmosphère martien est essentiellement due à la présence de poussière en suspension. Elle est sujette à d'importantes variations saisonnières et est en partie contrôlée par la dynamique de l'atmosphère. C'est la profondeur optique (visible) de l'atmosphère qui rend compte de son opacité : elle est d'autant plus élevée que l'atmosphère est opaque. Comme nous avons opté pour un modèle dynamique simplifié, nous avons préféré dans les simulations de référence ne pas tenir compte de l'opacité en affectant à la profondeur optique visible $\tau_{vis}$ la valeur $0$. Dans une seconde simulation du modèle rough avec écoulement des glaciers et un paramètre d'obliquité de $7.5^\circ$, nous avons choisi le paramètre $\tau_{vis}$ égal à $0.2$. C'est une valeur qui rend compte de l'opacité moyenne observée actuellement sur Mars. \\
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.75,center=5cm]{comp_co2ice_tauvis_5000y}
+\caption{Distribution de la glace de CO$_2$ après 5000 années martiennes simulées pour une profondeur optique de $0$ (référence) à gauche et $0.20$ à droite (obliquité $7.5^\circ$)}
+\label{comp_co2ice_tauvis_5000y}
+\end{center}
+\end{figure}
+
+Les résultats sont tout à fait semblables à ceux obtenus avec le changement d'albedo : la distribution de glace semble presque inchangée (figure \ref{comp_co2ice_tauvis_5000y}) tandis que la masse totale de CO$_2$ condensé est complètement modifiée (figure \ref{comp_co2_tauvis_5000y}) : on a encore une fois un effondrement de l'atmosphère.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.65, center=5cm]{comp_co2_tauvis_5000y}
+\caption{Moyenne globale du rapport de mélange du CO$_2$ atmosphérique pour une profondeur optique de $0$ (référence) à gauche et $0.20$ à droite  (obliquité $7.5^\circ$)}
+\label{comp_co2_tauvis_5000y}
+\end{center}
+\end{figure}
+
+
+
+\clearpage
+\section{Conclusion}
+Le nouveau modèle que nous avons conçu nous a permis de caractériser l'accumulation de glace de CO$_2$ en période de basse obliquité de manière convaincante. Les simulations ont mis en lumière des différences notables avec notre point de départ qu'est le travail menée par Kreslavsky et Head (\cite{Kres:05},\cite{Kres:11}). Toutefois, l'aspect quantitatif des résultats obtenus repose sur la mesure  ou l'estimation précise de certains paramètres fondamentaux comme l'albedo et l'opacité. Enfin, ces premières simulations nous ont permis d'identifier quelques pistes d'amélioration pour notre modèle afin de le rendre plus représentatif de la réalité. \\
+ 
+\subsection{Discussion}
+
+\subsubsection{Différences avec les résultats de Kreslavsky et Head}
+Kreslavsky et Head ont travaillé sur un modèle à la physique très simplifiée et sans dynamique, avec une haute résolution et sur de très longues durées : leur démarche est donc différente de la notre. À la lumière de nos résultats, nous avons pourtant remis en question dans la section \ref{smooth_section} l'une de leurs principales conclusions, à savoir le fait que la masse totale du dépôt de CO$_2$ dépend de l'histoire du système climatique. L'une des faiblesses de leur modèle tient dans la non prise en compte de l'écoulement de la glace de CO$_2$.  Même sur nos échelles de temps beaucoup plus faibles, nous avons constaté que sans prise en compte de ce phénomène, la glace de CO$_2$ disponible avait tendance à s'hyper-localiser, dans une migration lente, vers le point le plus favorable à la condensation du CO$_2$. De manière symétrique, lorsque les glaciers de CO$_2$ sont quasiment localisés en un point, le changement de distribution entraîné par une modification des paramètres orbitaux est lui aussi très lent. En pratique, on sait que la glace de CO$_2$ ne se localise pas en un point, et c'est bien l'écoulement qui régule cette tendance. Par conséquent, il nous paraît fondamental de considérer l'écoulement des glaciers de CO$_2$ lorsqu'on effectue des simulations sur de longues périodes de temps. \\
+
+\subsubsection{Limites du modèle}
+Nous avons construit un modèle ayant l'avantage de combiner une grande efficacité et une bonne prise en compte des micro-climats locaux associés à la topographie. Toutefois, le modèle reste perfectible, en partie à cause des contraintes d'efficacité.
+
+\paragraph{L'importance de la dynamique \\}
+Pour répondre à des contraintes de performance, nous avons choisi de simplifier la dynamique pour ne pas avoir à résoudre les équations de la dynamique des fluides, ce qui constitue un processus chronophage. Nous estimions dans la section \ref{dyn} que l'effondrement atmosphérique allait engendrer une baisse de l'influence de la dynamique sur la condensation du CO$_2$. Cependant, nous avons réalisé dans l'étude des variations saisonnières de composition de l'atmosphère (section \ref{seasonnal_var}) que les gradients de masse moléculaire et de rapport de mélange de CO$_2$ atmosphérique allaient probablement entraîner d'importants mouvements de masses d'air, dus par exemple à la convection. Par conséquent, la dynamique pourrait jouer un rôle non négligeable dans le comportement de la condensation de la glace de CO$_2$ \\
+
+\paragraph{La non prise en compte des variations des paramètres orbitaux \\}
+Nous avons choisi dans nos expérience de ne pas considérer les variations au cours du temps de l'excentricité ni de l'obliquité, en fixant ces paramètres pour toute la durée de la simulation. Bien que nos résultats ont montré que la convergence vers un état quasi-équilibré en température et pression est rapide, ils montrent aussi que les phénomènes de migration de la glace de CO$_2$ sont beaucoup plus lents. Par conséquent, dans une certaine mesure, la distribution locale de glace de CO$_2$ en surface peut dépendre du passé orbital de la planète. En outre, l'excentricité de l'orbite et ses variations affectent qualitativement et quantitativement l'accumulation de glace de CO$_2$. L'influence de ce paramètre est cependant a priori plus faible que celle de l'obliquité, d'après \cite{Kres:05}. \\
+
+
+\subsubsection{Limites expérimentales}
+Même dans l'éventualité d'un modèle parfaitement fidèle, les résultats quantitatifs resteraient conditionnés par des données observationnelles. Nous avons vu en particulier que l'albedo de la glace de CO$_2$ et l'opacité de l'atmosphère avaient une influence considérable sur la quantité totale de glace de CO$_2$ formée. Aujourd'hui, la mesure de ces deux paramètres et la théorisation de leur évolution est donc un enjeu majeur pour pouvoir retracer le passé de la planète. Dans leur étude sur l'effondrement de l'atmosphère \citep{Kres:05}, Kreslavsky et Head mettent aussi en avant l'importance de l'albedo sur l'aspect quantitatif des résultats. \\
+
+\subsection{Ouverture}
+\paragraph{Vers une étude poussée de la dynamique saisonnière à basse obliquité \\}
+Les résultats de la section \ref{dyn} nous encouragent à mener une étude différente avec une haute résolution, à la fois spatiale et temporelle. Le but de l'expérience serait de se concentrer sur la dynamique climatique saisonnière à basse obliquité, en prenant pour état initial, à obliquité donnée, l'état de fin de simulation de notre modèle. Nous utiliserions ainsi la routine dynamique développée sur le modèle de climat global du LMD que nous adapterions au nouveau modèle, notamment en ce qui concerne la prise en compte de la contribution des pentes ainsi que l'écoulement des glaciers. \\
+
+\paragraph{Prise en compte des paramètres orbitaux \\}
+Le LMD possède déjà des outils pour simuler la variation des paramètres orbitaux au cours du temps, il semble donc tout à fait envisageable de palier à la limite exposée ci-dessus en prenant en compte ce paramètre. Toutefois, la démarche ne serait véritablement intéressante que sur de longues périodes de temps, ce qui implique, idéalement, d'augmenter encore l'efficacité du modèle, ou d'utiliser des super-calculateurs pour effectuer les simulations. \\
+
+\paragraph{\' Etude du CO$_2$ enfoui sous le pôle sud \\}
+La stabilité du dépôt permanent de CO$_2$ enfoui sous la surface du pôle sud  pose encore question aujourd'hui. L'article de \cite{Bier:16} tente d'expliquer cette observation en faisant l'hypothèse d'une accumulation assez récente qui aurait été couplée avec les dernières périodes de basse obliquité. Comme le dépôt a eu lieu dans une "fosse" assez accidentée, nous pensons que la topographie locale a eu un rôle non négligeable dans la stabilité du CO$_2$ condensé. Nous pourrions facilement l'évaluer en ajoutant artificiellement à la topographie martienne issue des données MOLA d'importantes pentes locales au niveau du pôle sud. \\
+
+\subsection{Conclusion}
+Ce travail de stage m'a permis de concevoir un modèle solide et de réaliser un véritable protocole pour le tester et pour le confronter aux études déjà réalisées. Les premiers résultats des simulations encouragent la poursuite de l'investigation et montrent que l'étude de la planète Mars en période de faible obliquité est riche en enseignement et permet d'en apprendre plus sur son histoire passée et à avenir.
+
+\clearpage
+
+
+\nocite{Forg:99,Forg:06,Forg:06book,Forg:08mamo,Ahar:06,Bert:16,Bert:18,Forg:17book,Forg:98,Ahar:06}
+\bibliographystyle{apalike}
+\bibliography{newfred}
+
+
+\end{document}

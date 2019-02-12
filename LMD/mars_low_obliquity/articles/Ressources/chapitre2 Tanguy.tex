@@ -1,0 +1,741 @@
+% -----------------------------------------------------------------
+% Nouveau chapitre
+% -----------------------------------------------------------------
+
+\chapter{Les modèles numériques du climat de Pluton}
+\label{chap:modele}
+%\renewcommand{\headrulewidth}{0.5pt}
+%\renewcommand{\footrulewidth}{0pt}
+%\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{\chaptername~\thechapter. #1 }}{}}
+\fancyhead[RE]{\bfseries\nouppercase{Les modèles numériques du climat de Pluton}}
+\fancyhead[LO]{\bfseries\nouppercase{Les modèles numériques du climat de Pluton}}
+
+% -----------------------------------------------------------------
+%\paragraph{}
+%~\\ 
+%\vskip1.2cm
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.4]{figures/grille}
+\caption*{}
+\end{center}
+\end{figure}
+	
+%\vskip0.6cm
+%\vspace{1cm}
+% Table des mati\`eres
+\minitoc
+
+\newpage
+
+\section{Introduction}
+
+Les modèles de climat global, ou modèle de circulation générale (appelés simplement GCMs) sont des modèles numériques qui reproduisent le climat d’une planète à l’échelle globale. 
+Le GCM de Pluton a été développé au Laboratoire de Météorologie Dynamique à partir de 2005, s’inscrivant dans la lignée de nombreux modèles développés à partir de l’expérience acquise dans l’équipe Planéto pour simuler l’atmosphère de Mars \citep{Forg:99} et les atmosphères planétaires du système solaire et au-delà (Venus, Titan, Triton, les planètes géantes et les exoplanètes...).
+Le développement du GCM a fait l’objet d’une précédente thèse \citep{Vang:13}, qui a permis d’inclure une paramétrisation de la condensation de l’azote et du méthane à la surface et dans l’atmosphère ainsi que de nombreux autres processus physiques contrôlant le climat de Pluton (conduction dans le sol, turbulence, conduction moléculaire…).
+Mon travail de thèse a consisté à reprendre ces travaux et améliorer de nombreux aspects du modèle. La \autoref{paramGCM} résume les développements apportés durant ma thèse. 
+
+\vspace{0.5cm}
+
+Tout d’abord, j’ai travaillé sur les interactions surface-atmosphère. Un des premiers défis avec le GCM est d’arriver à un état d'équilibre, c'est à dire un résultat où la distribution des glaces et des espèces volatiles, ainsi que les températures de sous-surface, surface, et atmosphériques ne dépendent plus de l'état initial arbitrairement choisi. Le problème est que Pluton, située loin du Soleil, est régie par un cycle saisonnier beaucoup plus long que sur Terre. Surtout, elle reçoit très peu d'énergie, ce qui a pour conséquence que tous les phénomènes à sa surface sont très lents. C’est une faiblesse du modèle, car il faut alors simuler de nombreuses années plutoniennes (l'équivalent de plusieurs milliers d'années terrestres) pour ne plus être sensible à l'état initial, ce qui prendrait plusieurs mois de calculs. 
+Heureusement, l'atmosphère de Pluton est si fine et si transparente qu'elle n'a pas d'influence thermique et radiative sur les températures de la surface, en dehors de l'effet de la chaleur latente lorsque les composés volatils changent de phase. 
+J’ai donc développé un modèle de «~surface~» (ou modèle de transport des glaces volatiles), dérivé du GCM, dans lequel je ne garde que les processus physiques liés à la surface (\autoref{paramGCM}). Autrement dit, je « débranche » les processus atmosphériques dans le modèle pour simplifier et accélérer la modélisation des températures et des glaces de la surface. Quant au transport atmosphérique des espèces volatiles, il est paramétré par une simple équation de mélange à l'échelle globale au lieu d’être calculé avec précision à partir des équations de la dynamique des fluides, ce qui permet de s’affranchir d’une grande partie chronophage du code. Ainsi, avec un tel modèle réduit, simplifié, et donc beaucoup plus rapide, on peut simuler les interactions et échanges d'espèces volatiles entre la surface et l’atmosphère de Pluton sur des milliers d'années et équilibrer les températures de la surface et du sous-sol ainsi que la distribution des glaces. Ce modèle a également permis d’explorer les cycles annuels et paléoclimatiques de Pluton (les résultats sont décrits respectivement dans les Chapitres \ref{chap:nature} et \ref{chap:paleo}). Une fois l'équilibre trouvé, on peut « rebrancher » l'atmosphère, sa circulation et ses processus atmosphériques pour simuler de façon plus réaliste le climat avec le GCM complet. Le GCM est lancé sur une trentaine d'années terrestres (typiquement entre 1984 et 2015, ce qui nécessite 2-3 jours de calculs) et permet de modéliser Pluton tel qu’observé par New Horizons en 2015. 
+
+%\vspace{0.2cm}
+
+Dans un deuxième temps j’ai amélioré la partie physique du GCM liée aux processus atmosphériques : transfert radiatif à travers le méthane et le CO, schéma amélioré de condensation/sublimation de l’azote à la surface, révision des différents paramètres contrôlant la conduction et viscosité moléculaire et la formation de nuages de méthane et de CO…
+Ensuite, j’ai également ajouté de nouvelles paramétrisations : formation et évolution des brumes organiques, impact radiatif des brumes, diffusion moléculaire, processus NLTE…
+
+L’ensemble de ce travail a également nécessité de nombreux développements informatiques sur l’environnement UNIX, en Python et Bash.
+
+\begin{figure}[!h]
+\begin{center} 
+	\includegraphics[width=12cm]{figures/chap2/param}
+\end{center} 
+\caption{Schéma des différents processus physiques pris en compte dans le GCM : processus de sous-surface (noir), surface (vert), atmosphère (bleu), transfert radiatif (rouge). Le modèle de transport des glaces volatiles (version réduite du GCM) contient uniquement les processus  de surface et sous-surface (noirs et verts). La légende en haut à gauche indique le type de développement effectué : code original non modifié (code de départ, double crochet), code original amélioré (crochet), nouveau code ajouté mais peu testé (souligné en pointillé), nouveau code aouté et validé (pas de police spécifique).} 
+\label{paramGCM}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%
+\vspace{0.5cm}
+
+Le GCM est typiquement divisé en deux parties indépendantes :
+\begin{itemize}
+ \item une partie qui intègre les équations de la dynamique des fluides en 3D (résolution numérique des équations de Navier-Stokes en 3D pour la circulation atmosphérique). Cette partie peut s’appliquer à n’importe quel type d’atmosphère planétaire. 
+ \item une partie physique, propre à chaque planète, où sont traités en 1D (colonne par colonne, n’interagissant pas entre elles) et sur la base d’équations théoriques les différents processus physiques qui forcent la circulation et permettent de simuler les divers phénomènes atmosphériques existants sur la planète en question. 
+\end{itemize}
+
+Dans le cas du GCM de Pluton, 3 versions existent : la version 3D complète avec toutes les paramétrisations physiques (surface et atmosphère), la version 1D complète (simulation des processus physiques dans une colonne représentative) et la version 2D de transport des glaces volatiles (processus de surface et son interaction avec l’atmosphère seulement).
+Ces modèles, dans leur dernière version, constituent des outils puissants pour simuler la circulation atmosphérique 3D et le climat de Pluton, à n’importe quelle époque et sur des échelles de temps différentes. Ce sont également des outils uniques, les seuls actuellement à inclure le cycle de condensation et de sublimation du méthane et du CO, et l’évolution 3D des brumes (pour le GCM). 
+
+\vspace{0.5cm}
+
+Dans ce chapitre, je décris en détail le modèle de circulation générale et le modèle de transport des glaces volatiles développés pour Pluton. La première et la deuxième partie décrivent le modèle “de base” tel que je l’ai récupéré en début de thèse (section \ref{sc:dynamic}: partie dynamique, section \ref{sc:physic}: partie physique). La troisième partie décrit les améliorations et développements apportés au GCM durant la thèse, et la quatrième partie décrit le modèle de transport des glaces volatiles développé durant la thèse. 
+Les développements en cours et ceux qui peuvent être apportés dans le futur sont décrits dans les conclusions et perspectives de cette thèse. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Le cœur dynamique}
+\label{sc:dynamic}
+
+Le cœur dynamique du GCM contient les intégrations temporelles et spatiales des équations de la dynamique des fluides, utilisées pour simuler la circulation générale et le transport de traceurs dans l’atmosphère (composés volatils, aérosols…). Ces équations fondamentales sont basées sur une conservation de la masse, de l’énergie et de la quantité de mouvement. Pour les résoudre, le modèle utilise la méthode des différences finies (ou modèle en points de grille), c’est-à-dire qu’il discrétise les équations sur une grille 3D latitude/longitude/altitude de type “Arakawa C” \citep{ArakLamb:77}  pour effectuer les échanges entre les mailles (\autoref{grille}). Ce schéma numérique est valable pour la Terre et Mars, et n’a pas été modifié pour Pluton. 
+
+Même si les pressions de surface de Pluton (de l’ordre du Pascal) sont beaucoup plus faibles que celles sur Terre et sur Mars, l’atmosphère reste assez épaisse pour être modéliser avec les équations primitives de la météorologie. En fait, le coeur dynamique des GCM reste valable presque jusqu’à l’exobase (limite supérieure de la thermosphère). Par exemple, le cœur dynamique du GCM martien fonctionne avec succès jusqu’à la thermosphère à des pressions inférieures à 10$^{-7}$~Pa \citep{Gonz:09}.
+
+La grille de départ couvrant la planète et utilisée pour le GCM de Pluton en résolution standard est composée de 32 longitudes et 24 latitudes. Cela correspond à un espacement de 7.5$^{\circ}$ en latitude et 11.25$^{\circ}$ en longitude, et à une résolution spatiale de 150 km environ à l’équateur, ce qui est identique voire meilleur que les résolutions typiques utilisées dans les autres GCMs planétaires, et suffisant pour résoudre de possibles ondes planétaires. 
+
+Au niveau vertical, le modèle utilise le système de coordonnée «~sigma~», c’est-à-dire que chaque couche est définie par une valeur constante $\sigma$ = P/P$_{s}$, avec P la pression de la couche et P$_{s}$ la pression de surface, $\sigma$ allant de 1 à 0. Dans l’approximation hydrostatique, les altitudes de ces niveaux $\sigma$ ne varient ni au cours du temps ni en fonction du relief sous-jacent.
+
+Il est également possible de faire tourner le modèle avec des coordonnées hybrides qui correspondent aux coordonnées sigma proches de la surface et à des coordonnées de pression à plus haute altitude. Ainsi, les niveaux à hautes altitudes (où la circulation n’est pas impactée par le relief) ne sont pas modifiés par le relief permettant une meilleure représentation de la dynamique stratosphérique. 
+
+Typiquement, 25 niveaux verticaux sont utilisés. Dans le modèle de référence, la plupart des niveaux sont situés dans les premiers 15~km pour obtenir une bonne résolution proche de la surface, en particulier dans la couche limite. Les altitudes des premiers niveaux au milieu des couches sont 7~m, 15~m, 25~m, 40~m, 80~m etc… Au-dessus de 10~km, la résolution est d’environ une échelle de hauteur, et le niveau le plus élevé a une pression de 0.007 fois la pression de surface, ce qui correspond à une altitude d’environ 250~km. Dans la version du modèle développée pour l’analyse des brumes organiques (voir Chapitre~\ref{chap:haze}), le toit du modèle est étendu jusqu’à 600 km d’altitude pour inclure la photolyse du méthane. 
+
+L’intégration temporelle des variables dynamiques est différente de celle des variables physiques et se fait selon le schéma «~Matsuno-Leapfrog~» (méthode numérique «~saute-mouton~» en français,  méthode à pas multiples). Le pas de temps est contraint par un critère CFL (Courant-Freedrichs-Lewy) qui impose au rapport de la plus petite distance entre deux points du maillage au pas de temps dynamique d’être supérieur à la célérité des ondes les plus rapides représentées dans le modèle (les ondes de gravité pour un modèle aux équations primitives). En pratique, la valeur du pas de temps dynamique est ajustée au cours des simulations pour sélectionner une valeur optimale (la plus grande possible pour réduire le temps de calcul). 
+
+\begin{figure}[!h]
+\begin{center} 
+	\includegraphics[width=12cm]{figures/chap2/grille}
+\end{center} 
+\caption{Grille dynamique et physique pour une résolution horizontale 6x7. Dans la dynamique, les vents $u$ et $v$ sont sur une grille décalée. Les autres variables, dynamiques et physiques, sont sur la grille scalaire. Les points de la physiques sont indexés sur un vecteur unique contenant $NGRID=2~+~ (JM-1)~IM$ points en comptant à partir du pôle nord.} 
+\label{grille}
+\end{figure}
+
+\section{Le coeur physique : version du GCM en début de thèse}
+\label{sc:physic}
+
+Je donne ci-dessous une description assez brève des différentes paramétrisations physiques du GCM de Pluton, présentes dans sa version initiale en début de thèse. La plupart des routines ont été révisées durant la thèse et certains paramètres ont été mis à jour. Les développements plus conséquents (nouvelles routines, modifications importantes du code…) effectués durant la thèse sont décrits plus loin, dans la section \ref{sc:dev1} et la section \ref{sc:dev2}. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Conduction thermique dans le sol et températures de surface}
+\label{sc:condsoil}
+
+L’évolution de la température de surface $T_s$ est gouvernée par l’équilibre entre l’insolation solaire, l’émission thermique dans l’infrarouge ($\epsilon\sigma T_s^4$~W.m$^{-2}$, avec $\sigma$ la constante de Stefan-Boltzmann et $\epsilon$ l’émissivité de la surface\footnote{L'émissivité de la surface (sans dimension), qui rend compte de sa capacité à émettre de l'énergie par rayonnement et de la part de flux réémise après absorption, dépend de plusieurs facteurs : la composition moléculaire du sol, la température, les propriétés et la texture de la surface, la direction du rayonnement et sa longueur d'onde. Dans le modèle, on suppose que l’émissivité ne dépend pas de la longueur d'onde (approximation corps gris), de même pour l’albédo.}
+), les échanges de chaleur latente (voir section~\ref{sc:cond}), le flux de chaleur sensible provenant de l’atmosphère (négligeable sur Pluton mais pris en compte dans le modèle) et la conduction thermique dans le sol. 
+
+Sur Pluton, où le rayonnement solaire est faible (environ 1~W.m$^{-2}$), les flux radiatifs à la surface sont faibles comparés à la chaleur interne stockées dans le sol. En particulier, la chaleur stockée pendant un été peut jouer un rôle majeur dans le contrôle des températures de surface pendant l’hiver suivant (voir Chapitre~\ref{chap:nature} et Chapitre~\ref{chap:paleo}). 
+
+Les flux de chaleur entrant et sortant de la sous-surface sont calculés selon un modèle classique 1D faisant évoluer les températures de sous-sol $T$ en fonction du temps $t$ et de la profondeur $z$. Les températures satisfont l’équation suivante (si on néglige toute source de chaleur interne):
+
+\begin{equation} 
+\label{eq:Heat1D}
+C \frac{\partial T}{\partial t} = \frac{\partial }{\partial z} \left[ \lambda \frac{\partial T}{\partial z} \right]
+\end{equation}
+
+où $\lambda$ est la conductivité thermique du sol (J.s$^{-1}$.m$^{-1}$.K$^{-1}$) et $C$ est la chaleur spécifique (ou capacité thermique) volumique du sol (J.m$^{-3}$.K$^{-1}$). $C$=$\rho$C$_p$, avec $\rho$ la densité du sous-sol, en kg.m$^{-3}$ et C$_p$ sa chaleur spécifique massique (kg$^{-1}$.K$^{-1}$). Cette équation s’accompagne de deux conditions aux limites. La première est au niveau de la couche la plus profonde ($z$=$H$), où on peut considèrer un flux de chaleur interne. Dans la version de référence, ce flux est nul. La seconde condition est à la surface ($z$=0), où l’équilibre radiatif permet de calculer la température de surface T$_s$=T$_{z=0}$.
+
+Pour résoudre numériquement cette équation, le modèle utilise une discrétisation spatiale, basée sur une approche en volumes finis et sur un schéma implicite d’Euler. Le  domaine est divisé en N couches discrètes. La température et le flux à chaque pas de temps et à chaque niveau sont évalués. 
+Le paramètre essentiel contrôlant l’influence du stockage de chaleur dans le sol et la conduction sur les températures de surface est l’inertie thermique $I = \sqrt{\lambda C} $. En pratique, on utilise $I$ comme paramètre clé du modèle en supposant une valeur constante pour C=10$^6$~J.m$^{-3}$.K$^{-1}$ et en faisant varier $\lambda$ en conséquence.
+
+Sur Pluton, la discrétisation du sous-sol nécessite une attention particulière en comparaison à la Terre ou Mars, car il est important de capturer simultanément (1) les ondes thermiques diurnes courtes dans les niveaux de faible inertie thermique proches de la surface et (2) les ondes thermiques saisonnières beaucoup plus longues, pouvant atteindre des profondeurs importantes dans le sol possédant une haute inertie thermique.   
+Dans le modèle, les valeurs de référence d’inertie thermiques ont été mises à jour durant la thèse. On utilise typiquement une inertie thermique diurne faible $I_{\mbox{\scriptsize day}}=20-50$~J.s$^{-1/2}$.m$^{-2}$.K$^{-1}$, correspondant aux valeurs estimées par \citet{Lell:11b} à partir de l’analyse des données Spitzer (20-30~uSI). Pour l’inertie thermique saisonnière, la valeur de référence est $I_{\mbox{\scriptsize year}}=800$~J.s$^{-1/2}$.m$^{-2}$.K$^{-1}$, ce qui correspond à un sol peu poreux. 
+
+Dans un sol homogène, la profondeur de peau d’une onde thermique de période $P$ (s) est:
+\begin{equation}
+\delta_{P} =  \frac{I}{C} \sqrt{\frac{P}{\pi}}
+\end{equation}
+
+Avec $C$ la capacité thermique volumétrique du sol (J.m$^{-3}$.K$^{-1}$) et $I$ son inertie thermique (J.s$^{-1/2}$.m$^{-2}$.K$^{-1}$ ou uSI). 
+Ainsi, les profondeurs de peau diurnes et annuelles modélisées sont respectivement 0.02~m and 40~m. Pour représenter cela correctement dans le modèle, la sous-surface est divisée en $N=22$ couches ($N=24$ couches dans une version plus récente, pour pouvoir tourner avec des inerties thermiques plus élevées ; ne ralenti pas de façon significative le code), distribuées de façon à ce que la résolution verticale soit plus fine proche de la surface :
+
+\begin{equation}
+z_k = z_1 \, 2^{k-1}
+\end{equation}
+avec $z_1 = 1.414 \times 10^{-4}$~m la profondeur de la première couche.  La couche la plus profonde est ainsi à environ 300~m (1100~m dans la dernière version).
+
+Le tableau \ref{tab:IT} montre les différentes profondeurs de peau $\delta_{P}$ utilisées dans le modèle en fonction de l’inertie thermique choisie (diurne ou saisonnière). De façon générale l'inertie thermique est fixée dans le modèle jusqu'à une profondeur correspondant à 3 fois la profondeur de peau, pour s’assurer que le modèle capture bien l’onde thermique. A noter que pour une période paléoclimatique de 3 millions d’années terrestres, la profondeur de peau d’un sol ayant une inertie thermique de 800~uSI est de 4~400~m.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+Inertie thermique (uSI) & $\delta_P$ diurne (m) & $\delta_P$ saisonnière (m) \\
+\hline
+20 & 8.4$\times$10$^{-3}$ & 1.0 \\
+50 & 0.02 & 2.5 \\
+200 & 0.08 & 10.0 \\
+800 & 0.3 & 39.9 \\
+1500 & 0.6 & 74.8 \\
+\hline
+\end{tabular}
+\end{center}
+\caption{Exemple de profondeurs de peau diurnes et saisonnières en fonction de l’inertie thermique du sol.}
+\label{tab:IT}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Conduction thermique moléculaire et viscosité de l’atmosphère}
+\label{sc:condvisc}
+
+La conduction thermique est un phénomène irréversible de transport de l'énergie interne dû à une hétérogénéité de l'agitation moléculaire (nombre de chocs par unité de volume), qui s’apparente au phénomène de diffusion. Elle est non négligeable lorsque le libre parcours moyen des molécules est grand, à basse pression. 
+% XXXC’est le mode de transport d’énergie dominant dans l’atmosphère basse et moyenne de Pluton.
+La viscosité moléculaire est un autre type d’échange lié au mouvement des molécules, et correspond aux échanges de la quantité de mouvement (la conduction thermique correspond aux échanges de température). 
+% moléculaire, et représente la résistance opposée par l'air pour une vitesse de déformation donnée. C’est une force de friction interne du fluide qu’est l’atmosphère. Dans le modèle, elle a surtout un effet près de la surface, où elle permet de lisser les gradients de vitesse.
+
+Le modèle prend en compte l’effet de la conduction moléculaire sur les températures atmosphériques et l’effet de la viscosité moléculaire sur les vents. Les deux processus sont gouvernés par des équations différentielles similaires. En supposant l’approximation des plans parallèles (chaque colonne atmosphérique est traitée en 1D et ses niveaux sont horizontaux), l’équation pour la conduction thermique atmosphérique est : 
+
+\begin{equation} 
+\frac{\partial T}{\partial t}=\frac{1}{\rho c_p}\frac{\partial}{\partial z}\left(k\frac{\partial T}{\partial z}\right) 
+\end{equation}
+
+avec $T$ la température (K), $\rho$ la densité (kg.m$^{-3}$) et $k$ le coefficient de conduction thermique (J.m$^{-1}$.s$^{-1}$.K$^{-1}$), exprimé par $k = k_0 T^{s}$, avec $k_0 = 5.63\times10^{-5}$~J.m$^{-1}$.s$^{-1}$.K$^{-(1+s)}$  et $s=1.12$. Ces valeurs ont été révisées durant la thèse par rapport aux valeurs initiales, et sont maintenant issues de \citet{Hubb:90}.
+
+Pour la viscosité moléculaire :
+\begin{equation} 
+\frac{\partial S}{\partial t}=\frac{1}{\rho}\frac{\partial}{\partial z}\left(\mu \frac{\partial S}{\partial z}\right) 
+\end{equation}
+
+où $S$ correspond aux composantes du vents horizontal (m.s$^{-1}$) et $\mu$ est le coefficient de viscosité moléculaire (kg.m$^{-1}$.s$^{-1}$), qui est lié au coefficient de conduction thermique $k$ par $k=\frac{1}{4}[9c_p-5(c_p-R)]\mu$. 
+Au vu de leur similarité, les deux équations sont discrétisées et résolues numériquement à l’aide du même schéma numérique implicite. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Mélange dans la couche limite}
+\label{sc:pbl}
+
+Il y a trois mélanges possibles sur Pluton : le mélange par friction proche de la surface généré par le cisaillement de vent et/ou l'instabilité thermique (turbulence), la convection et le transport par la circulation générale. L’atmosphère de Pluton étant très stable près de la surface, il peut y avoir un fort mélange par friction proche de la surface, mais au-dessus, le mélange atmosphérique est beaucoup moins intense. 
+
+\vspace{0.5cm}
+
+La diffusion verticale est effectuée via les deux premiers types de mélange, la turbulence et la convection, qui sont paramétrées de la même façon que dans le modèle martien \citep{Forg:99}. Plus la turbulence est forte, plus le transport vertical est efficace et plus la structure thermique de l’atmosphère et modifiée.
+Ces processus opèrent à une échelle réduite, au sein de la couche limite. En effet, le mélange turbulent est négligeable à l’extérieur de la couche limite, qui, quand elle existe, est souvent peu profonde sur Pluton (moins de 4~km) à cause du fort gradient thermique positif au-dessus de la surface. Dans le GCM, il n’y a pas d’autre processus de diffusion verticale. Au final, les espèces gazeuses et les aérosols sont donc transportés vers de plus hautes altitudes seulement par la circulation générale de grande échelle. 
+En pratique, la dynamique de la couche limite est gouvernée par un modèle de turbulence \citet{MellYama:82} d'ordre 2.5, utilisé pour calculer les coefficients de mélange induits par le cisaillement du vent en fonction de la stabilité du profil de température et de l’évolution de l’énergie cinétique turbulente. 
+La diffusion est complétée par un schéma d’ajustement «~convectif~», qui mélange rapidement l’atmosphère dans le cas de profils de températures instables (tout profil instable est remplacé par un profil neutre ou adiabatique $\frac{d\theta}{dz}= 0$ tout en conservant l’énergie et le moment cinétique),  ce qui reste rare sur Pluton. Le gradient adiabatique sur Pluton est -g/$C_p$=-0.62~K.km$^{-1}$.
+
+\vspace{0.5cm}
+
+La turbulence et la convection mélangent l’énergie (mélange de la température potentielle $\theta = T(z) (\frac{P(z)}{P_0})^\kappa$, avec $\kappa=\frac{R}{C_p}$ et $P_0$ la pression au sol), la quantité de mouvement (les vents) et les traceurs (les gaz et aérosols). 
+Dans la couche juste au dessus de la surface, le flux turbulent $F$ (kg.m$^{-2}$.s$^{-1}$) est donné par :
+
+\begin{equation}
+F = \rho C_d  U_1 (q_1 -q_0), 
+\label{eq:sflux}
+\end{equation}
+
+avec $\rho$ la densité de la couche atmosphérique (kg.m$^{-3}$), $q_1$ et $q_0$ les valeurs des variables considérées (température, vent ou traceur) dans la première couche atmosphérique et à la surface ($q_0=0$ m.s$^{-1}$ pour les vents), $U_1$ est la vitesse du vent horizontal dans la première couche et $C_d$ est le coefficient de trainée. L’épaisseur de la première couche atmosphérique $z_1$ étant assez faible, on fait l’hypothèse que les conditions de surface sont neutres et que le profil de vent dans les premiers mètres au-dessus de la surface est logarithmique (et non influencé par les questions de stabilité de l’atmosphère) et on utilise simplement :
+
+\begin{equation}
+C_d = \left( \frac{\kappa}{\ln{\frac{z_1}{z_0}}} \right)^2
+\label{eq:cd}
+\end{equation}
+
+avec $\kappa$ la constante de von Karman ($\kappa$ = $0.4$) et $z_{0}$ le coefficient de rugosité, supposé égal à $z_{0}=0.01$~m partout comme dans le GCM martien \citep{Forg:99}. Cette grandeur équivaut à la hauteur à laquelle le vent devient en théorie nul, dans le profil logarithmique. 
+%En réalité, le vent à cette hauteur ne suit plus une loi logarithmique mais dépend de la rugosité de la surface. De façon générale, les surfaces sont plus rugueuses si elles ont plus de saillies et de protubérances. 
+Il n'y a cependant aucune données sur la rugosité de la surface de Pluton. Des tests ont été effectués avec différents coefficients de rugosité et montrent une influence négligeable de ce paramètre sur les résultats du modèle. En effet, la vitesse du vent horizontal obtenue dans la première couche du GCM $U_1$ pour une rugosité de 0.001~m est plus grande d’un facteur 2-3 que la vitesse obtenue avec une rugosité de 0.1~m. Par contre, le coefficient de trainée $C_d$ pour une rugosité de 0.001~m est plus faible d’un facteur 3-4 que celui obtenu avec une rugosité de 0.1~m. Au final, le facteur $C_d$~$U_1$ reste toujours proche de 1, et la rugosité a donc un faible impact sur les résultats.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Condensation et sublimation de l’azote}
+\label{sc:cond}
+
+La condensation et la sublimation de la glace d’azote sont des processus subtils sur Pluton et nécessitent une vigilance particulière.  En effet, les changements de phase à chaque pas de temps peuvent faire intervenir de grandes quantités d’énergie et une masse importante d’atmosphère. 
+Localement, les changements de phase ne modifient pas seulement la température de surface et la pression, mais aussi la structure de la couche limite, en «~pompant~» l’air lorsque N$_2$ condense à la surface, et en libérant de grandes quantités d’air froid pur en N$_2$ lors de la sublimation. 
+
+\begin{figure}[!h]
+\begin{center} 
+	\includegraphics[width=15cm]{figures/chap2/clausius}
+\end{center} 
+\caption{Courbes d’équilibre de Clausius Clapeyron. Gauche : courbes telles que paramétrées dans le modèle, à partir des relations thermodynamiques calculées par \citet{FraySchm:09}. Droite : Courbes d’équilibre pour les espèces volatiles de Pluton comparés à ceux de Mars et de la Terre  \citep{Moor:17}. Le point triple de l’azote est situé à 63.147~K, celui du CO à 68.1~K (les états liquides du CO et de l’azote se superposent) et celui du méthane à 90.7~K.} 
+\label{clausius}
+\end{figure}
+
+Le schéma de condensation / sublimation de l’azote est adapté de celui utilisé dans le GCM martien pour le CO$_2$ \citep{Forg:98}. Cependant, il est nécessaire d’appliquer quelques changements au code pour mieux représenter l’intense condensation et sublimation à la surface de Pluton et les changements de pression. 
+La variation de la température de condensation $T_c$ en fonction de la pression partielle d’azote $P_{\mbox{\scriptsize N2}}$ est donnée par la courbe de Clausius Clapeyron (\autoref{clausius}) dérivée des relations thermodynamiques calculés par \citet{FraySchm:09}, et prend en compte la transition entre les phases $\alpha$ et $\beta$ (cristalline) autour de 35.61~K (correspond à $P_{\mbox{\scriptsize N2}}=0.53$~Pa):
+
+\begin{eqnarray}
+\mbox{if } P_{N2} <0.53 \mbox{ Pa :} & 
+T_c  = &  \left[ \frac{1}{35.600} - \frac{296.925}{1.09 L_{\mbox{\scriptsize N2}}} 
+\ln{\left( \frac{P_{\mbox{\scriptsize N2}}}{0.508059} \right) } \right]^{-1} 
+\\
+\mbox{if } P_{N2} >0.53 \mbox{ Pa :} & 
+T_c  = & \left[ \frac{1}{63.147} - \frac{296.925}{0.98 L_{\mbox{\scriptsize N2}}} 
+\ln{ \left( \frac{P_{\mbox{\scriptsize N2}}}{12557.}\right) } \right] ^{-1} 
+\end{eqnarray}
+
+avec $L_{\mbox{\scriptsize N2}} =2.5.10^{5}$~J.kg$^{-1}$ la chaleur latente de condensation de l’azote. 
+
+\subsubsection{Condensation et sublimation à la surface}
+
+La condensation et la sublimation de l’azote à la surface est essentiellement contrôlée par la conservation de l’énergie et de la masse.  
+A un pas de temps considéré, si la température de surface $T_0^*$ prédite par l’équilibre radiatif et celui de la conduction tombe en dessous de la température de condensation $T_{c0}$ à la pression de surface, une quantité $\delta$m$_0$ (kg.m$^{-2}$) d’azote condense, et libère la chaleur latente requise pour garder l’interface solide-gaz à la température de condensation ($T_0 = T_{c0}$):
+
+\begin{equation}
+\label{eq:condatm}
+\delta m_0 = \frac{c_s}{(L_{\mbox{\scriptsize N2}}  +c_p(T_1 -T_{c0}))} (T_{c0} - T^*_0) 
+\end{equation}
+
+$c_s$ est la capacité thermique de la surface (J.m$^{-2}$.K$^{-1}$ pour N$_2$), $c_p$  est la capacité thermique massique de l’air à pression constante (1040~J.kg$^{-1}$.K$^{-1}$ pour N$_2$) et $L_{\mbox{\scriptsize N2}} $ est la chaleur latente de N$_2$ ($2.5~10^5$~J.kg$^{-1}$). 
+Le terme $c_p(T_1 -T_{c0})$ (J.kg$^{-1}$) correspond à une quantité additionnelle de chaleur apportée par l’atmosphère (supposée être à la température $T_1$ dans la première couche du modèle) lorsqu’elle est refroidie à la température de condensation $T_{c0}$ juste au-dessus de la surface. La basse atmosphère de Pluton étant une stratosphère chaude directement en contact avec la surface, on trouve que ce terme peut être significatif. Avec $T_1$ typiquement à 10~K au-dessus de $T_{c0}$ lorsque N$_2$ condense dans Sputnik Planitia, ce terme atteint 4$\%$ de la chaleur latente. 
+Inversement, si la température $T^*_0$ de la glace d’azote prédite à la surface est au-dessus de la température de condensation $T_{c0}$ à la pression de surface, N$_2$ sublime et $\delta m_0$ est négatif:
+
+\begin{equation}
+\label{eq:subatm}
+\delta m_0 = \frac{c_s}{L_{\mbox{\scriptsize N2}} } (T_{c0} - T^*_0) 
+\end{equation}
+
+On fixe alors $T_0 = T_{c0}$, à moins que toute le réservoir local de glace à la surface (de masse $m_0$, en kg.m$^{-2}$) se soit entièrement sublimé. Dans ce cas, on fixe $\delta m_0 = -m_0$ et la nouvelle température de surface devient :
+
+\begin{equation}
+T_0 = T^*_0 - L_{\mbox{\scriptsize N2}}  \ m_0 / c_s 
+\end{equation}
+
+La formation ou la disparition de glace d’azote à la surface est prise en compte dans le modèle pour calculer l’albédo et l’émissivité de la surface (voir section \ref{changesurf}).
+
+A noter que le choix de l’inertie thermique ne joue pas au premier ordre un rôle important dans la quantité de glace de N$_2$ sublimée et condensée. En effet, comme le montrent les équations \ref{eq:condatm} et \ref{eq:subatm}, la variation de masse échangée $\delta$m$_0$ est quasiment proportionnelle à $\frac{c_s}{L_{N2}}$~$\Delta$T$_s$ avec avec c$_s$ fonction de l'inertie thermique. $\Delta$T$_s$ est quasiment proportionnel à $\frac{F}{c_s}$ (seulement au premier ordre), avec $F$ le flux absorbé par la surface (W.m$^{-2}$). Ainsi, au premier ordre, $c_s$ se simplifie au numérateur et au dénominateur dans ce cas très simplifié, et la quantité d'espèce volatile échangée $\delta$m$_0$ ne dépend donc pas de l’inertie thermique.  
+
+\subsubsection{Condensation et sublimation dans l’atmosphère}
+
+Dans l’atmosphère, la condensation et la sublimation sont, en théorie, plus complexes. En effet, la condensation d’un gaz implique de nombreux processus microphysiques : sursaturation,  nucléation, croissance du cristal de glace, sédimentation, etc... Cependant, dans le cas de l’azote, ces processus restent mal connus. Dans le GCM de Pluton, on a gardé le schéma détaillé du GCM martien pour le CO$_2$ (décrit dans l’appendice de \citet{Forg:98}) et on l’a directement adapté à la glace de N$_2$.
+
+La sursaturation est négligée, et la condensation et la sublimation atmosphérique sont calculées en utilisant des principes de conservation d’énergie, comme pour le schéma des échanges à la surface. 
+On ne prend pas en compte la croissance et le transport des particules de glace d’azote. 
+Au lieu de cela, on suppose que de la glace de N$_2$ formée à un certain niveau du modèle tombe à travers les couches atmosphériques sous-jacentes, où elle peut à nouveau sublimer ou condenser directement à la surface en l’espace d’un pas de temps du modèle. 
+Dans nos simulations, l’atmosphère étant plus chaude que la surface la plupart du temps, on a trouvé que la condensation d’azote dans l’atmosphère (nuages d’azote) est rare et a peu d’impact sur Pluton. En réalité, des mouvements verticaux induits par les pentes locales ou des ondes de gravité non résolues pourraient déclencher de la condensation atmosphérique dans les régions couvertes de glace d’azote. 
+
+\subsubsection{Calcul de la masse, quantité de mouvement, et flux verticaux de chaleurs induits par le cycle de N$_2$}
+
+La sublimation et la condensation de l’azote induisent un transport significatif (en termes de masse d’air, de chaleur, et de traceurs) de la surface à travers les couches atmosphériques du modèle et inversement. 
+Par exemple, à chaque pas de temps, une couche atmosphérique de plusieurs dizaines de mètres d’épaisseur peut subir un changement de phase. Ces processus de transport doivent donc bien être pris en compte sur Pluton.
+La résolution numérique des processus de transport dans le système de coordonnées ``$\sigma$'' du GCM (voir section~\ref{sc:dynamic}) utilise un schéma de transport vertical de Van-Leer I. Le schéma est donné dans l’appendice de \citet{Forg:17}. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Le cycle du méthane et les nuages de glace de méthane}
+\label{sc:ch4_model}
+
+L’évolution 3D du CH$_4$ à la surface et dans l’atmosphère dans ses phases gazeuses et solides est simulée en prenant en compte : 1) la condensation et la sublimation à la surface et dans l’atmosphère (voir ci-dessous), 2) le transport par la circulation générale, en utilisant le schéma Van-Leer~I de volumes finis, 3) le mélange dans l’atmosphère par diffusion turbulente et éventuellement par convection (voir section~\ref{sc:pbl}) et 4) la sédimentation gravitationnelle des particules de glace de CH$_4$.
+Par rapport à la version initiale, certains paramètres des relations thermodynamiques pour le méthane ont été révisés. De plus, un schéma implicite a été mis en place pour mieux décrire les variations de  température induite par les nuages de méthane (voir section \ref{sc:paramnuage}). 
+
+\subsubsection{Condensation et sublimation à la surface}
+Les flux de masse de méthane montant et descendant sont calculés à partir de l’équation~\ref{eq:sflux}, avec $q_0$ le rapport de mélange (kg/kg) juste au-dessus de la surface et $q_1$ celui au milieu de la première couche atmosphérique. Une conséquence importante de l’équation~\ref{eq:sflux} est que le taux de sublimation de méthane est proportionnel à la vitesse de vent horizontal près de la surface. 
+\autoref{clausius} montre la courbe d’équilibre (Pression, Température) de Clausius Clapeyron pour le méthane, obtenue à partir des relations thermodynamiques calculées par \citet{FraySchm:09}. CH$_4$ est moins volatil que N$_2$ avec une pression de vapeur saturante 1000 fois plus faible. 
+
+Lorsque de la glace de méthane pure est présente à la surface, $q_0$ est égal au rapport de mélange du méthane à la pression de vapeur saturante $q_{\mbox{\scriptsize  sat CH4}}$, calculé à partir de la fonction suivante, dépendante en température $T$ (K) et pression $p$ (Pa) et dérivée de \cite{FraySchm:09} :
+%     ORIGINAL FORTRAN MMR
+%    qsat(i)=0.117.E5*exp((16*612.5/8.314)*(1/90.7-1/t(i)))
+
+\begin{equation}
+q_{\mbox{\scriptsize sat CH4}} = 0.117 \times 10^{5}  
+e^{{\frac{6.12 \times 10^{5}}{R}} 
+\left(  {1}/{90.7} -{1}/{T} \right) } 
+\times \frac{M_{\mbox{\scriptsize CH4}}}{M_{\mbox{\scriptsize air}}} \times \frac{1}{p}
+\label{eq:ch4sat}
+\end{equation}
+
+Ici, ${M_{\mbox{\scriptsize CH4}}}/{M_{\mbox{\scriptsize air}}}$ est la fraction des masses molaires utilisée pour convertir le rapport de mélange volumique en rapport de mélange massique. $R = 8.314/M_{\mbox{\scriptsize CH4}} = 519~$m$^2$.s$^{-2}$.K$^{-1}$ est la constante des gaz utilisée pour le méthane. 
+
+Lorsque de la glace de méthane et d’azote sont présentes à la surface et que la glace de méthane sublime, on fait l’hypothèse que les deux glaces sont mélangées et diluées dans une solution solide N$_2$:CH$_4$ avec 0.5\% de méthane \citep{Merl:15}. La loi de Raoult donne alors :  
+$q_0= 0.003~q_{\mbox{\scriptsize  sat CH4}}$.
+Si la quantité totale de méthane à la surface est sublimée en l’espace d’un pas de temps du modèle, le flux vers l’atmosphère est limité en conséquence. 
+S’il n’y a pas de glace de méthane à la surface, alors $q_0= q_1$ si $q_1 < q_{\mbox{\scriptsize sat CH4}}$ (pas de condensation) et $q_0 = q_{\mbox{\scriptsize sat CH4}}$ si $q_1 > q_{\mbox{\scriptsize sat CH4}}$ (condensation directement à la surface).
+La chaleur latente libérée par la condensation et la sublimation du méthane à la surface est prise en compte dans le budget radiatif de la surface, en considérant une chaleur latente $L_{\mbox{\scriptsize CH4}} = 5.867 \times 10^5$~J.kg$^{-1}$ \citep{FraySchm:09}.
+
+\subsubsection{Condensation dans l’atmosphère et formation des nuages de CH$_4$}
+\label{sc:paramnuage}
+
+Le méthane peut aussi condenser puis sublimer dans l’atmosphère lorsque le rapport de mélange atmosphérique du CH$_4$ excède le rapport de mélange à saturation donné par l’équation~\ref{eq:ch4sat}. On ne sait pas si le CH$_4$ peut facilement nucléer ou si une sursaturation importante est nécessaire pour cela. Les particules de brumes organiques issues de la photochimie dans la haute atmosphère constituent probablement une source de noyaux de condensation adaptés pour une condensation hétérogène de méthane sur ces particules. Dans le GCM, on fait l’hypothèse que tout le méthane atmosphérique en état de saturation condense et forme des particules de glace (nuages de méthane). 
+
+La quantité de chaleur latente libérée lors de la condensation ou sublimation du méthane dans l’atmosphère est loin d’être négligeable. On trouve qu’elle peut changer localement la température atmosphérique de plus de 10~K. 
+De plus, la chaleur latente libérée limite la quantité de méthane qui condense quand l’atmosphère est sursaturée. Si la condensation du CH$_4$ est calculée sans prendre en compte la libération de chaleur latente qui l’accompagne, le modèle prédit des températures irréalistes (par exemple, des variations de plusieurs dizaines de Kelvins en l’espace d’un pas de temps) et donc des taux de condensations erronés. Il en va de même si les deux processus ne sont pas traités simultanément ou si on utilise un schéma numérique explicite. 
+En pratique, on utilise donc un schéma implicite. A chaque pas de temps du modèle, lorsque le rapport de mélange massique du méthane $q_{\mbox{\scriptsize CH4}}$ excède la valeur à saturation (ou si de la glace de méthane est déjà présente), on calcule simultanément la température à la fin du pas de temps $T'$, influencée par la condensation et la sublimation du méthane, et le rapport de mélange à saturation correspondant $q_{\mbox{\scriptsize sat CH4}}(T')$. Pour ce faire, on approche numériquement $T'$  en résolvant l’équation suivante:
+
+\begin{equation}
+T' = T + [q_{\mbox{\scriptsize CH4}} - q_{\mbox{\scriptsize sat CH4}}(T')]
+\frac{L_{\mbox{\scriptsize CH4}}}{c_p} 
+\end{equation}
+
+La variation de rapport de mélange massique (kg/kg) du méthane gazeux et solide est donnée par :
+
+\begin{equation}
+\delta q_{\mbox{\scriptsize CH4}} = -\delta q_{\mbox{\scriptsize ice}} = (q_{\mbox{\scriptsize
+sat CH4}}(T') - q_{\mbox{\scriptsize CH4}}),
+\end{equation}
+
+sauf si toute la glace de CH$_4$ dans l’atmosphère sublime en un pas de temps (dans ce cas, on ajuste $T'$ en conséquence).
+Une fois que le rapport de mélange massique atmosphérique de la glace de CH$_4$ $q_{\mbox{\scriptsize ice}}$ est connu, la glace est répartie pour former des nuages de glace de méthane autour des noyaux de condensation  (CCN : cloud condensation nuclei).
+On fait l’hypothèse que le nombre de noyaux de condensation [CCN] par unité de masse atmosphérique (kg$^{-1}$) est constant dans toute l’atmosphère. En supposant une taille unique monodispersée pour les particules de brumes organiques ($r_CCN$), le rayon d’une particule du nuage est donné par :
+
+\begin{equation}
+r=  (\frac{3 q_{\mbox{\scriptsize ice}}}{4\pi \rho_{\mbox{\scriptsize ice}} \ \mbox{[CCN]} } +
+r_{\mbox{\scriptsize [CCN]}}^3)^{1/3}
+\end{equation}
+
+avec $\rho_{\mbox{\scriptsize ice}}$ la densité volumique de la glace de CH$_4$ (520~kg.m$^{-3}$), et $r_{\mbox{\scriptsize [CCN]}}$ le rayon des CCN fixé à 0.2~$\mu$m. 
+Une fois que $r$ est connue, la vitesse de sédimentation de la particule du nuage est calculée en utilisant la loi de Stokes corrigée pour les basses pressions (correction de Cunningham, \citet{Ross:78}). 
+Le rayon $r$ de la particule est aussi utilisé pour estimer l’opacité apparente des nuages. Cependant, le rôle radiatif des nuages reste négligé. 
+Le nombre de noyaux de condensation [CCN] est un paramètre clé contrôlant directement les propriétés des nuages et leur sédimentation. Quelles sont les valeurs possibles pour [CCN] sur Pluton ?
+Sur Terre, le rapport de mélange des noyaux de condensation actifs dans la troposphère varie entre 10$^{6}$~kg$^{-1}$ (pour un air peu pollué comme celui aux pôles) et 10$^{10}$~kg$^{-1}$ (masse d’air polluée) \citep{HudsYum:02,Andr:09}. La valeur de [CCN] est significativement plus basse pour des nuages de type cirrus ($<$10$^{4}$~kg$^{-1}$) \citep{Demo:03}. Sur Pluton, les particules de brumes sont sans doute des CCN efficaces. Dans le Chapitre~\ref{chap:haze}, je discute en détails les valeurs possibles de rapport de mélange massique pour ces particules. Cependant, les valeurs réelles de CCN dépendent aussi du degré d’agrégation des monomères, et de leur activation, deux paramètres qui restent mal connus sur Pluton. Dans les simulations de référence, nous avons prescrit [CCN]=10$^{5}$~kg$^{-1}$.
+
+\section{Améliorations et développements apportés au GCM}
+\label{sc:dev1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Les brumes organiques}
+
+La sonde New Horizons a révélé la présence d’une fine brume bleutée dans l’atmosphère de Pluton (voir Chapitre~1.\ref{sc:brume}). Cette brume serait à priori composée de particules organiques formées suite à la photolyse du méthane par les rayons UV, en particulier les rayons Lyman-$\alpha$ solaire et ceux diffusés par le milieu interplanétaire.  Le GCM inclus un modèle de formation, transport et sédimentation de ces particules. Ce modèle et les résultats obtenus sont décrits et analysés dans \citet{BertForg:17}, qui constitue le Chapitre~\ref{chap:haze} de ce manuscrit. 
+Dans une version plus récente du modèle, la sédimentation des brumes prend en compte le champ 3D de gravité (la gravité dépend de l’altitude).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Le transfert radiatif}
+\label{sc:radia}
+
+Dans la version initiale, certaines routines du transfert radiatif étaient déjà présentes mais le transfert radiatif n’était pas sensible à la quantité de méthane atmosphérique. Les spectres du méthane et du CO ont été refait, avec l’aide de Jeremy Leconte pour l'utilisation du code kspectrum (voir ci dessous). 
+L’insolation incidente au-dessus de chaque colonne atmosphérique est calculée à chaque pas de temps, en prenant en compte la variation de la distance Soleil-Pluton, l’inclinaison saisonnière (variation du point subsolaire) et le cycle diurne. 
+
+N$_2$ est le constituant majeur de l’atmosphère de Pluton mais ses effets radiatifs sont négligés dans la basse atmosphère puisque N$_2$ est transparent aux longueurs d’ondes émises par le soleil (visible) et par la surface (infrarouge). Il peut y avoir sur Pluton de l’absorption UV (extrêmes UV notamment) par N$_2$, mais celle-ci se fait beaucoup plus haut dans l’atmosphère et n’impacte pas à priori le domaine simulé par le GCM (voir Chapitre~\ref{chap:haze}, discussions). 
+
+Dans le modèle, on prend en compte (1) le chauffage et le refroidissement radiatif par le CH$_4$, qui peut varier avec l’espace et le temps en fonction de la distribution du méthane calculée par le modèle de transport du méthane (voir section~\ref{sc:ch4_model}) (2) le refroidissement par le CO (raies rotationnelle\footnote{Dans le domaine proche UV-visible les interactions entre le rayonnement et les molécules induisent principalement des variations  d’énergie  électronique  de  la  molécule (unité usuelle: le nm). Dans le proche IR, ce sont des variations d’énergie de vibration ($\mu$m). Dans le  domaine des  micro-ondes, ce sont des échanges d’énergie de rotation (mm, cm). Le spectre de rotation d'une molécule (excitation des phénomènes de rotation de la molécule) nécessite que la molécule possède un moment dipolaire et que les centres de charge et masse soient distincts. C'est l'existence de ce moment dipolaire qui permet au champ électrique de la lumière micro-onde d'exercer un couple sur la molécule, ce qui la fait tourner plus rapidement (en excitation) ou plus lentement (en désexcitation). Le monoxyde de carbone (molécule diatomique hétérogène) possède l'un des spectres de rotation les plus simples.}), dont le rapport de mélange est fixé à 0.05~\% partout pour le calcul de transfert radiatif \citep{Lell:11a,Lell:16} et (3) l’effet radiatif des autres espèces (hydrocarbures, HCN…) émettant dans l’infrarouge à plus haute altitude.
+
+La diffusion Rayleigh n’est pas activée dans le modèle car elle est considérée négligeable dû à la faible épaisseur de l’atmosphère. Les effets radiatifs des nuages sont également négligés. Les effets radiatifs de la brume sont en cours de développement. 
+
+\subsubsection{Transfert radiatif à travers CH$_4$ et CO}
+
+Pour CH$_4$ et CO, on utilise un modèle de transfert radiatif appelé basé sur la méthode k-corrélés (ou modèle de k-distribution) pour calculer les coefficients d’absorption. Une intégration pas-à-pas des équations du transfert radiatif dans toutes les raies atmosphériques serait très fastidieuse et couteuse en temps de calcul et en mémoire numérique, en particulier parce que les coefficients d'absorption des différentes espèces varient rapidement avec la longueur d'onde et demandent donc d’utiliser un pas d'intégration spectral très court pour bien les capturer. Dans la méthode de k-distribution, l’intégration se fait plutôt par valeur croissantes des $k$ coefficients.
+
+On découpe tout d’abord le spectre en plusieurs bandes qui reflètent les variations majeures du spectre. Dans le GCM de Pluton, on utilise 17 bandes spectrales dans l’infrarouge et 23 dans le visible. Les bandes sont choisies de façon à bien reproduire les bandes vibrationnelles du CH$_4$ dans le proche infrarouge (à 1.6, 2.3 et 3.3~$\mu$m) ainsi que la bande d’émission du CH$_4$  dans l’infrarouge à  7.6~$\mu$m. \citet{Stro:96} montre les différentes intensités de chauffage et de refroidissement des bandes. En particulier, la Figure 10 de \citet{Stro:96} montre que le chauffage dans la bande 2.3 du méthane est plus intense d'un facteur 6 que celui de la bande 3.3, pour les pressions qui nous intéressent. De plus, le refroidissement du méthane domine par rapport à celui du CO.
+
+Pour calculer les $k$ coefficients d’absorption dans chaque bande, des spectres raie par raie à haute résolution combinant le CO et le CH$_4$ sont calculés à partir de la base de données HITRAN 2012 pour une gamme de températures et de pressions \footnote{Une description détaillée du programme open-source ``kspectrum'' pour le calcul du transfert radiatif est disponible à l’adresse http ://code.google.com/p/kspectrum/.}. On obtient une fonction de répartition g(k) qui est ensuite approximée avec seulement une dizaine de points (points de Gauss), puis inversée pour trouver k(g). La distribution choisie des points de Gauss est la même pour toutes les bandes, il faut donc ajuster sa forme pour qu'elle représente fidèlement la fonction g(k) réelle partout dans le spectre. On trouve qu’au moins 33 points de Gauss sont nécessaires pour l’intégration pour obtenir des résultats avec une précision raisonnable. 
+
+Ensuite, les spectres et les $k$ coefficients de référence sont stockés dans une matrice de référence à partir de laquelle le GCM interpole les valeurs des $k$ coefficients lors de la simulation du transfert radiatif (le transfert radiatif est résolu dans chaque bande dans l'espace des points de Gauss). La matrice de référence est produite avec une grille de températures et de pressions logarithmiques (8~températures $\times$ 7~pressions-log $\times$7~rapports de mélange de CH$_4$), avec $T=\{30, 40, 50, 70, 90, 110, 150, 200\}$~K,  $p=\{10^{-4}, 10^{-3}, 10^{-2}, 10^{-1}, 1, 10, 100\}$~Pa, et [CH$_4$]= $\{10^{-4},  10^{-3}, 5\times10^{-3}, 10^{-2}, 5\times10^{-2}, 10^{-1}, 5\times10^{-1}\}$~kg.kg$^{-1}$.  Le calcul des flux infrarouges et visibles sont séparés en utilisant une méthode à deux faisceaux.
+
+\subsubsection{Processus hors équilibre thermodynamique local}
+
+Les basses pressions et les basses températures régnant sur Pluton entrainent des difficultés dans les calculs de transfert radiatif (et donc des incertitudes). 
+En effet, si les pressions ou températures sont basses, alors les chocs entre molécules se font plus rares et ne deviennent plus le mécanisme dominateur pour transmettre l’énergie (de vibration, de rotation…) entre les molécules (l’énergie est alors utilisée autrement, par exemple via une émission par fluorescence). On s’éloigne alors d’un milieu en équilibre thermodynamique local (LTE) et on se rapproche d’un milieu hors équilibre (NLTE), dans lequel les lois classiques de physiques ne décrivent plus correctement l’état de l’atmosphère (dans le cas NLTE, certaines caractéristiques du spectre de certaines espèces chimiques peut notamment changer).
+%, comme l'élargissement des raies par exemple ; la raie d’une espèce n’est pas déplacée en NLTE car la longueur d’onde à laquelle elle absorbe dépend uniquement des états quantiques de transition de l’espèce), ce qui entraine des changements de coefficients d’absorption. 
+Pour les niveaux de pression atmosphérique considérés dans le GCM de Pluton, on peut avoir un NLTE pour le traitement des raies du méthane, alors que les raies rotationnelles du CO sont supposées rester en LTE \citep{Stro:96}.
+
+Pour prendre en compte l’effet NLTE de la bande du CH$_4$ à 7.6~$\mu$m, on modifie les taux de refroidissement LTE obtenus avec le modèle radiatif (k-distribution) en suivant la méthode décrite dans \citet{Stro:96} pour calculer le facteur de rendement NLTE. Les taux de refroidissement du CH$_4$ obtenus dans le GCM se sont avérés être beaucoup plus faibles que ceux montrés dans \citet{Stro:96}.
+% et significativement plus faibles que les taux de refroidissement du CO. 
+Cependant, nous avons pu montrer qu'ils étaient en accord avec les modèles plus récents des mêmes auteurs (D. Strobel, communication personnelle). Les différences entre les résultats obtenus aujourd’hui et ceux de \citet{Stro:96} seraient dues à une mise à jour de la base de données spectroscopiques (HITRAN 2012 vs HITRAN 1986) et le fait que les températures utilisées dans \citet{Stro:96} sont plus élevées que celles utilisées dans le GCM. 
+
+Les incertitudes des calculs NLTE pour la bande du CH$_4$ à 7.6~$\mu$m ont un effet limité sur nos résultats. Pour les bandes situées dans le proche infrarouge, on reproduit les calculs du facteur de rendement NLTE de \citet{Stro:96} en utilisant certains paramètres et coefficients mis à jour dans \cite{Zalu:11} pour les bandes du CH$_4$ à 2.3 and 3.3~$\mu$m. Nous n'avions aucune information sur la bande à 1.6~$\mu$m. Dans ce contexte, et étant donné les incertitudes habituellement rencontrées dans les calculs NLTE \citep{Bour:03}, nous avons décider d'autoriser des modifications empiriques des variations théoriques NLTE avec la densité atmosphérique (tout en gardant la forme théorique) pour ajuster le facteur de rendement et donc les taux de chauffage afin d’obtenir dans le modèle des températures proches de la structure thermique observées par New Horizons. 
+Par conséquent, le modèle de transfert radiatif du GCM reproduit la structure thermique observée, ce qui est important pour correctement analyser le climat de Pluton, mais ce n’est pas un résultat du modèle en soi. 
+
+En pratique dans le modèle, on multiplie le taux de chauffage total (sommé sur toutes les bandes) du CH$_4$ obtenu avec le code de transfert radiatif LTE par un facteur de rendement NLTE variant avec l’altitude : $\varepsilon_{\mbox{\scriptsize NLTE}}$. 
+\begin{equation}
+\varepsilon_{\mbox{\scriptsize NLTE}} = 0.1 + \frac{0.9}{1+{\rho_{\mbox{\scriptsize .55}}}/{\rho}}, 
+\end{equation}
+avec $\rho$ la densité atmosphérique (kg.m$^{-3}$), et $\rho_{\mbox{\scriptsize .55}}$ la densité de référence pour laquelle $\varepsilon_{\mbox{\scriptsize NLTE}}=0.55$. 
+Après plusieurs réglages pour coller aux observations, on fixe $\rho_{\mbox{\scriptsize .55}}=2\times10^{-6}$~kg.m$^{-3}$. 
+
+
+\subsubsection{Refroidisseurs radiatifs supplémentaires}
+
+Comme je l’ai mentionné dans le Chapitre~1.\ref{sc:temppres}, le refroidissement de l’atmosphère de Pluton à 70~K au-dessus de 30~km reste un mystère. Pendant la thèse, il a été suggéré que certaines espèces (HCN, C$_2$H$_2$), jusqu’alors non considérées dans les calculs de transfert radiatif, pouvaient refroidir radiativement l’atmosphère \citep{Dias:15,Glad:16}. Depuis, cette hypothèse a été réfutée (voir Chapitre~1.\ref{sc:temppres}). En utilisant l’approximation cooling-to-space (l’échange de radiation entre les couches atmosphériques est négligeable par rapport à la perte directe de radiation  vers l’espace), on représente ce refroidissement en ajoutant dans le modèle le taux de refroidissement suivant pour des pressions atmosphériques inférieures à 0.12~Pa:
+
+\begin{equation}
+\frac{\partial T}{\partial t} = -5\times10^{-11} \   B(\lambda_0,T) 
+\end{equation}
+
+avec $T$ la température atmosphérique (K) et $B(\lambda_0,T)$ la fonction de Planck (W.m$^{-2}$.$\mu$m$^{-1}$.sr$^{-1}$) à la longueur d’onde $\lambda_0$. On prend $\lambda_0 = 14$~$\mu$m puisque les principales bandes d’émission des espèces considérées pour ce refroidissement, C$_2$H$_2$ et HCN \citep{Glad:16}, sont centrées sur 13.7 et 14.05~$\mu$m respectivement (ici, on néglige les bandes rotationnelles d’HCN aux longueurs d’onde submillimétriques). La valeur $-5\times10^{-11}$ est un réglage choisi de façon à reproduire au mieux le refroidissement observé par New Horizons dans notre simulation de référence.  
+
+\subsection{Le cycle de CO}
+Le cycle du CO est calculé à partir des mêmes paramétrisations que celles utilisées pour le méthane, en utilisant les propriétés du CO et sa courbe de Clausius Clapeyron (\autoref{clausius}): la chaleur latente de sublimation est égale à $L_{\mbox{\scriptsize CO}} = 2.74\times10^5$~J.kg$^{-1}$ et le rapport de mélange massique à saturation $q_{\mbox{\scriptsize  sat CO}}$ est calculé à partir de la température $T$ (K) et de la pression $p$ (Pa) en utilisant l’expression suivante dérivée de \citet{FraySchm:09}:
+
+\begin{equation}
+\label{eq:cosat}
+q_{\mbox{\scriptsize sat CO}} = 0.1537 \times 10^{5}  
+%e^{{\frac{274.}{R}} 
+e^{{\frac{2.74 \times 10^{5}}{R}} 
+\left(  {1}/{68.1} -{1}/{T} \right) } 
+\times \frac{M_{\mbox{\scriptsize CO}}}{M_{\mbox{\scriptsize air}}} \times \frac{1}{p}
+\end{equation}
+
+Ici, ${M_{\mbox{\scriptsize CO}}}/{M_{\mbox{\scriptsize air}}}$ est le rapport des masses molaires utilisé pour convertir le rapport de mélange volumique en rapport de mélange massique et $R = 8.314/M_{\mbox{\scriptsize CO}} = 296.8~$~m$^2$.s$^{-2}$.K$^{-1}$ est la constante des gaz utilisée pour CO. 
+CO est presque aussi volatil que l’azote et beaucoup plus volatil que le méthane. En pratique, on trouve que CO condense seulement lorsque de la glace d’azote est présente à la surface et ne forme jamais de dépôts de CO pur. 
+Un paramètre clé contrôlant le cycle du CO est donc le rapport de mélange de CO dans la solution solide N$_2$:CO à la surface. En me basant sur les résultats et les analyses récentes obtenus par \citet{Merl:15} à la suite d’observations spectroscopiques de Pluton faites avec le Very Large Telescope, j'ai fixé ce rapport de mélange à 0.3\%. 
+
+\section{Le modèle de transport des glaces volatiles}
+\label{sc:dev2}
+
+La modélisation du climat de Pluton à l’aide d’équations universelles est difficile car :
+
+\begin{itemize}
+\item Les constantes de temps radiatives sont longues (environ 20 années terrestres)
+\item Les résultats sont sensibles à l’état initial, particulièrement à la topographie, le réservoir total de glaces volatiles, et les albédos, émissivités et inerties thermiques des différents terrains. 
+\end{itemize}
+
+Afin d’obtenir un état équilibré des conditions atmosphérique (pression), de surface (distribution des glaces) et de sous-surface (températures), le modèle de climat de Pluton doit simuler plusieurs années Pluton et donc des milliers d’années terrestres. Ce n’est pas possible en termes de temps de calcul et de ressources informatiques avec le GCM complet. Une version réduite du GCM a donc été développée dans laquelle : 
+
+\begin{itemize}
+\item Le transport de N$_2$, CO, et CH$_4$ est paramétré comme un mélange à l’échelle globale, avec des réglages issus des résultats du GCM complet. 
+\item Les processus atmosphériques (nuages, brumes, convection, transfert radiatif dans l’atmosphère…) ne sont pas pris en compte (on considère donc l’atmosphère transparente à toutes les longueurs d’onde). En effet, l’atmosphère de Pluton est tellement fine que ces processus n’impactent pas de façon significative l’équilibre thermique radiatif et conductif à la surface.  Avec une température de surface entre 37~K (N$_2$) et 55~K (CH$_4$), la loi de Wien donne une émission thermique de la surface de Pluton autour de 52-78~$\mu$m, qui n’est pas absorbée par l’atmosphère.
+\item Le modèle est un modèle à une couche atmosphérique dans laquelle s’effectue les échanges avec la surface, et dans laquelle sont transportées et mélangées les masses d’azote, de méthane et de CO (à partir d’une paramétrisation simple de la dynamique atmosphérique, voir section \ref{redistrib}).
+\end{itemize}
+
+Ainsi réduit, ce modèle de transport des glaces volatiles peut simuler sur dizaines de milliers d’années terrestres les cycles saisonniers des glaces volatiles, déterminés par le transport atmosphérique et les cycles de condensation et de sublimation des glaces. 
+Dans ce modèle, la surface est représentée par une grille de 32 longitudes et 24 latitudes. Les points du modèle sont indépendants les uns des autres. En chaque point, le modèle calcule le budget radiatif de la surface (insolation, radiation thermique), les échanges de chaleur avec la sous-surface par conduction, les échanges de chaleur latente, et les échanges d'espèces volatiles (N$_2$, CO, et CH$_4$) avec l’atmosphère. Les quantités de glace à la surface sont mises à jour à chaque pas de temps (sublimation, condensation, écoulement) ainsi que les conditions de surface (albédo, émissivité, inertie thermique) auquel les cycles des glaces sont très sensibles. 
+Les schémas de conduction dans la sous-surface et de sublimation et condensation de l’azote sont les mêmes que dans le GCM. 
+
+\subsection{Variation de l'insolation et calendrier de Pluton}
+
+\begin{figure}[!h]
+\begin{center} 
+	\includegraphics[width=12cm]{figures/chap2/decli}
+\end{center} 
+\caption{Haut : variation du point subsolaire au cours d’une année Pluton. Bas : calendrier de Pluton pour les premiers jours du mois de juillet 2015. $Time$ est le temps en jours terrestres (=0 au début du calendrier), $Had$ est le temps en jours Pluton, $Earth date$ est la date terrestre, $JulianDate$ estla date julienne, $Ls$ est la longitude solaire, $M$ est l’anomalie moyenne, $v$ est l’anomalie vraie (égale à 0$^{\circ}$ au périhélie), $decli$ est la déclinaison, $dist sol$ est la distance solaire (UA).} 
+\label{subsol}
+\end{figure}
+
+A chaque pas de temps, la distance au soleil et la déclinaison (latitude du point subsolaire) sont d’abord calculées en résolvant le problème de Kepler puis l’insolation solaire locale est calculée pour chaque point de grille en prenant en compte le cycle diurne.
+La \autoref{subsol} montre la variation du point subsolaire au cours d’une année Pluton. L’équinoxe de printemps nord correspond au maximum d’insolation à l’équateur avant le printemps nord, à la date du 25 février 1988, et permet d’initialiser la longitude solaire L$_s$=0$^{\circ}$ à cette date. 
+
+Pour pouvoir relier la longitude solaire aux dates terrestres dans le GCM de Pluton, j’ai écrit un code permettant de résoudre le problème de Kepler et d’élaborer un calendrier de Pluton. L'équation de Kepler relie l'excentricité $e$ et l'anomalie excentrique $E$ à l'anomalie moyenne $M$. Elle permet de passer des paramètres dynamiques du mouvement d'un corps (l'anomalie moyenne) aux paramètres géométriques (l'anomalie excentrique). La \autoref{subsol} montre un passage du calendrier pour les premiers jours du mois de juillet 2015. Le 14 juillet 2015 (jour Pluton 1478), la longitude solaire est de 63.7$^{\circ}$, la déclinaison est de 51.2$^{\circ}$ et la distance au Soleil est de 32.93 AU (le flux solaire reçu au niveau de Pluton est d’environ 1.26 W~m$^2$). Un exemple de calendrier sur toute une orbite de Pluton est donné en Annexe \ref{sc:calendar}. 
+En pratique, je régle les simulations GCM de façon à avoir un fichier de sortie par année terrestre, ce qui correspond à 57.18468 jours Pluton. Pour une simulation GCM typique allant de 1984 à 2015, je régle la fréquence des fichiers de sorties à 57 jours Pluton, soit un écart de 0.18468 jour Pluton par an terrestre. Afin d’analyser l’année 2015 avec les bonnes dates et longitudes solaires, je démarre donc (2015-1984)$\times$0.18468 jours Pluton en avance, soit le 6 février 1984, pour ainsi tomber sur le 1$^{er}$ janvier 2015 au premier pas de temps du fichier de sortie 2015.  
+
+La convention moderne est utilisée pour définir le pôle nord de Pluton (toutes les cartes de cette thèse utilisent cette convention). Le pôle nord pointe vers le côté sud du plan invariable du Système solaire. Ainsi, le pôle nord de Pluton est celui qui peut être vu actuellement depuis la Terre, celui observé par New Horizons, correspondant à l’été nord actuellement. 
+
+\subsection{Propriétés des glaces volatiles}
+\label{sc:glaces}
+
+\subsubsection{La loi de Raoult}
+
+La loi de Raoult\footnote{Aussi appelée loi de la cryométrie. Dans le monde anglo-saxon, cette loi est appelée loi de Blagden, du nom du chimiste Charles Blagden, assistant de Cavendish, qui l'aurait mise en évidence expérimentalement dès 1788.} stipule que dans une solution (ici, solution solide) supposée idéale\footnote{Une solution est dite idéale si les interactions entre toutes les molécules qui la composent sont identiques.}, la pression partielle en phase vapeur d'un constituant est proportionnelle à sa fraction molaire en phase solide, avec comme coefficient de proportionnalité sa pression de vapeur saturante. Par exemple, pour l’équilibre solide gaz du méthane, mélangé à de l’azote, la pression partielle du méthane est :
+
+\begin{equation}
+P_{CH_4} = z_{CH_4 gaz} P = z_{CH_4 solide} P_{CH_4 sat}     
+\end{equation}
+
+Avec $P$ la pression totale du mélange, P$_{CH_4 sat}$ la pression de vapeur saturante du CH$_4$ (à la température du mélange), z$_{CH_4 gaz}$ la fraction molaire du CH$_4$ en phase vapeur et z$_{CH_4 solide}$ la fraction molaire du CH$_4$ en phase solide. 
+La loi de Raoult s’applique à des mélanges idéaux, en particulier pour des corps purs mélangés dans des proportions de même ordre de grandeur. Dans le cas de solution solides mélangées dans des proportions très différentes (par exemple, une solution N$_2$:CH$_4$ très riche en N$_2$), la loi de Henry permet une meilleure approximation des pressions partielles. Cette loi dépend d’une constante de Henry, déterminée à partir de mesures en laboratoire. 
+
+Sur Pluton, les solutions solides peuvent s’écarter des solutions idéales et présenter des mélanges de composés dans des proportions très inégales. Cependant, le manque de données sur ces types de mélange ne nous permet pas d’utiliser la loi de Henry pour déterminer les pressions partielles. Malgré le fait que les résultats peuvent s’éloigner de la réalité, la loi de Raoult reste notre meilleure approximation et est donc utilisée dans le modèle. L’évolution des pressions de vapeur saturante avec la température des glaces sur Pluton sont données par la \autoref{clausius}. 
+
+\subsubsection{Le diagramme de phase N$_2$-CH$_4$}
+
+Les diagrammes de phase sont les représentations graphiques des domaines de stabilité physiques des phases cristallographiques et/ou chimiques (pur ou non) d’une solution, qui varient en fonction de la pression, température et composition de la solution. 
+Sur Pluton, l’azote et le méthane ont la particularité d’être très partiellement solubles l’un dans l’autre, comme le montre la \autoref{phase}. Cette solubilité dépend fortement de la température de la solution solide. Les deux espèces peuvent également cohabiter sous la forme de deux phases mixtes cristallines en mélange intime. Par exemple, à 40~K on a une phase N$_2$:CH$_4$ saturée en méthane avec environ 5$\%$ de CH$_4$ associée à une phase CH$_4$:N$_2$ saturée en azote avec seulement 3$\%$ de N$_2$ \citep{Prot:15}. 
+
+Le diagramme de phase N$_2$:CO ou N$_2$:CH$_4$:CO n'est pas connu\footnote{Il y a peu de littérature concernant des expériences en laboratoire sur la glace de CO, probablement à cause de son extrême toxicité pour l'Homme}. On peut noter qu'aux températures de surface actuelles de Pluton, CO est dans sa phase $\alpha$ (structure cubique des cristaux) tandis que l'azote est dans sa phase $\beta$ (structure compacte hexagonale).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Densités et viscosité des glaces}
+
+A 40~K, la glace d’eau a une densité d’environ 935~kg.m$^{-3}$ \citep{Moor:16}, voire moins sur Pluton si elle est un peu poreuse. Son élasticité et friabilité peuvent permettent à des fractures et de la porosité d’être maintenues sur des échelles de temps géologiques. La glace d’azote (et de CO) est légèrement plus dense avec une densité d'environ 1000~kg.m$^{-3}$ (942~kg.m$^{-3}$ au point triple 63.15~K). La glace de méthane est la moins dense d'entre toutes avec une densité autour de 520~kg.m$^{-3}$ \citep{Leyr:16}. Ainsi, la glace d’eau et la glace de méthane peuvent flotter sur la glace d’azote (plusieurs blocs de glace d’eau semblent en effet flotter sur Sputnik Planitia), mais par contre la glace d'eau ne peut pas flotter sur celle de méthane. 
+
+La viscosité de la glace riche en azote (ou CO) dépend de sa température. Des expériences en laboratoire estiment la viscosité de la glace d’azote autour de 2$\times$10$^8$~Pa.s à 56~K, ce qui est plus faible de plusieurs ordre de grandeur que la viscosité de la glace d’eau à une température proche de son point de fusion (environ 10$^{13}$) \citep{Moor:17,Umur:17}. L’azote s’écoule donc plus facilement sur Pluton que sur Terre, malgré la faible gravité sur Pluton. La faible viscosité de la glace d’azote favorise des écoulements assez rapides sur des pentes même peu inclinées et la formation des larges cellules de convection vue dans Sputnik Planitia \citep{Moor:16,McKi:16,Trow:16}. La rhéologie de la glace d’azote est décrite en plus de détails dans \citet{Umur:17}. Le méthane étant beaucoup moins volatil que l’azote, il est probablement beaucoup plus rigide (ce qui est confirmé par la présence de forts gradients de topographie, en forme de crêtes, sur les glaciers de méthane (\autoref{bladed}).
+
+\begin{figure}[!h]
+\begin{center} 
+	\includegraphics[width=12cm]{figures/chap2/diagphase}
+\end{center} 
+\caption{Diagramme de phase d’une solution solde N$_2$:CH$_4$. Le diagramme original est de \citet{ProkYant:83}. Les points expérimentaux sont ceux de \citet{Prot:15}. Le diagramme montre que les limites de solubilité du méthane et de l’azote l’un dans l’autre sont de 5$\%$ (N$_2$:CH$_4$ avec 5$\%$ de CH$_4$) et de 3$\%$ (CH$_4$:N$_2$ avec 3$\%$ de N$_2$).} 
+\label{phase}
+\end{figure}
+\clearpage
+
+\subsection{Transport atmosphérique horizontal et effet de la topographie}
+\label{redistrib}
+
+Il s’agit ici de paramétriser et représenter le transport horizontal des composés volatils après les échanges à la surface, pour s’affranchir du cœur dynamique 3D et du schéma de transport 3D du GCM et permettre ainsi de tourner plus vite et de simuler les cycles des glaces sur des milliers d’années. 
+Pour cela, les espèces volatiles sont mélangées selon un facteur d’intensité réglable, en prenant en compte les effets liés à la topographie. Pour l’azote, la pression de surface p$_s$ à l’altitude $z$ (par rapport au rayon moyen de Pluton) est contrainte à chaque pas de temps à tendre vers la valeur de pression moyenne globale, selon une équation de rappel Newtonien (la valeur est rappelée vers une valeur moyenne) :
+
+\begin{equation}
+\label{eq:newton}
+\frac{\delta p_s}{\delta t}= -\frac{1}{\tau_{N_2}}\left ( p_s-< p_s> \frac{e^{\frac{-z}{H}}}{< e^{\frac{-z}{H}}> } \right )
+\end{equation}
+
+avec H  la hauteur d’échelle pour les niveaux proches de la surface (environ 18~km), <~> l’opérateur signifiant la moyenne globale (pondérée par l’aire de chaque point), et $\tau_{N_{2}}$ la constante de temps caractéristique du mélange (en secondes, contrôle le temps mis par p$_s$ pour tendre vers <p$_s$>). De façon similaire, pour un gaz à l’état de trace comme CH$_4$ ou CO, le rapport de mélange massique local est mélangé en intégrant l'équation : 
+
+\begin{equation}
+\frac{\delta q}{\delta t}= -\frac{1}{\tau_{CH_4}}\left ( q-\frac{< q p_s >}{< p_s >} \right )
+\end{equation}
+
+Sur la base de tests effectués avec le GCM de Pluton, on prend $\tau_{CH_4}$~=~10$^7$~s comme valeur de référence pour le méthane (environ 5 mois terrestres) et $\tau_{N_2}$~=~1~s et $\tau_{CO}$~=~1~s (mélange instantané) pour l’azote et le CO. 
+On se place donc toujours le cas d’une atmosphère «~épaisse~» redistribuée instantanément, où le transport de chaleur latente entre l’hémisphère d’hiver et l’hémisphère d’été est toujours assez efficace pour ne pas former de gradient méridional de pression. Cependant, cela reste discutable si les pressions deviennent très faibles (on pourrait alors avoir un gradient de pression entre l'hémisphère de jour et celui de jour et la nuit). 
+
+\subsection{Sublimation et condensation de l'azote}
+
+Dans le modèle de transport des glaces volatiles il est possible d’atteindre de basses pressions de surface, en particulier lorsque Pluton est proche de son apoastre, loin du Soleil. Les pressions sont d’autant plus faibles que l’inertie thermique saisonnière est faible (voir Chapitre~\ref{chap:nature} \autoref{fig2nature}).
+Le schéma de sublimation et condensation de l’azote est le même que pour le GCM complet (voir section \ref{sc:cond}). Cependant, dans le modèle de transport des glaces volatiles, le pas de temps physique est plus grand (jusqu’à un pas de temps par jour Pluton) et peut provoquer des pressions négatives et des instabilités numériques, en particulier lors des périodes de basses pressions lorsqu’il n'y a plus assez d'atmosphère pour limiter le refroidissement de la surface (dans ces cas, l’atmosphère dans le modèle peut ne pas avoir le temps de se rééquilibrer et de redistribuer l'azote).
+
+Pour résoudre ce problème, j'ai ajouté la possibilité d’avoir des sous-pas de temps dans le schéma de sublimation et condensation de l’azote.  
+La \autoref{equilibre} montre les différentes étapes de calcul. Dans le cas sans sous-pas de temps, la température de surface est tout d’abord actualisée à la température T$_{s1}$ (étape 1), qui prend en compte les autres processus physiques ayant modifié la température de surface au cours du même pas de temps (par exemple, le bilan radiatif à la surface). Puis, la température de surface est ramenée à la température d’équilibre T$_0$ (étape 2), et la pression et le réservoir de glace d’azote s’ajustent en fonction de la masse d’azote $\delta$m$_0$ échangée (étape 3). La température finale à la fin du pas de temps est donc T$_0$. 
+En réalité, les choses se passent de façon simultanée : un léger changement de température entraine un changement de pression, qui va rapidement s’équilibrer à l’échelle globale. J'ai rajouté des sous-pas de temps pour discrétiser plus finement le problème et rapprocher les valeurs finales de températures et de pressions aux valeurs réelles. 
+
+On considère l’exemple de la condensation d’azote à la surface, montré par la \autoref{equilibre}.
+Au lieu d'actualiser la température de surface à la température qui prend en compte les autres processus physiques ayant eu lieu au cours du même pas de temps, on ne considère qu'une fraction $1/n$ de cette tendance, avec $n$ le nombre de sous-pas de temps (paramètre fixe réglable), pour ammener la température à T$_{s1}$ (étape 1). Ensuite, la température de surface est ramenée à T$_0$ et la pression diminue en fonction de la quantité de masse d’azote $\delta$m$_0$ ainsi condensée (étapes 2 et 3).
+A ce moment-là, la pression est redistribuée à l’échelle globale, en utilisant l’équation~\ref{eq:newton} et en prenant en compte l’effet de la topographie locale (étape 4). Enfin, un nouveau bilan radiatif à la surface s’effectue sur un sous-pas de temps (étape 5). Ensuite, le second sous-pas de temps commence en répétant l’étape 1 (autres processus physiques), 2 et 3 (condensation/sublimation de l’azote). Si le dernier sous-pas de temps est atteint, on s’arrête à l’étape 3 sinon on continue (étapes 4, 5…). 
+
+%\newpage
+
+Dans certains cas, la température de condensation à la pression P$_{s~eq}$ (à la fin de l’étape 5) est plus grande que la température de départ T$_{s1}$ et le modèle peut diverger (\autoref{equilibre}). Ce cas est très rare et n’a été rencontré que pour des inerties thermiques saisonnières < 400 uSI lors saisons de très basses pressions. Dans ce cas, on force la pression de surface à une valeur fixe (par exemple, 10$^{-4}$ Pa) pour éviter que la divergence mène à des pressions négatives et on conserve la masse sur ce pas de temps.  
+
+\subsection{Sublimation et condensation du méthane et du CO}
+
+Dans le modèle de transport des glaces volatiles, les changements de phase s’effectuent selon les mêmes relations thermodynamiques utilisées dans le GCM (voir équation~\ref{eq:ch4sat} et équation~\ref{eq:cosat}). CH$_4$ et CO sont des constituants minoritaires de l’atmosphère, et leur les échanges surface-atmosphère dépendent du flux turbulent donné par l’équation~\ref{eq:sflux}. Cependant, dans ce modèle à une seule couche verticale, q$_1$ correspond au rapport de mélange massique dans l’atmosphère entière. De plus les vents ne sont pas calculés (pas de dynamique) et je fixe donc la vitesse de vent horizontale à z$_1$ = 5 m au-dessus de la surface locale $U$ à 0.5 m.s$^{-1}$ (valeur de référence estimée à partir des résultats du GCM). Le coefficient de trainée C$_1$ à 5~m au-dessus de la surface locale (équation~\ref{eq:cd}) est fixé à 0.06. Tout comme dans le GCM, on considère que des mélanges N$_2$:CH$_4$ and N$_2$:CO peuvent exister à la surface et on applique la loi de Raoult avec 0.5$\%$ de méthane et 0.3$\%$ de CO lorsque ces glaces sont présentes dans le modèles à la surface avec de l’azote. 
+
+\subsection{Topographie}
+La topographie de Pluton est une donnée qui a beaucoup évolué au cours de la thèse. Les travaux des Chapitres \ref{chap:nature} et \ref{chap:haze} ont été réalisés avec des cartes de topographies idéalisées, c’est-à-dire avec une surface plate partout sauf au niveau de Sputnik Planitia, où un cratère a été dessiné, et au niveau d’autres d’autres petits cratères, représentés de façon très simples également. J’ai développé plusieurs scripts permettant de changer la topographie à notre gré. 
+Dans les Chapitres \ref{chap:paleo} et \ref{chap:GCM}, la topographie utilisée est celle à haute résolution obtenue par New Horizons \citep{Sche:16AGU,Sche:16LPSC}. La version utilisée (\autoref{topo}) n’est sans doute pas la version finale de la topographie, qui n’est pas encore publiée, mais je ne m’attends pas à des différences significatives entre la version actuelle et la version finale. Dans l’hémisphère sud, où il n’y a pas de donnée, la surface est considérée plate (une version existe avec des montagnes au sud mais n’a pas été utilisée).
+
+\begin{figure}[!h]
+\begin{center} 
+	\includegraphics[width=15cm]{figures/chap2/subtime}
+\end{center} 
+\caption{Schéma spécial pour traiter les instabilités lors de la sublimation et la condensation de l’azote. Haut : cas sans sous-pas de temps. La température de surface est ramenée à T$_0$ et la pression est ajustée en fonction de la masse $\delta$m$_0$ échangée. Milieu : cas avec 2 sous-pas de temps. La température est actualisée à T$_{s1}$ qui dépend du nombre de sous-pas de temps. La température de surface est ramenée à T$_0$, la pression est ajustée en fonction de la masse $\delta$m$_0$ échangée, puis équilibrée à l’échelle globale. Enfin, le bilan radiatif est effectué à la surface sur un sous-pas de temps. Les étapes sont répétées pour chaque sous-pas de temps. Pour le dernier sous-pas de temps, seules les étapes 1, 2 et 3 sont répétées pour obtenir l’état final (en rouge). Bas : Comparaison de la discrétisation du problème dans le cas stable (convergence vers une température de surface et une pression d’équilibre) et instable (divergence).} 
+\label{equilibre}
+\end{figure}
+
+\clearpage
+
+Dans les simulations où l’écoulement de glace d’azote est pris en compte (voir Chapitre~\ref{chap:paleo}), j’ai modifié la topographie de Sputnik Planitia de la façon suivante : je fais l’hypothèse que le socle de glace d’eau sous le glacier Sputnik Planitia est un bassin elliptique de 10~km de profondeur, ce qui est en accord avec les estimations d’épaisseur au centre de Sputnik Planitia \citep{Moor:16, McKi:16, Trow:16, Kean:16}. L’ellipse est située entre les latitudes 10$^{\circ}$S-50$^{\circ}$N (\autoref{topoSP}). Le demi grand axe $a$ de cette ellipse est de 1200 km, et ses foyers sont les points F=(42$^{\circ}$N,163$^{\circ}$E) et F’=(1.75$^{\circ}$N,177$^{\circ}$W). L’ellipse est ensuite construite grâce à la définition bifocale de l’ellipse : on cherche les points M tel que d(M,F)+d(M,F’)=2a, avec $d$ la distance entre deux points (méthode d’haversine, voir equation~\ref{eq:haversine}).  
+Les bords du bassin et sa partie sud sont probablement moins profonds, comme en atteste l’absence de cellule polygonale à ces endroits. Nous plaçons ainsi le socle de glace d’eau des bords de Sputnik Planitia à 3~km, 4~km ou 5~km (selon les cas) sous le niveau de surface moyen (\autoref{topoSP}).
+Ensuite, selon les simulations, le bassin ainsi modélisé est rempli de glace d’azote jusqu’à 1.6~km ou 2.5~km sous le niveau de surface moyen, la dernière valeur correspondant à l’altitude réellement observée de la surface du glacier Sputnik Planitia (on a donc dans ce cas un bassin rempli de 10-2.5=7.5~km d’azote solide en son centre). 
+
+\begin{figure}[!h]
+\begin{center} 
+	\includegraphics[width=12cm]{figures/chap2/topoSP}
+\end{center} 
+\caption{Topographie de Sputnik Planitia dans le modèle, à partir des données observée par New Horizons (gauche) et à partir des données mais modifiée pour représenter le bassin ``vide'', avant son remplissage par les glaces de N$_2$, CH$_4$, CO.} 
+\label{topoSP}
+\end{figure}
+
+\subsection{Ecoulement des glaciers}
+
+Sur Pluton, dans Sputnik Planitia par exemple, N$_2$ tend à condenser là où il y déjà de la glace de N$_2$, car l'albédo plus élevé de la glace de N$_2$ (par rapport au sol nu, beaucoup plus sombre) favorise la condensation sur la glace (piège froid). Par conséquent, la glace tend à s'accumuler sur seulement une petite fraction du bassin. En réalité, les blocs de glace d’azote massifs doivent s’écouler tout comme les glaciers terrestres \citep{Moor:16}. Il est donc important de simuler l’écoulement de la glace dans le modèle, d’autant plus que cela impacte l’évolution de la pression à la surface, qui dépend fortement de la surface totale recouverte de glace de N$_2$ disponible pour la condensation et la sublimation. 
+Par conséquent, j'ai ajouté dans le modèle un schéma d’écoulement de la glace.
+
+Deux types d'algorithme ont été développés dans ce but.: 
+\begin{itemize}
+\item Soit l’écoulement se fait en redistribuant simplement localement la glace, d’un point avec une grande quantité vers un point voisin avec une quantité plus faible. Dans ce cas simple, on utilise une vitesse caractéristique ajustable. C’est cette méthode qui a été utilisée pour l’étude des cycles annuels des glaces volatiles (voir Chapitre~\ref{chap:nature}), avec une vitesse caractéristique de 7~cm par jour Pluton (soit 1~cm par jour terrestre), permettant au bassin Sputnik Planitia de se remplir (horizontalement) après deux années Pluton. Ce schéma peut être utilisé pour tout type de glace.
+\item Soit l’écoulement se fait de façon beaucoup plus précise, et se base sur un schéma d’écoulement laminaire de la glace d’azote décrit dans \citet{Umur:17}, dépendant de l’épaisseur et de la température de la glace. Ce schéma n’est valable que pour l’écoulement de la glace d’azote et implique d’utiliser des réservoirs réalistes. Il a été utilisé pour l’étude des cycles géologiques de Pluton, en particulier pour caractériser l’évolution de la glace dans Sputnik Planitia lors des derniers cycles d’obliquité (voir Chapitre~\ref{chap:paleo}). Je le décris en détail ci-dessous.
+\end{itemize}
+
+\subsubsection{Hypothèses et incertitudes}
+
+On fait l’hypothèse que la glace d’azote mélangée avec de faibles abondances de CO et de CH$_4$ s’écoule comme de la glace d’azote pure. Dans nos simulations, c’est toujours le cas car le rapport de mélange de ces glaces dans celle d’azote est fixé à 0.5$\%$ et 0.3$\%$. En réalité, le méthane étant plus rigide que l’azote, un mélange solide N$_2$:CH$_4$ s’écoule plus lentement qu’un mélange de N$_2$ pur. Le CO ayant la même structure moléculaire que N$_2$, on peut considérer que la glace de CO se comporte comme celle de N$_2$.
+
+La rhéologie de la glace d’azote est celle décrite dans \citet{Yama:10} et \citet{Umur:17} pour de faibles températures de surface. On considère le cas simple d’un écoulement laminaire et d’une glace isotherme en profondeur. 
+L’écoulement laminaire est valable dans l’hypothèse des couches minces, c’est-à-dire pour de faibles épaisseurs de glace. Le schéma ne prend pas en compte les processus de convection solide.  Le type d’écoulement (liquide ou solide) à la base du glacier dépend de l’épaisseur de la glace et de sa température. Dans le cas de Pluton, l’écoulement solide à la base est valable pour des épaisseurs de glace entre 400~et~1000~m. Cependant, nous faisons l'hypothèse d'une base sans écoulement liquide pour toutes les épaisseurs rencontrées.
+%ici on l’applique pour toutes les épaisseurs rencontrées. 
+Une première raison est que dans nos travaux, nous nous intéressons surtout aux bords du glacier de Sputnik Planitia, ce qui correspond à de faibles épaisseurs de glace. Au centre de Sputnik Planitia, un écoulement solide pour une épaisseur de glace de 10~km est déjà extrêmement rapide, et acceptable au premier ordre. De plus, un tel schéma est plus simple à implémenter et correspond mieux à l’idée de simuler au premier ordre l’écoulement de la glace. En effet, les incertitudes sur la rhéologie, les températures, la profondeur de la glace et la taille des grains ne permettent pas de définir précisément les paramètres liés à l’écoulement liquide à la base du glacier.  
+L’écoulement liquide à la base du glacier est beaucoup plus probable, même pour des couches minces de glace, si les températures de surface de la glace s’approchaient du point triple de l’azote (63~K). Cependant, nos travaux montrent que même avec une forte obliquité, les températures de surface de la glace d’azote ne dépassent pas les 45~K, à cause de l’inertie thermique élevée de la surface (voir Chapitre~\ref{chap:paleo}). 
+
+\begin{figure}[!h]
+\begin{center} 
+	\includegraphics[width=12cm]{figures/chap2/glaflow}
+\end{center} 
+\caption{Géométrie 2D de l’écoulement d’azote paramétré dans le modèle (à gauche, figure issue de \citet{Umur:17}, à droite, géométrie de l'écoulement entre deux colonnes du GCM). $L$ est la distance horizontale caractéristique de l’écoulement (distance entre deux points voisins du modèle) et $\Delta$H est la différence de hauteur de glace entre les points voisins, en prenant en compte la topographie sous la glace.} 
+\label{glaflow}
+\end{figure}
+
+On considère également que le socle de glace d’eau est statique et n’est pas érodé par la glace : la topographie du socle (indépendante de la glace d’azote) ne change donc pas.  
+
+De façon générale, l’écoulement de la glace d’azote est difficile à reproduire avec précision car :
+
+\begin{itemize}
+\item L’épaisseur réelle de la glace d’azote sur Pluton n’est pas connue.
+\item Les gradients de température à l’intérieur de la glace ne sont pas connus.
+\item La rhéologie de la glace d’azote à ces températures froide a été peu étudiée et certaines valeurs de paramètres utilisées peuvent être assez éloignées des valeurs réelles (notamment lorsque la glace d’azote est mélangée avec du CO et du méthane).
+\item La modélisation de l’écoulement est limitée par la résolution horizontale du modèle
+\end{itemize}
+
+\subsubsection{Schéma d’écoulement laminaire}
+
+La \autoref{glaflow} montre la géométrie de l’écoulement considéré entre deux colonnes de glace voisines \citep{Umur:17}. 
+Dans le cas d’un profil isotherme sur toute la colonne de glace, et de l'absence d’écoulement liquide à la base, le flux de masse d’une colonne de glace vers la colonne voisine plus basse est caractérisé par une fonction analytique de type Arrhénius-Glen modifiée:
+
+\begin{equation}
+q_{0}=g_Q exp[\frac{\frac{H}{H_a}}{1+\frac{H}{H_{\Delta T}}} ] q_{glen} 
+\end{equation}
+\begin{equation}
+q_{glen}=A(\rho g)^{n}\frac{H^{n+2}}{n+2}\frac{tan^{n-1}(\theta) } { (1+tan^{2}(\theta) ) ^{\frac{n}{2}}}
+\end{equation}
+
+Avec q$_0$ en m$^2$.s$^{-1}$ et $\rho$ la densité de la glace d’azote (1000 kg.m$^{-3}$), $g$ la gravité à la surface de Pluton (0.6192 m.s$^{-1}$), et $H$ l’épaisseur de glace de la colonne considérée. g$_Q$ est un paramètre correctif pour l’écoulement de N$_2$. On fixe g$_Q$=0.5, H$_a$=175~m et H$_{\Delta T}$=1925~m selon \citet{Umur:17}. $\theta$ est l’angle entre les deux colonnes défini par $\theta$=arctan($\Delta$H/L$_{ref}$), avec $\Delta$H la différence de hauteur entre les deux colonnes de glace et L$_{ref}$ la distance horizontale caractéristique de l’écoulement. Dans le modèle, $\Delta$H est calculé à partir de la topographie et de la masse de glace des deux points de grille voisins, et L$_{ref}$ est la distance entre les deux points de grille\footnote{On peut calculer la plus courte distance $d$ entre deux points de grille d’une sphère de rayon $R$ en utilisant la formule d’haversine (terme anglais issue de ``haversed sine'') suivante :
+
+\begin{equation}
+\label{eq:haversine}
+d=2~R~arcsin[\sqrt{sin^{2}(\frac{\varphi_1-\varphi_2}{2})+cos(\varphi_1)cos(\varphi_2)sin^2(\frac{\lambda_2-\lambda_1}{2})}]
+\end{equation}
+Avec $\varphi$ la latitude, $\lambda$ la longitude et $R$ le rayon de la sphère.
+}. 
+Le facteur $A$ s’écrit sous une forme dite d’Arrhenius, et ne dépend dans ce cas simple et sans écoulement liquide à la base que de la température de surface T$_s$ :
+
+\begin{equation}
+A(T_s)=0.005 e^{\frac{T_a}{45}-\frac{T_a}{T_s}}
+\end{equation}
+
+avec T$_a$ la température d’activation fixée à 422~K, et
+
+\begin{equation}
+n(T_s)=2.1+0.0155(T_s-45)
+\end{equation}
+
+On peut alors estimer le temps de relaxation $\tau$ du glacier, défini par \citet{Umur:17} par: 
+
+\begin{equation}
+\tau = \frac{H L}{\left | q_{0} tan(\theta )\right |}
+\end{equation}
+
+Ce temps de relaxation est le temps mis par une colonne de glace pour s’écouler et perdre une fraction (1-1/e) de son réservoir initial. 
+La masse de glace transférée de la colonne de masse initiale $m_0$ est ainsi donnée par :
+
+\begin{equation}
+\delta m_0=m_0 (1-e^{\frac{-\delta t}{\tau }})
+\end{equation}
+La \autoref{tauflow} compare les valeurs de temps de relaxation d'un glacier d'azote obtenues pour différents angles, épaisseurs de glace et longueurs de glacier. Typiquement, une colonne de 200~m d'épaisseur et de 50~km de long, reposant sur une pente de 10$^{\circ}$ va s’écouler sur un temps caractéristique de relaxation d’environ 50 ans terrestres. Il ne restera alors plus que 75~m de glace à cet endroit, qui mettra ensuite 5000 ans à perdre une fraction (1-1/e) de sa masse. Ces estimations sont similaires à celles données par \citet{Umur:17}.
+\begin{figure}[!h]
+\begin{center} 
+	\includegraphics[width=14cm]{figures/chap2/tauflow}
+\end{center} 
+\caption{Temps de relaxation du glacier d'azote tel que modélisé dans le modèle de transport des glaces volatiles, obtenu pour différents angles de pentes $\theta$, épaisseurs de glace, et longueurs caractéristiques. En haut à gauche: $\theta$=5$^{\circ}$. En haut à droite: $\theta$=10$^{\circ}$. En bas à gauche: $\theta$=20$^{\circ}$. En bas à droite: $\theta$=30$^{\circ}$} 
+\label{tauflow}
+\end{figure}
+
+Dans le modèle, la grille physique est parcourue et les différents points sont comparés (élévation et masse de glace disponible) pour permettre les échanges de masse de glace. Chaque point est comparé avec les 4 points voisins (Nord, Sud, Est, Ouest). La \autoref{grille} décrit la grille physique du modèle. Il y a 10 cas particuliers : les deux pôles, qui ont chacun autant de voisins qu’il y a de points en longitude, les 4 points voisins des pôles et situés aux longitudes extrêmes (points 2, 7, 14, 19 sur la \autoref{grille}), les autres points voisins des pôles (3-6, 15-18), les points situés aux longitudes extrêmes non voisin des pôles, et enfin les autres points. Pour chaque cas, les points voisins sont trouvés, comparés et si $\Delta$H est suffisamment grand, la masse d’azote est transférée selon les équations ci-dessus.
+Par exemple, le point 14 a comme voisins les points 20, 8, 19 et 15.
+
+
+\subsection{Mode de simulation des paléoclimats de Pluton}
+
+Les cycles paléoclimatiques de Pluton sont décrits dans le Chapitre~\ref{chap:paleo}. Un cycle d’obliquité correspond à environ 2.8 millions d’années. Le modèle de transport des glaces volatiles est rapide, mais pas assez pour simuler directement des millions d’années. J’ai donc développé un mode spécial pour l’étude des paléoclimats de Pluton. Le mode est décrit en détail dans le Chapitre~\ref{chap:paleo}. Premièrement, le modèle simule 5 années Pluton, afin «~d’équilibrer~» les températures de sous-surface et de surface et d’atteindre des variations de température et de flux de condensation et de sublimation qui se répètent à chaque année Pluton. Puis, pour chaque point de grille, les tendances annuelles moyennes des flux de glaces sont multipliées par le pas de temps paléoclimatique, typiquement 50~000 années terrestres. Les réservoirs de glace sont alors mis à jour en chaque point de la grille, ainsi que la topographie, qui évolue en fonction de l’épaisseur de glace présente au point considéré. 
+%La topographie du substrat, qui est une donnée important pour écouler la glace, reste accessible dans le modèle puisqu’elle correspond à la topographie moins l’épaisseur de glace. 
+La masse totale d'espèces volatiles (glace et vapeur) est conservée. Enfin, les paramètres orbitaux (excentricité et longitude du périastre) et l’obliquité varient avec le pas de temps paléoclimatique\footnote{Ce sont les paramètres des cycles de Milankovic bien connus sur Terre : excentricité, obliquité et la précession des équinoxes. Ce dernier paramètre correspond au lent changement de direction de l'axe de rotation du corps considéré, entrainant un changement de la longitude au nœud ascendant et donc de la longitude solaire au périastre.}. J'utilise des fonctions analytiques reproduisant l’évolution de ces paramètres donnée dans \citet{Earl:17} et \citet{Dobr:97}. Ces données sont extrapolées en supposant qu’elles sont périodiques. Une fois les changements de réservoirs, topographie et conditions orbitales effectués, la boucle est relancée (simulation sur 5 années Pluton, multiplication des tendances, mis à jour des réservoirs, topographie et conditions orbitales etc…). Pour simuler 1 million d’années terrestres, on a donc typiquement besoin de faire 20 «~sauts~» paléoclimatiques de 50~000 ans, ce qui revient à un temps de calcul similaire à celui permettant de simuler 5$\times$20=100 années Pluton (soit environ 25~000 ans terrestres). 
+
+La fonction utilisée pour simuler l’évolution de l’obliquité avec le temps est une fonction sinus définie par:
+
+\begin{equation}
+\Phi = \frac{A}{2} sin(\frac{2\pi}{P}(t+\delta))+\Theta_{0}
+\end{equation}
+
+Avec $A$ l’amplitude de l’onde (23$^{\circ}$), $P$ la période (2.77 millions d’années terrestres), $\delta$ le déphasage (0.16), et $\Theta_{0}$ la valeur de l’obliquité moyenne (115.5$^{\circ}$).
+La fonction utilisée pour simuler l’évolution de la longitude solaire au périastre L$_{sp}$ avec le temps est une fonction linéaire définie par:
+
+\begin{equation}
+L_{sp} = 360-(a~t+P)[mod~360]
+\end{equation}
+
+Avec $a$ la pente ($a$=129) et $P$ la période (-3.8 millions d’années terrestres).
+Enfin, la fonction utilisée pour simuler l’évolution de l’excentricité avec le temps est une fonction créneau définie par:
+
+\begin{equation}
+e=\frac{2A}{P} (t - \frac{P}{2}E(\frac{2t}{P}+0.5) )(-1)^{E(\frac{2t}{P}+0.5)}+e_0
+\end{equation}
+
+Avec $A$ l’amplitude (e$_{max}$-e$_{min}$=0.044), $P$ la période (3.95 millions d’années terrestres), E le symbole partie entière, et e$_0$ la valeur de l’excentricité moyenne (0.244).
+% (  2/(3,95/2)*( x - 3,95/2*R0((2*x/3,95+0,5)) ) * (-1) ^ R0((2*x/3,95+0,5))  )*0,044/2+0,244
+
+\subsection{Changements des propriétés de surface : albédo, émissivité, inertie thermique}
+\label{changesurf}
+
+Les albédos et les émissivités des différents terrains sont donnés dans les fichiers d’entrée du modèle. Lorsque l'épaisseur de la glace dépasse 1~g.m$^{-2}$ dans le modèle, l’albédo en ce point change à la valeur fixée en entrée correspondant à la glace présente. L’albédo de la glace d’azote domine, puis celui de la glace de CO et enfin celui de la glace de méthane, c’est-à-dire que si les trois glaces sont présentes à la surface, l’albédo reste égal à celui de l’azote. 
+
+Lorsque la température passe sous les 35.6~K, la glace de N$_2$ change en théorie de système cristallin: on passe de la phase $\beta$ à la phase $\alpha$, ce qui change en théorie les propriétés optiques \citep{Phil:16} et physiques \citep{Stan:99}. Dans le modèle, on peut adapter l’émissivité de l’azote lorsqu’on change de phase. On utilise une fonction hyperbolique permettant une transition plus ou moins douce de l’émissivité $\beta$ de référence ($\varepsilon_\beta$=0.8) à l’émissivité choisie $\varepsilon_\alpha$ pour la phase $\alpha$, dans le cas d’une diminution de température de surface T$_s$ sous 35.6~K (et l’inverse dans le cas d’une augmentation de température). Basé sur les résultats de \citet{Stan:99}, l’émissivité est typiquement :
+
+\begin{equation}
+\varepsilon= f \varepsilon_\alpha + (1-f) \varepsilon_\beta
+\end{equation}
+avec
+\begin{equation}
+f~=~0.5~(~1+tanh(~3~(~35.6-T_s~)~)~). 
+\end{equation}
+
+
+La même formule peut être utilisée pour changer l’albédo de la glace, mais cela n’a pas été exploré avec le modèle, à cause du manque de donnée et car l'effet dû à l'émissivité semble dominer \citep{Stan:99}.
+
+Des changements d’inertie thermique sont également possibles avec le modèle. A chaque pas de temps, le modèle adapte l’inertie du sol en fonction de la masse d’azote ou de méthane présente à la surface. Ce code a été testé mais peu de simulation ont été lancée avec ce mode, qui utilise encore plusieurs paramètres non contraints (l’inertie thermique de la glace d’azote, méthane, CO et eau). De façon générale, les études de Pluton menées dans cette thèse ont utilisé une inertie thermique diurne et saisonnière globale. 
+
+Des changements d’albédo des glaces avec le temps ou en fonction des flux de condensation / sublimation de la glace ou en fonction de la contamination par les brumes, sont aussi possibles et plusieurs fonctions ont été ajoutées au modèle, mais ont cependant été peu testées. 
+
+% Fin
+%------------------------------------------------------------------

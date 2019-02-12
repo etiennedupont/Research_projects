@@ -170,7 +170,7 @@ optimizer_actor = optim.Adam(actor_nn.parameters(), lr=LEARNING_RATE_ACTOR)
 target_actor_nn.eval()
 
 ## Benchmark parameter
-MAX_TIME_SEC = 400
+MAX_TIME_SEC = 600
 reward_time = np.zeros(MAX_TIME_SEC)
 
 

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import DDPG_pendulum_original
 import DDPG_pendulum_modified
 
-reward_time_updated, reward_time = DDPG_pendulum_modified.main(MAX_EPISODES=300)
+reward_time_updated, reward_time = DDPG_pendulum_modified.main(MAX_EPISODES=600)
 
 def plot_rewards():
     max_time = min(len(reward_time), len(reward_time_updated))
