@@ -15,17 +15,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import argparse
+import DDPG_mountaincar_original
 
-parser = argparse.ArgumentParser(description='Run DDPG on lunar lander')
+parser = argparse.ArgumentParser(description='Run DDPG on Mountain Car')
 parser.add_argument('--gpu', help='Use GPU', action='store_true')
 args = parser.parse_args()
-env = gym.make("LunarLanderContinuous-v2")
 
-LOW_BOUND = env.action_space.low[0] # -1
-HIGH_BOUND = env.action_space.high[0] # 1
+env = gym.make("MountainCarContinuous-v0")
+LOW_BOUND =  env.action_space.low[0] # -1
+HIGH_BOUND =  env.action_space.high[0] # 1
 
-STATE_SIZE = env.observation_space.shape[0]      # state vector size (8)
-ACTION_SIZE = env.action_space.shape[0]     # action vector size (2)
+STATE_SIZE = 2      # state vector size
+ACTION_SIZE = 1     # action vector size (single-valued because actions are continuous in the interval (-2, 2))
+
 MEMORY_CAPACITY = 1000000
 
 BATCH_SIZE = 128
@@ -44,13 +46,11 @@ NOISE_DECAY = 0.99
 # Parameters for the exploration noise process:
 # dXt = theta*(mu-Xt)*dt + sigma*dWt
 EXPLO_MU = 0.0
-EXPLO_THETA = 0.95
+EXPLO_THETA = 0.15
 EXPLO_SIGMA = 0.2
 
 MAX_STEPS = 200
-MAX_EPISODES = 400
 EPS = 0.001
-
 
 
 # Choose device cpu or cuda if a gpu is available
@@ -87,22 +87,6 @@ class ReplayMemory:
         return len(self.memory)
 
 
-class DQN_critic(nn.Module):
-
-    def __init__(self, input_size):
-        super(DQN_critic, self).__init__()
-
-        self.hidden1 = nn.Linear(input_size, 8)
-        self.hidden2 = nn.Linear(8, 8)
-        self.hidden3 = nn.Linear(8, 8)
-        self.output = nn.Linear(8, 1)
-
-    def forward(self, x):
-        x = F.relu(self.hidden1(x))
-        x = F.relu(self.hidden2(x))
-        x = F.relu(self.hidden3(x))
-        return self.output(x.view(x.size(0), -1))
-
 
 class DQN_actor(nn.Module):
 
@@ -112,20 +96,16 @@ class DQN_actor(nn.Module):
         self.hidden1 = nn.Linear(state_size, 8)
         self.hidden2 = nn.Linear(8, 8)
         self.hidden3 = nn.Linear(8, 8)
-        self.output = nn.Linear(8, ACTION_SIZE)
+        self.output = nn.Linear(8, 1)
 
     def forward(self, x):
         x = F.relu(self.hidden1(x))
         x = F.relu(self.hidden2(x))
         x = F.relu(self.hidden3(x))
         x = self.output(x)
-        x = (torch.sigmoid(x) * (HIGH_BOUND - LOW_BOUND)) + LOW_BOUND
-        x = torch.clamp(x,-1,1)
-        if x.size(0) == 1:
-            return x[0]
-        else:
-            return x.view(x.size(0), ACTION_SIZE)
-       # return x.reshape((ACTION_SIZE,-1))
+        x = (torch.sigmoid(x)* (HIGH_BOUND - LOW_BOUND)) + LOW_BOUND
+        return x.view(x.size(0), -1)
+
 
 # Soft target update function
 def update_targets(target, original):
@@ -134,7 +114,7 @@ def update_targets(target, original):
 
         for targetParam, orgParam in zip(target.parameters(), original.parameters()):
             targetParam.data.copy_((1 - TAU)*targetParam.data + TAU*orgParam.data)
-
+            
 
 def optimize_model():
 
@@ -150,39 +130,8 @@ def optimize_model():
     # Divide memory into different tensors
     non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
     state_batch = torch.cat(batch.state)
-    action_batch = torch.cat(batch.action).view(BATCH_SIZE, -1)
+    action_batch = torch.cat(batch.action).view(BATCH_SIZE, 1)
     reward_batch = torch.cat(batch.reward)
-
-    # Create state-action (s,a) tensor for input into the critic network with taken actions
-    state_action = torch.cat([state_batch, action_batch], -1)
-
-    # Compute Q(s,a) using critic network
-    state_action_values = critic_nn(state_action)
-
-    # Compute deterministic next state action using actor target network
-    next_action = target_actor_nn(non_final_next_states).detach()
-
-    # Compute next timestep state-action (s,a) tensor for non-final next states
-    next_state_action = torch.zeros(BATCH_SIZE, ACTION_SIZE+STATE_SIZE, device=device)
-    next_state_action[non_final_mask, :] = torch.cat([non_final_next_states, next_action], -1)
-
-    # Compute next state values at t+1 using target critic network
-    next_state_values = target_critic_nn(next_state_action).detach()
-
-    # Compute expected state action values y[i]= r[i] + Q'(s[i+1], a[i+1])
-    expected_state_action_values = reward_batch.view(BATCH_SIZE, 1) + GAMMA*next_state_values
-
-    # Critic loss by mean squared error
-    loss_critic = F.mse_loss(state_action_values, expected_state_action_values)
-
-    # Optimize the critic network
-    optimizer_critic.zero_grad()
-    loss_critic.backward()
-
-    for param in critic_nn.parameters():
-        param.grad.data.clamp_(-1, 1)
-
-    optimizer_critic.step()
 
     #optimize actor
     # Actor actions
@@ -198,15 +147,13 @@ def optimize_model():
     optimizer_actor.step()
 
     # Soft parameter update
-    update_targets(target_critic_nn, critic_nn)
     update_targets(target_actor_nn, actor_nn)
 
 
 
 # Initialize neural nets
-# Critic net with input (s,a) tensor and output a single q value for that state-action pair
-critic_nn = DQN_critic(STATE_SIZE + ACTION_SIZE).to(device)
-target_critic_nn = DQN_critic(STATE_SIZE + ACTION_SIZE).to(device)
+# We first need to compute the optimal Q value to be used later in the policy gradient theorem
+critic_nn, reward_time_original = DDPG_mountaincar_original.main(train=True,MAX_EPISODES=300)
 
 # Actor net: state input -- action output bounded from lower bound to high bound
 actor_nn = DQN_actor(STATE_SIZE).to(device)
@@ -215,9 +162,7 @@ target_actor_nn = DQN_actor(STATE_SIZE).to(device)
 # Initialize replay memory
 memory = ReplayMemory(MEMORY_CAPACITY)
 
-target_critic_nn.load_state_dict(critic_nn.state_dict())
 optimizer_critic = optim.Adam(critic_nn.parameters(), lr=LEARNING_RATE_CRITIC)
-target_critic_nn.eval()
 
 target_actor_nn.load_state_dict(actor_nn.state_dict())
 optimizer_actor = optim.Adam(actor_nn.parameters(), lr=LEARNING_RATE_ACTOR)
@@ -227,7 +172,8 @@ target_actor_nn.eval()
 MAX_TIME_SEC = 400
 reward_time = np.zeros(MAX_TIME_SEC)
 
-def main():
+
+def main(MAX_EPISODES=200):
 
     episode_reward = [0]*MAX_EPISODES
     nb_total_steps = 0
@@ -239,6 +185,8 @@ def main():
 
             if i_episode % 10 == 0:
                 print("Episode ", i_episode)
+                
+            print("Episode {} : reward  = ".format(i_episode),end='')
 
             state = env.reset()
             state = torch.tensor([state], dtype=torch.float, device=device)
@@ -257,11 +205,9 @@ def main():
                 noise_process = EXPLO_THETA * (EXPLO_MU - noise_process) + EXPLO_SIGMA * np.random.randn(ACTION_SIZE)
                 noise = noise_scale*noise_process
                 action += torch.tensor([noise[0]], dtype=torch.float, device=device)
-                action = torch.clamp(action,LOW_BOUND,HIGH_BOUND)
-                action_arr = np.array(action)
 
                 # Perform an action
-                next_state, reward, done, _ = env.step(action_arr)
+                next_state, reward, done, _ = env.step(action)
                 next_state = torch.tensor([next_state], dtype=torch.float, device=device)
                 reward = torch.tensor([reward], dtype=torch.float, device=device)
 
@@ -283,7 +229,6 @@ def main():
                 reward_time[i_sec] = episode_reward[i_episode]
 
                 #env.render()
-               
 
     except KeyboardInterrupt:
         pass
@@ -301,10 +246,11 @@ def main():
     print('Average duration of one episode : ', round(time_execution/MAX_EPISODES, 3), 's')
     print('---------------------------------------------------')
 
-    plt.plot(episode_reward[:i_episode])
-    plt.show()
+    #plt.plot(episode_reward[:i_episode])
+    #plt.show()
     
-    return reward_time[:i_sec]
+    return reward_time[:i_sec], reward_time_original
 
-if __name__ == '__main__':
-    main()
+
+#if __name__ == '__main__':
+#    main()

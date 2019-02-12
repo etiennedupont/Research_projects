@@ -16,16 +16,17 @@ import matplotlib.pyplot as plt
 
 import argparse
 
-parser = argparse.ArgumentParser(description='Run DDPG on lunar lander')
+parser = argparse.ArgumentParser(description='Run DDPG on Mountain Car')
 parser.add_argument('--gpu', help='Use GPU', action='store_true')
 args = parser.parse_args()
-env = gym.make("LunarLanderContinuous-v2")
 
+env = gym.make("MountainCarContinuous-v0")
 LOW_BOUND = env.action_space.low[0] # -1
 HIGH_BOUND = env.action_space.high[0] # 1
 
-STATE_SIZE = env.observation_space.shape[0]      # state vector size (8)
-ACTION_SIZE = env.action_space.shape[0]     # action vector size (2)
+STATE_SIZE = 2      # state vector size
+ACTION_SIZE = 1     # action vector size (single-valued because actions are continuous in the interval (-2, 2))
+
 MEMORY_CAPACITY = 1000000
 
 BATCH_SIZE = 128
@@ -44,11 +45,10 @@ NOISE_DECAY = 0.99
 # Parameters for the exploration noise process:
 # dXt = theta*(mu-Xt)*dt + sigma*dWt
 EXPLO_MU = 0.0
-EXPLO_THETA = 0.95
+EXPLO_THETA = 0.15
 EXPLO_SIGMA = 0.2
 
 MAX_STEPS = 200
-MAX_EPISODES = 400
 EPS = 0.001
 
 
@@ -112,20 +112,16 @@ class DQN_actor(nn.Module):
         self.hidden1 = nn.Linear(state_size, 8)
         self.hidden2 = nn.Linear(8, 8)
         self.hidden3 = nn.Linear(8, 8)
-        self.output = nn.Linear(8, ACTION_SIZE)
+        self.output = nn.Linear(8, 1)
 
     def forward(self, x):
         x = F.relu(self.hidden1(x))
         x = F.relu(self.hidden2(x))
         x = F.relu(self.hidden3(x))
         x = self.output(x)
-        x = (torch.sigmoid(x) * (HIGH_BOUND - LOW_BOUND)) + LOW_BOUND
-        x = torch.clamp(x,-1,1)
-        if x.size(0) == 1:
-            return x[0]
-        else:
-            return x.view(x.size(0), ACTION_SIZE)
-       # return x.reshape((ACTION_SIZE,-1))
+        x = (torch.sigmoid(x)* (HIGH_BOUND - LOW_BOUND)) + LOW_BOUND
+        return x.view(x.size(0), -1)
+
 
 # Soft target update function
 def update_targets(target, original):
@@ -150,7 +146,7 @@ def optimize_model():
     # Divide memory into different tensors
     non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
     state_batch = torch.cat(batch.state)
-    action_batch = torch.cat(batch.action).view(BATCH_SIZE, -1)
+    action_batch = torch.cat(batch.action).view(BATCH_SIZE, 1)
     reward_batch = torch.cat(batch.reward)
 
     # Create state-action (s,a) tensor for input into the critic network with taken actions
@@ -227,7 +223,7 @@ target_actor_nn.eval()
 MAX_TIME_SEC = 400
 reward_time = np.zeros(MAX_TIME_SEC)
 
-def main():
+def main(train=False,MAX_EPISODES=200):
 
     episode_reward = [0]*MAX_EPISODES
     nb_total_steps = 0
@@ -257,11 +253,9 @@ def main():
                 noise_process = EXPLO_THETA * (EXPLO_MU - noise_process) + EXPLO_SIGMA * np.random.randn(ACTION_SIZE)
                 noise = noise_scale*noise_process
                 action += torch.tensor([noise[0]], dtype=torch.float, device=device)
-                action = torch.clamp(action,LOW_BOUND,HIGH_BOUND)
-                action_arr = np.array(action)
 
                 # Perform an action
-                next_state, reward, done, _ = env.step(action_arr)
+                next_state, reward, done, _ = env.step(action)
                 next_state = torch.tensor([next_state], dtype=torch.float, device=device)
                 reward = torch.tensor([reward], dtype=torch.float, device=device)
 
@@ -301,10 +295,14 @@ def main():
     print('Average duration of one episode : ', round(time_execution/MAX_EPISODES, 3), 's')
     print('---------------------------------------------------')
 
-    plt.plot(episode_reward[:i_episode])
-    plt.show()
-    
-    return reward_time[:i_sec]
+    #plt.plot(episode_reward[:i_episode])
+    #plt.show()
+    if not train:
+        return reward_time[:i_sec]
+    else:
+        plt.plot(episode_reward[:i_episode])
+        plt.show()
+        return target_critic_nn, reward_time[:i_sec]
 
-if __name__ == '__main__':
-    main()
+#if __name__ == '__main__':
+#    main()

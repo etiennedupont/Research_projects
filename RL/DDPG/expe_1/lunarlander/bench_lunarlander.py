@@ -1,10 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import DDPG_mountaincar_original
-import DDPG_mountaincar_modified
+import DDPG_lunarlander_original
+import DDPG_lunarlander_modified
 
-reward_time_updated = DDPG_mountaincar_modified.main()
-reward_time = DDPG_mountaincar_original.main()
+reward_time_updated = DDPG_lunarlander_modified.main()
+reward_time = DDPG_lunarlander_original.main()
 
 
 def plot_rewards():
