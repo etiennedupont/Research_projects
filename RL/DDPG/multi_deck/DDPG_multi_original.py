@@ -16,16 +16,24 @@ import matplotlib.pyplot as plt
 
 import argparse
 
-parser = argparse.ArgumentParser(description='Run DDPG on Pendulum')
+
+#GAME_STRING_NAME = 'lunar lander'
+#GAME_STRING_NAME = 'mountain car'
+GAME_STRING_NAME = 'pendulum'
+#GAME_ID = "LunarLanderContinuous-v2"
+#GAME_ID = "MountainCarContinuous-v0"
+GAME_ID = "Pendulum-v0"
+
+parser = argparse.ArgumentParser(description='Run DDPG on ' + GAME_STRING_NAME)
 parser.add_argument('--gpu', help='Use GPU', action='store_true')
 args = parser.parse_args()
+env = gym.make(GAME_ID)
 
-LOW_BOUND = -2
-HIGH_BOUND = 2
+LOW_BOUND = env.action_space.low[0] 
+HIGH_BOUND = env.action_space.high[0] 
 
-STATE_SIZE = 3      # state vector size
-ACTION_SIZE = 1     # action vector size (single-valued because actions are continuous in the interval (-2, 2))
-
+STATE_SIZE = env.observation_space.shape[0]      # state vector size 
+ACTION_SIZE = env.action_space.shape[0]     # action vector size 
 MEMORY_CAPACITY = 1000000
 
 BATCH_SIZE = 128
@@ -63,7 +71,6 @@ print("\033[91m\033[1mDevice : ", device.upper(), "\033[0m")
 device = torch.device(device)
 
 
-env = gym.make("Pendulum-v0")
 
 # Replay memory function
 Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward'))
@@ -113,16 +120,21 @@ class DQN_actor(nn.Module):
         self.hidden1 = nn.Linear(state_size, 8)
         self.hidden2 = nn.Linear(8, 8)
         self.hidden3 = nn.Linear(8, 8)
-        self.output = nn.Linear(8, 1)
+        self.output = nn.Linear(8, ACTION_SIZE)
 
     def forward(self, x):
         x = F.relu(self.hidden1(x))
         x = F.relu(self.hidden2(x))
         x = F.relu(self.hidden3(x))
         x = self.output(x)
-        x = (torch.sigmoid(x)* (HIGH_BOUND - LOW_BOUND)) + LOW_BOUND
-        return x.view(x.size(0), -1)
-
+        x = (torch.sigmoid(x) * (HIGH_BOUND - LOW_BOUND)) + LOW_BOUND
+        #x = torch.clamp(x,LOW_BOUND,HIGH_BOUND)
+        if x.size(0) == 1:
+        #    return x.view(x.size(0),-1)
+            return x[0]
+        else:
+        #    return x.view(x.size(0),-1)
+            return x.view(x.size(0), ACTION_SIZE)
 
 # Soft target update function
 def update_targets(target, original):
@@ -147,7 +159,7 @@ def optimize_model():
     # Divide memory into different tensors
     non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
     state_batch = torch.cat(batch.state)
-    action_batch = torch.cat(batch.action).view(BATCH_SIZE, 1)
+    action_batch = torch.cat(batch.action).view(BATCH_SIZE, -1)
     reward_batch = torch.cat(batch.reward)
 
     # Create state-action (s,a) tensor for input into the critic network with taken actions
@@ -160,7 +172,7 @@ def optimize_model():
     next_action = target_actor_nn(non_final_next_states).detach()
 
     # Compute next timestep state-action (s,a) tensor for non-final next states
-    next_state_action = torch.zeros(BATCH_SIZE, 4, device=device)
+    next_state_action = torch.zeros(BATCH_SIZE, ACTION_SIZE+STATE_SIZE, device=device)
     next_state_action[non_final_mask, :] = torch.cat([non_final_next_states, next_action], -1)
 
     # Compute next state values at t+1 using target critic network
@@ -227,6 +239,7 @@ reward_time = np.zeros(MAX_TIME_SEC)
 def main():
 
     episode_reward = [0]*MAX_EPISODES
+    step_reward = [0]*(MAX_EPISODES*MAX_STEP)
     nb_total_steps = 0
     time_beginning = time.time()
 
@@ -254,9 +267,11 @@ def main():
                 noise_process = EXPLO_THETA * (EXPLO_MU - noise_process) + EXPLO_SIGMA * np.random.randn(ACTION_SIZE)
                 noise = noise_scale*noise_process
                 action += torch.tensor([noise[0]], dtype=torch.float, device=device)
+                action = torch.clamp(action,LOW_BOUND,HIGH_BOUND)
+                action_arr = np.array(action)
 
                 # Perform an action
-                next_state, reward, done, _ = env.step(action)
+                next_state, reward, done, _ = env.step(action_arr)
                 next_state = torch.tensor([next_state], dtype=torch.float, device=device)
                 reward = torch.tensor([reward], dtype=torch.float, device=device)
 
@@ -277,7 +292,6 @@ def main():
             if i_sec < MAX_TIME_SEC:
                 reward_time[i_sec] = episode_reward[i_episode]
 
-                #env.render()
                
 
     except KeyboardInterrupt:
